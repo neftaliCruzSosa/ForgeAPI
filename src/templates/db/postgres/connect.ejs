@@ -1,0 +1,28 @@
+import {  Sequelize  } from 'sequelize';
+
+if (!process.env.DB_NAME || !process.env.DB_USER || !process.env.DB_PASSWORD) {
+  throw new Error("❌ Faltan variables de entorno para conectar a PostgreSQL");
+}
+
+const sequelize = new Sequelize(
+  process.env.DB_NAME,
+  process.env.DB_USER,
+  process.env.DB_PASSWORD,
+  {
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    dialect: 'postgres',
+    logging: false,
+  }
+);
+
+(async () => {
+  try {
+    await sequelize.authenticate();
+    console.log('✅ Conectado a PostgreSQL');
+  } catch (err) {
+    console.error('❌ Error de conexión a PostgreSQL:', err.message);
+  }
+})();
+
+export default sequelize;

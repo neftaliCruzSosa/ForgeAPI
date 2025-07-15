@@ -1,0 +1,43 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Logs
+logs/
+*.log
+
+# OS / editor files
+.DS_Store
+Thumbs.db
+*.swp
+
+# Build or generated folders
+projects/
+dist/
+build/
+coverage/
+
+# VS Code
+.vscode/
+
+# Dependency lock files (optional, keep one if needed)
+package-lock.json
+yarn.lock
+.pnpm-lock.yaml
+
+# Temp files
+tmp/
+temp/
+*.tmp
+*.bak
+
+# Output from CLI tests
+test-output/

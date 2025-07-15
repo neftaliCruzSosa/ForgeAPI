@@ -1,0 +1,27 @@
+import "dotenv/config";
+import express from "express";
+import cors from "cors";
+import helmet from "helmet";
+import morgan from "morgan";
+import errorHandler from "./middlewares/errorHandler.js";
+import loadAuth from "./auth/index.js";
+import "./db.js";
+
+const app = express();
+
+app.use(helmet())
+app.use(cors())
+app.use(morgan('dev'))
+app.use(errorHandler)
+app.use(express.json());
+
+loadAuth(app);
+
+import apiRoutes from './routes/autoload.js';
+
+app.use('/api', apiRoutes);
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
+});

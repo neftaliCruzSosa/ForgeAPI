@@ -1,0 +1,12 @@
+import express from 'express';
+const router = express.Router();
+import * as authController from './auth.controller.js';
+import auth from './auth.middleware.js';
+
+router.post('/register', authController.register);
+router.post('/login', authController.login);
+router.post('/logout', authController.logout);
+router.get('/profile', auth({ required: true }), authController.profile);
+router.put('/promote/:username', auth({ required: true, admin: true }), authController.promoteToAdmin);
+
+export default router;

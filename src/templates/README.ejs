@@ -1,0 +1,98 @@
+# <%= projectName %>
+
+Proyecto generado automáticamente con **API Forge** 🛠️
+
+---
+
+## 🧰 Tecnologías usadas
+
+- Node.js
+- Express
+- <%= dbLabel %>
+- JSON Web Tokens (JWT)
+- Dotenv
+
+---
+
+## 🚀 Cómo empezar
+
+```bash
+npm install
+npm run dev
+```
+
+> El servidor se levantará en [http://localhost:3000](http://localhost:3000)
+
+---
+
+## ⚙️ Configuración del entorno
+
+Crea un archivo `.env` basado en el ejemplo:
+
+```bash
+cp .env.example .env
+```
+
+Edita los valores según tu entorno:
+
+```env
+PORT=3000
+JWT_SECRET=supersecret
+JWT_EXPIRES_IN=7d
+<% dbEnvVars.forEach(line => { -%>
+<%- line %>
+<% }) %>
+```
+
+---
+
+## 🔐 Rutas de autenticación
+
+- `POST /auth/register`
+- `POST /auth/login`
+
+---
+
+## 🔁 Endpoints de entidades
+
+<% entities.forEach(entity => { %>
+### `/api/<%= entity.name.toLowerCase() %>`
+
+- `POST /` → Crear <%= entity.name %>
+- `GET /` → Obtener todos los registros
+- `GET /:id` → Obtener un <%= entity.name.toLowerCase() %> por ID
+- `PUT /:id` → Actualizar un <%= entity.name.toLowerCase() %>
+- `DELETE /:id` → Eliminación lógica (soft delete)
+- `PATCH /:id/restore` → Restaurar un <%= entity.name.toLowerCase() %> eliminado
+- `DELETE /:id/hard` → Eliminación permanente (hard delete)
+
+<% }); %>
+
+---
+
+## 📂 Estructura del proyecto
+
+```
+.
+├── app.js
+├── .env
+├── models/
+├── routes/
+├── controllers/
+├── middlewares/
+├── auth/
+└── db.js
+```
+
+---
+
+## 🧪 Scripts
+
+```bash
+npm run dev    # Desarrollo con nodemon
+npm start      # Producción
+```
+
+---
+
+## 📚 README generado por el generador modular.

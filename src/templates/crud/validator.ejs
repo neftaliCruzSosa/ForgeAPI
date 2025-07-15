@@ -1,0 +1,9 @@
+import Joi from 'joi';
+
+const <%= modelName.toLowerCase() %>Schema = Joi.object({
+<% fields.forEach(field => { %>
+  <%= field.name %>: Joi.<% if (field.type === 'ref') { if (dbType === 'mongo') { %>string().hex().length(24)<% } else if (dbType === 'postgres') { %>number()<% } else { %>any()<% } } else { %><%= field.type.toLowerCase() %>()<% } %><% if (field.required) { %>.required()<% } %><% if (field.minlength) { %>.min(<%= field.minlength %>)<% } %><% if (field.maxlength) { %>.max(<%= field.maxlength %>)<% } %>,
+<% }); %>
+});
+
+export default <%= modelName.toLowerCase() %>Schema;

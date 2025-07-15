@@ -1,0 +1,26 @@
+{
+  "name": "forgeapi",
+  "version": "0.1.0",
+  "description": "Modular API code generator with auth, CRUD and validation.",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "echo `No build step required`",
+    "start": "node src/index.js",
+    "demo": "node test/test-demo-social-api.js"
+  },
+  "type": "module",
+  "keywords": [
+    "api-generator",
+    "codegen",
+    "crud",
+    "rest-api",
+    "backend",
+    "scaffold"
+  ],
+  "author": "Neftali Cruz Sosa",
+  "license": "MIT",
+  "dependencies": {
+    "ejs": "^3.1.10"
+  }
+}

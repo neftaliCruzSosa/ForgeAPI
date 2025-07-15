@@ -1,0 +1,35 @@
+import { getIronSession } from "iron-session";
+
+const sessionOptions = {
+  cookieName: "session_token",
+  password: process.env.IRON_SESSION_PASSWORD,
+  cookieOptions: {
+    secure: process.env.NODE_ENV === "production",
+    httpOnly: true,
+    sameSite: "lax"
+  }
+};
+
+export default function authMiddleware(options = {}) {
+  return async function (req, res, next) {
+    req.session = await getIronSession(req, res, sessionOptions);
+
+    const user = req.session.user;
+
+    if (!user && options.required) {
+      return res.status(401).json({ error: "Authentication required" });
+    }
+
+    if (user) {
+      req.user = user;
+
+      if (options.admin && user.role !== "admin") {
+        return res.status(403).json({ error: "Admin access required" });
+      }
+
+      req.requireSelf = !!options.self;
+    }
+
+    next();
+  };
+}

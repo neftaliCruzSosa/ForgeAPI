@@ -1,0 +1,31 @@
+import { Model, DataTypes } from 'sequelize';
+<%const resolveType = (type) => {  if (type === "ref") return "INTEGER";  if (type.toLowerCase() === "array") return "ARRAY(DataTypes.STRING)";  return type.toUpperCase();};%>
+class <%= name %> extends Model {
+  static initModel(sequelize) {
+    <%= name %>.init(
+      {
+<% fields.forEach(field => { -%>
+        <%= field.name %>: {
+          type: DataTypes.<%= resolveType(field.type) %><%=
+          field.required ? ', allowNull: false' : '' %><%=
+          field.unique ? ', unique: true' : '' %><%=
+          field.default !== undefined ? `, defaultValue: ${JSON.stringify(field.default)}` : '' %>
+        },
+<% }) -%>
+      }, {
+        sequelize,
+        modelName: '<%= name %>',
+        timestamps: true
+      });
+    }
+
+  static associate(models) {
+<% fields.forEach(field => { -%>
+<% if (field.type === 'ref' && field.ref) { -%>
+    <%= name %>.belongsTo(models.<%= field.ref %>, { foreignKey: '<%= field.name %>' });
+<% } -%>
+<% }) -%>
+  }
+}
+
+export default <%= name %>;

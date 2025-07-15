@@ -1,0 +1,169 @@
+import {  <%= modelName %>  } from '../models/index.js';
+import validate from '../validators/<%= modelName %>.validator.js';
+
+// Crear
+export async function create<%= modelName %>(req, res) {
+  const { error } = validate.validate(req.body);
+  if (error) return res.status(400).json({ error: error.details[0].message });
+
+  try {
+    const item = new <%= modelName %>({
+      ...req.body,
+      createdBy: req.user.id
+    });
+    const saved = await item.save();
+    res.status(201).json(saved);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+};
+
+// Obtener todos
+export async function getAll<%= modelName %>(req, res) {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+    const sort = req.query.sort || '_id';
+
+    const { search, showDeleted, ...filters } = req.query;
+
+    //Validar campos
+    const allowedFields = [<%- fields.map(f => `'${f.name}'`).join(', ') %>];
+    const query = {};
+
+    Object.keys(filters).forEach((key) => {
+      if (key.startsWith("exclude_")) {
+        const realKey = key.replace("exclude_", "");
+
+        if (!allowedFields.includes(realKey)) return;
+
+        const values = filters[key].split(",").map((v) => v.trim());
+        query[realKey] = { $nin: values };
+        return;
+      }
+
+      if (!allowedFields.includes(key)) return;
+
+      const value = filters[key];
+
+      if (typeof value === "string" && value.includes(",")) {
+        query[key] = { $all: value.split(",") };
+      } else if (typeof value === "string") {
+        query[key] = { $regex: value, $options: "i" };
+      } else {
+        query[key] = value;
+      }
+    });
+
+<% if (fields.some(f => f.name === 'isDeleted')) { %>    if (!showDeleted || req.user?.role !== "admin") {
+      query.isDeleted = false;
+    }
+<% } %>
+<% if (fields.filter(f => f.type === 'String').length > 0) { %>    if (search) {
+      query.$or = [<% fields.filter(f => f.type === 'String').forEach((f, i, arr) => { %>{ <%= f.name %>: { $regex: search, $options: 'i' } }<%= i < arr.length - 1 ? ',' : '' %><% }); %>];
+    }
+<% } %>
+    let dbQuery = <%= modelName %>.find(query).sort(sort).skip(skip).limit(limit);
+    <% fields.filter(f => f.type === 'ref').forEach(f => { %>
+    query = query.populate('<%= f.name %>');
+    <% }); %>    
+    const items = await dbQuery;
+    const total = await <%= modelName %>.countDocuments(query);
+
+    res.json({
+      page,
+      totalPages: Math.ceil(total / limit),
+      totalItems: total,
+      items,
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// Obtener por ID
+export async function get<%= modelName %>ById(req, res) {
+  try {
+    let query = <%= modelName %>.findOne({ _id: req.params.id, isDeleted: false });
+    <% fields.filter(f => f.type === 'ref').forEach(f => { %>
+    query = query.populate('<%= f.name %>');
+    <% }); %>
+    const item = await query;
+    if (!item) return res.status(404).json({ error: 'Not found' });
+    res.json(item);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// Actualizar
+export async function update<%= modelName %>(req, res) {
+  try {
+    const item = await <%= modelName %>.findById(req.params.id);
+    if (!item) return res.status(404).json({ error: 'Not found' });
+    <% if (fields.some(f => f.name === 'createdBy')) { %>
+    if (req.requireSelf && req.user.id !== item.createdBy.toString()) {
+      return res.status(403).json({ error: 'Unauthorized' });
+    }    <% } %>
+
+    Object.assign(item, req.body);
+    const updated = await item.save();
+    res.json(updated);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+};
+
+// Soft Delete
+export async function delete<%= modelName %>(req, res) {
+  try {
+    const item = await <%= modelName %>.findById(req.params.id);
+    if (!item) return res.status(404).json({ error: 'Not found' });
+
+    <% if (fields.some(f => f.name === 'createdBy')) { %>if (req.requireSelf && req.user.id !== item.createdBy.toString()) {
+      return res.status(403).json({ error: 'Unauthorized' });
+    }<% } %>
+
+    item.isDeleted = true;
+    await item.save();
+    res.json({ message: 'Soft deleted' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// Restaurar
+export async function restore<%= modelName %>(req, res) {
+  try {
+    const item = await <%= modelName %>.findById(req.params.id);
+    if (!item) return res.status(404).json({ error: 'Not found' });
+
+    <% if (fields.some(f => f.name === 'createdBy')) { %>if (req.requireSelf && req.user.id !== item.createdBy.toString()) {
+      return res.status(403).json({ error: 'Unauthorized' });
+    }<% } %>
+
+    item.isDeleted = false;
+    await item.save();
+    res.json({ message: 'Restored' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// Eliminar permanente
+export async function hardDelete<%= modelName %>(req, res) {
+  try {
+    const item = await <%= modelName %>.findById(req.params.id);
+    if (!item) return res.status(404).json({ error: 'Not found' });
+
+    <% if (fields.some(f => f.name === 'createdBy')) { %>if (req.requireSelf && req.user.id !== item.createdBy.toString()) {
+      return res.status(403).json({ error: 'Unauthorized' });
+    }<% } %>
+
+    await item.deleteOne();
+    res.json({ message: 'Permanently deleted' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};

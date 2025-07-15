@@ -1,0 +1,73 @@
+import bcrypt from 'bcrypt';
+import User from '../models/User.js';
+
+export async function register(req, res) {
+  const { username, password, ...extra } = req.body;
+
+  try {
+    const exists = await <%- preset.findByUsername %>;
+    if (exists) return res.status(400).json({ error: 'User already exists' });
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = new User({
+      username,
+      password: hashedPassword,
+      role: 'user',
+      ...extra
+    });
+
+    await user.save();
+    res.status(201).json({ message: 'User registered.' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+export async function login(req, res) {
+  const { username, password } = req.body;
+
+  try {
+    const user = <%- preset.findByUsername %>;
+    if (!user) return res.status(401).json({ error: 'Invalid credentials' });
+
+    const valid = await bcrypt.compare(password, user.password);
+    if (!valid) return res.status(401).json({ error: 'Invalid credentials' });
+
+    req.session.user = { id: user._id, username: user.username, role: user.role };
+    await req.session.save();
+
+    res.json({ message: 'Logged in.' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+export async function logout(req, res) {
+  try {
+    await req.session.destroy();
+    res.json({ message: 'Logged out.' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+export async function profile(req, res) {
+  res.json({ user: req.user });
+}
+
+export async function promoteToAdmin(req, res) {
+  const { username } = req.params;
+
+  try {
+    const user = await <%- preset.findByUsername %>;
+    if (!user) return res.status(404).json({ error: 'User not found' });
+
+    user.role = 'admin';
+    await user.save();
+
+    res.json({ message: `User ${username} promoted to admin` });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};

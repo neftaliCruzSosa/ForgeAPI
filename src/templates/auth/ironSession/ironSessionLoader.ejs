@@ -1,0 +1,7 @@
+import authMiddleware from './auth.middleware.js';
+import authRoutes from './auth.routes.js';
+
+export default (app) => {
+  app.use(authMiddleware());
+  app.use('/auth', authRoutes);
+};

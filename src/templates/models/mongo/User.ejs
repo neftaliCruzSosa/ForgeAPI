@@ -1,0 +1,15 @@
+import mongoose from 'mongoose';
+
+const UserSchema = new mongoose.Schema({
+<% fields.forEach(field => { -%>
+  <%- field.name %>: {
+    type: <%- field.type === 'ref' ? 'mongoose.Schema.Types.ObjectId' : field.type %><%=
+      field.ref ? `, ref: '${field.ref}'` : ''
+    %><%= field.required ? ', required: true' : '' %><%= field.unique ? ', unique: true' : '' %><%=
+      field.default !== undefined ? `, default: ${JSON.stringify(field.default)}` : ''
+    %>
+  },
+<% }) -%>
+}, { timestamps: true });
+
+export default mongoose.model('User', UserSchema);

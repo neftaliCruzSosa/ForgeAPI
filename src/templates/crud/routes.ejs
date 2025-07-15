@@ -1,0 +1,20 @@
+import express from 'express';
+const router = express.Router();
+import * as controller from '../controllers/<%= modelName %>.controller.js';
+
+<% if (protect) { %>import auth from '../auth/auth.middleware.js';<% } %>
+<% function authOptions(level) {
+  if (level === 'admin') return '{ required: true, admin: true }';
+  if (level === 'auth') return '{ required: true }';
+  if (level === 'self') return '{ required: true, self: true }';
+  return '';
+} %>
+router.post('/', <%= protect?.create ? `auth(${authOptions(protect.create)})` : 'auth()' %>, controller.create<%= modelName %>);
+router.get('/', <%= protect?.getAll ? `auth(${authOptions(protect.getAll)})` : 'auth()' %>, controller.getAll<%= modelName %>);
+router.get('/:id', <%= protect?.getById ? `auth(${authOptions(protect.getById)})` : 'auth()' %>, controller.get<%= modelName %>ById);
+router.put('/:id', <%= protect?.update ? `auth(${authOptions(protect.update)})` : 'auth()' %>, controller.update<%= modelName %>);
+router.delete('/:id', <%= protect?.delete ? `auth(${authOptions(protect.delete)})` : 'auth()' %>, controller.delete<%= modelName %>);
+router.patch('/:id', <%= protect?.restore ? `auth(${authOptions(protect.restore)})` : 'auth()' %>, controller.restore<%= modelName %>);
+router.delete('/:id/hardDelete', <%= protect?.hardDelete ? `auth(${authOptions(protect.hardDelete)})` : 'auth()' %>, controller.hardDelete<%= modelName %>);
+
+export default router;

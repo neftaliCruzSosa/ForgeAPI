@@ -1,0 +1,16 @@
+import mongoose from 'mongoose';
+
+if (!process.env.DB_URI) {
+  throw new Error("❌ Faltan variables de entorno: DB_URI no está definido para MongoDB");
+}
+
+mongoose.connect(process.env.DB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+}).then(() => {
+  console.log('✅ Conectado a MongoDB');
+}).catch(err => {
+  console.error('❌ Error de conexión a MongoDB:', err.message);
+});
+
+export default mongoose;

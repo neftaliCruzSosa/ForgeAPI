@@ -1,0 +1,29 @@
+{
+  "type": "module",
+  "name": "<%= projectName %>",
+  "version": "1.0.0",
+  "description": "Generated with ApiForge - Modular API Generator",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+<%
+  const keys = Object.keys(dependencies);
+  keys.forEach((name, i) => {%>    "<%= name %>": "<%= dependencies[name] %>"<%= i < keys.length - 1 ? ',' : '' %>
+<% }) %>  },
+  "devDependencies": {
+<%  const devKeys = Object.keys(devDependencies);
+  devKeys.forEach((name, i) => {%>    "<%= name %>": "<%= devDependencies[name] %>"<%= i < devKeys.length - 1 ? ',' : '' %>
+<% }) %>  },
+  "generator": {
+    "name": "ApiForge",
+    "version": "1.0.0",
+    "auth": "<%= authType %>",
+    "db": "<%= dbType %>"
+  }
+}
