@@ -7,18 +7,39 @@ class BaseFileGenerator {
 
   async ensureDir(basePath, subdir) {
     const fullPath = this.fileService.resolvePath(basePath, subdir);
-    await this.fileService.ensureDir(fullPath);
-    return fullPath;
+    try {
+      await this.fileService.ensureDir(fullPath);
+      return fullPath;
+    } catch (err) {
+      this.logger?.error(
+        `❌ Error while ensuring directory "${subdir}": ${err.message}`
+      );
+      throw err;
+    }
   }
 
   async renderTemplate(templatePath, data) {
-    return await this.templateService.render(templatePath, data);
+    try {
+      return await this.templateService.render(templatePath, data);
+    } catch (err) {
+      this.logger?.error(
+        `❌ Error rendering template "${templatePath}": ${err.message}`
+      );
+      throw err;
+    }
   }
 
   async writeRenderedFile(basePath, relativePath, content) {
     const filePath = this.fileService.resolvePath(basePath, relativePath);
-    await this.fileService.writeFile(filePath, content);
-    return filePath;
+    try {
+      await this.fileService.writeFile(filePath, content);
+      return filePath;
+    } catch (err) {
+      this.logger?.error(
+        `❌ Error writing rendered file "${relativePath}": ${err.message}`
+      );
+      throw err;
+    }
   }
 
   logInfo(message) {

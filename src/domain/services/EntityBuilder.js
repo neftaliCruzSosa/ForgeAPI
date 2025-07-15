@@ -1,7 +1,19 @@
 class EntityBuilder {
   buildDefinition(entity, { skipSystemFields = [] } = {}) {
-    const userFields = entity.fields || [];
-    const overrideFields = entity.overrideFields || [];
+    if (!entity || typeof entity !== "object") {
+      throw new Error("EntityBuilder: 'entity' must be an object.");
+    }
+
+    if (!entity.name || typeof entity.name !== "string") {
+      throw new Error(
+        "EntityBuilder: 'entity.name' must be a non-empty string."
+      );
+    }
+
+    const userFields = Array.isArray(entity.fields) ? entity.fields : [];
+    const overrideFields = Array.isArray(entity.overrideFields)
+      ? entity.overrideFields
+      : [];
 
     let fields = overrideFields.length > 0 ? overrideFields : userFields;
 

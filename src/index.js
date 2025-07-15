@@ -20,9 +20,15 @@ export default async function forgeAPI({
   authType = "jwt",
 }) {
   const useCase = new GenerateApiUseCase({ buildGenerators });
-  await useCase.generate(projectName, entities, {
-    auth,
-    dbType,
-    authType,
-  });
+
+  try {
+    await useCase.generate(projectName, entities, {
+      auth,
+      dbType,
+      authType,
+    });
+  } catch (err) {
+    console.error(`❌ ForgeAPI failed: ${err.message}`);
+    throw err;
+  }
 }

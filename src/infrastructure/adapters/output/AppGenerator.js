@@ -14,14 +14,20 @@ class AppGenerator extends BaseFileGenerator {
   }
 
   async generate(basePath) {
-    const rendered = await this.renderTemplate(this.templatePath, {});
-    const filePath = await this.writeRenderedFile(
-      basePath,
-      this.outputFile,
-      rendered
-    );
-
-    this.logInfo(`✅ Archivo ${this.outputFile} generado en ${filePath}`);
+    try {
+      const rendered = await this.renderTemplate(this.templatePath, {});
+      const filePath = await this.writeRenderedFile(
+        basePath,
+        this.outputFile,
+        rendered
+      );
+      this.logInfo(`✅ Archivo ${this.outputFile} generado en ${filePath}`);
+    } catch (err) {
+      this.logger?.error(
+        `❌ Error generating ${this.outputFile}: ${err.message}`
+      );
+      throw err;
+    }
   }
 }
 

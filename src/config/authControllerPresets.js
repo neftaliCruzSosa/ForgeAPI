@@ -1,4 +1,4 @@
-const authPresets = {
+export default {
   mongo: {
     findByUsername: "await User.findOne({ username });",
   },
@@ -6,5 +6,3 @@ const authPresets = {
     findByUsername: "await User.findOne({ where: { username } });",
   },
 };
-
-export default authPresets;

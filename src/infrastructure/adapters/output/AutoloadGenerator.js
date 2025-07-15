@@ -17,15 +17,22 @@ class AutoloadGenerator extends BaseFileGenerator {
   }
 
   async generate(entities, basePath) {
-    const rendered = await this.renderTemplate(this.templatePath, { entities });
-    const outputPath = await this.ensureDir(basePath, this.routesDir);
-    const filePath = await this.writeRenderedFile(
-      outputPath,
-      this.outputFile,
-      rendered
-    );
+    try {
+      const rendered = await this.renderTemplate(this.templatePath, {
+        entities,
+      });
+      const outputPath = await this.ensureDir(basePath, this.routesDir);
+      const filePath = await this.writeRenderedFile(
+        outputPath,
+        this.outputFile,
+        rendered
+      );
 
-    this.logInfo(`🔄 Archivo de autoload generado: ${filePath}`);
+      this.logInfo(`🔄 Archivo de autoload generado: ${filePath}`);
+    } catch (err) {
+      this.logger?.error(`❌ Error generating autoload file: ${err.message}`);
+      throw err;
+    }
   }
 }
 

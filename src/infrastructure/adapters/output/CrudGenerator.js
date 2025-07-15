@@ -19,10 +19,14 @@ class CrudGenerator extends BaseFileGenerator {
     this.controllersDir = controllersDir;
     this.routesDir = routesDir;
 
-    const defaultControllerPath = templateDir && fileService.joinPath(templateDir, dbType, "controller.ejs");
-    const defaultRoutePath = templateDir && fileService.joinPath(templateDir, "routes.ejs");
+    const defaultControllerPath =
+      templateDir &&
+      fileService.joinPath(templateDir, dbType, "controller.ejs");
+    const defaultRoutePath =
+      templateDir && fileService.joinPath(templateDir, "routes.ejs");
 
-    this.controllerTemplatePath = controllerTemplatePath || defaultControllerPath;
+    this.controllerTemplatePath =
+      controllerTemplatePath || defaultControllerPath;
     this.routeTemplatePath = routeTemplatePath || defaultRoutePath;
   }
 
@@ -34,11 +38,14 @@ class CrudGenerator extends BaseFileGenerator {
     const controllersPath = await this.ensureDir(basePath, this.controllersDir);
     const routesPath = await this.ensureDir(basePath, this.routesDir);
 
-    const renderedController = await this.renderTemplate(this.controllerTemplatePath, {
-      modelName,
-      fields,
-      protect,
-    });
+    const renderedController = await this.renderTemplate(
+      this.controllerTemplatePath,
+      {
+        modelName,
+        fields,
+        protect,
+      }
+    );
 
     const renderedRoute = await this.renderTemplate(this.routeTemplatePath, {
       modelName,
@@ -51,7 +58,11 @@ class CrudGenerator extends BaseFileGenerator {
       `${modelName}.controller.js`,
       renderedController
     );
-    const routeFile = await this.writeRenderedFile(routesPath, `${modelName}.routes.js`, renderedRoute);
+    const routeFile = await this.writeRenderedFile(
+      routesPath,
+      `${modelName}.routes.js`,
+      renderedRoute
+    );
 
     this.logInfo(`✅ CRUD generado para ${modelName}`);
     this.logInfo(`   ├─ Controller: ${controllerFile}`);

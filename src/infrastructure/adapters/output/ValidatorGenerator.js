@@ -1,4 +1,4 @@
-import BaseFileGenerator from '../../shared/BaseFileGenerator.js';
+import BaseFileGenerator from "../../shared/BaseFileGenerator.js";
 
 class ValidatorGenerator extends BaseFileGenerator {
   constructor({
@@ -7,7 +7,7 @@ class ValidatorGenerator extends BaseFileGenerator {
     templateService,
     logger,
     dbType = "mongo",
-    validatorsDir = "validators"
+    validatorsDir = "validators",
   }) {
     super({ fileService, templateService, logger });
     this.templatePath = fileService.joinPath(templateDir, "validator.ejs");
@@ -19,21 +19,28 @@ class ValidatorGenerator extends BaseFileGenerator {
     const modelName = entity.name;
     const fields = entity.overrideFields || entity.fields || [];
 
-    const validatorsPath = await this.ensureDir(basePath, this.validatorsDir);
+    try {
+      const validatorsPath = await this.ensureDir(basePath, this.validatorsDir);
 
-    const rendered = await this.renderTemplate(this.templatePath, {
-      modelName,
-      fields,
-      dbType: this.dbType
-    });
+      const rendered = await this.renderTemplate(this.templatePath, {
+        modelName,
+        fields,
+        dbType: this.dbType,
+      });
 
-    const filePath = await this.writeRenderedFile(
-      validatorsPath,
-      `${modelName}.validator.js`,
-      rendered
-    );
+      const filePath = await this.writeRenderedFile(
+        validatorsPath,
+        `${modelName}.validator.js`,
+        rendered
+      );
 
-    this.logInfo(`🧪 Validator generado para ${modelName}: ${filePath}`);
+      this.logInfo(`🧪 Validator generado para ${modelName}: ${filePath}`);
+    } catch (err) {
+      this.logger?.error(
+        `❌ Error generating validator for ${modelName}: ${err.message}`
+      );
+      throw err;
+    }
   }
 }
 

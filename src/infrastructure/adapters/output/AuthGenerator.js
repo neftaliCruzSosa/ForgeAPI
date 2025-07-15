@@ -20,30 +20,38 @@ class AuthGenerator extends BaseFileGenerator {
   }
 
   async generate(projectPath) {
-    const templates = [
-      { name: "auth.controller", output: "auth.controller.js" },
-      { name: "auth.middleware", output: "auth.middleware.js" },
-      { name: "auth.routes", output: "auth.routes.js" },
-      { name: `${this.authType}Loader`, output: "index.js" },
-    ];
+    try {
+      const templates = [
+        { name: "auth.controller", output: "auth.controller.js" },
+        { name: "auth.middleware", output: "auth.middleware.js" },
+        { name: "auth.routes", output: "auth.routes.js" },
+        { name: `${this.authType}Loader`, output: "index.js" },
+      ];
 
-    const outputPath = await this.ensureDir(projectPath, this.outputDir);
-    const preset = authControllerPresets[this.dbType] || {};
+      const outputPath = await this.ensureDir(projectPath, this.outputDir);
+      const preset = authControllerPresets[this.dbType] || {};
 
-    for (const { name, output } of templates) {
-      const templatePath = this.fileService.resolvePath(
-        this.templateDir,
-        `${name}.ejs`
+      for (const { name, output } of templates) {
+        const templatePath = this.fileService.resolvePath(
+          this.templateDir,
+          `${name}.ejs`
+        );
+
+        const rendered = await this.renderTemplate(templatePath, {
+          authType: this.authType,
+          preset,
+        });
+
+        await this.writeRenderedFile(outputPath, output, rendered);
+      }
+
+      this.logInfo(`✅ Auth (${this.authType}) generado en: ${outputPath}`);
+    } catch (err) {
+      this.logger?.error(
+        `❌ Error generating auth module (${this.authType}): ${err.message}`
       );
-      const rendered = await this.renderTemplate(templatePath, {
-        authType: this.authType,
-        preset,
-      });
-
-      await this.writeRenderedFile(outputPath, output, rendered);
+      throw err;
     }
-
-    this.logInfo(`✅ Auth (${this.authType}) generado en: ${outputPath}`);
   }
 }
 

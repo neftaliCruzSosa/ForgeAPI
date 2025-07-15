@@ -20,50 +20,59 @@ class StaticModelGenerator extends BaseFileGenerator {
   async generate(entity, basePath) {
     const modelPath = await this.ensureDir(basePath, this.outputDir);
 
-    const definitionPath = this.fileService.resolvePath(
-      this.templateDir,
-      `${entity.name}.json`
-    );
-    const exists = await this.fileService.exists(definitionPath);
-    if (!exists) {
-      this.logger?.warn(
-        `❌ No se encontró definición JSON para ${entity.name}`
+    try {
+      const definitionPath = this.fileService.resolvePath(
+        this.templateDir,
+        `${entity.name}.json`
       );
-      return;
-    }
+      const exists = await this.fileService.exists(definitionPath);
+      if (!exists) {
+        this.logger?.warn(
+          `❌ No se encontró definición JSON para ${entity.name}`
+        );
+        return;
+      }
 
-    const raw = await this.fileService.readFile(definitionPath);
-    const baseDefinition = JSON.parse(raw);
+      const raw = await this.fileService.readFile(definitionPath);
+      const baseDefinition = JSON.parse(raw);
 
-    const fullDefinition = this.entityBuilder.buildDefinition(baseDefinition, {
-      skipSystemFields: entity.skipSystemFields || [],
-    });
-    const templatePath = this.fileService.resolvePath(
-      this.templateDir,
-      this.dbType,
-      `${entity.name}.ejs`
-    );
-
-    const templateExists = await this.fileService.exists(templatePath);
-    if (!templateExists) {
-      this.logger?.warn(
-        `❌ No se encontró plantilla para ${entity.name} en ${this.dbType}`
+      const fullDefinition = this.entityBuilder.buildDefinition(
+        baseDefinition,
+        {
+          skipSystemFields: entity.skipSystemFields || [],
+        }
       );
-      return;
+
+      const templatePath = this.fileService.resolvePath(
+        this.templateDir,
+        this.dbType,
+        `${entity.name}.ejs`
+      );
+      const templateExists = await this.fileService.exists(templatePath);
+      if (!templateExists) {
+        this.logger?.warn(
+          `❌ No se encontró plantilla para ${entity.name} en ${this.dbType}`
+        );
+        return;
+      }
+
+      const rendered = await this.renderTemplate(templatePath, fullDefinition);
+      const filePath = await this.writeRenderedFile(
+        modelPath,
+        `${entity.name}.js`,
+        rendered
+      );
+
+      fullDefinition.protect = entity.protect;
+      this.logInfo(`📄 Modelo estático ${entity.name} generado: ${filePath}`);
+
+      return fullDefinition;
+    } catch (err) {
+      this.logger?.error(
+        `❌ Error generating static model for ${entity.name}: ${err.message}`
+      );
+      throw err;
     }
-
-    const rendered = await this.renderTemplate(templatePath, fullDefinition);
-
-    const filePath = await this.writeRenderedFile(
-      modelPath,
-      `${entity.name}.js`,
-      rendered
-    );
-
-    fullDefinition.protect = entity.protect;
-    this.logInfo(`📄 Modelo estático ${entity.name} generado: ${filePath}`);
-
-    return fullDefinition;
   }
 }
 

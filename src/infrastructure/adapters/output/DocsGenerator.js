@@ -15,18 +15,28 @@ class DocsGenerator extends BaseFileGenerator {
   }
 
   async generate(basePath, projectName, entities) {
-    const preset = dbPresets[this.dbType] || {};
+    try {
+      const preset = dbPresets[this.dbType] || {};
 
-    const rendered = await this.renderTemplate(this.templatePath, {
-      projectName,
-      entities,
-      dbType: this.dbType,
-      dbLabel: preset.label,
-      dbEnvVars: typeof preset.env === "function" ? preset.env(projectName) : [],
-    });
+      const rendered = await this.renderTemplate(this.templatePath, {
+        projectName,
+        entities,
+        dbType: this.dbType,
+        dbLabel: preset.label,
+        dbEnvVars:
+          typeof preset.env === "function" ? preset.env(projectName) : [],
+      });
 
-    const filePath = await this.writeRenderedFile(basePath, "README.md", rendered);
-    this.logInfo(`📘 README.md generado en: ${filePath}`);
+      const filePath = await this.writeRenderedFile(
+        basePath,
+        "README.md",
+        rendered
+      );
+      this.logInfo(`📘 README.md generado en: ${filePath}`);
+    } catch (err) {
+      this.logger?.error(`❌ Error generating README.md: ${err.message}`);
+      throw err;
+    }
   }
 }
 
