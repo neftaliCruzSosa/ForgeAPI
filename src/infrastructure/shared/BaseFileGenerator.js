@@ -12,7 +12,7 @@ class BaseFileGenerator {
       return fullPath;
     } catch (err) {
       this.logger?.error(
-        `❌ Error while ensuring directory "${subdir}": ${err.message}`
+        `Error while ensuring directory "${subdir}": ${err.message}`
       );
       throw err;
     }
@@ -23,7 +23,7 @@ class BaseFileGenerator {
       return await this.templateService.render(templatePath, data);
     } catch (err) {
       this.logger?.error(
-        `❌ Error rendering template "${templatePath}": ${err.message}`
+        `Error rendering template "${templatePath}": ${err.message}`
       );
       throw err;
     }
@@ -36,7 +36,7 @@ class BaseFileGenerator {
       return filePath;
     } catch (err) {
       this.logger?.error(
-        `❌ Error writing rendered file "${relativePath}": ${err.message}`
+        `Error writing rendered file "${relativePath}": ${err.message}`
       );
       throw err;
     }

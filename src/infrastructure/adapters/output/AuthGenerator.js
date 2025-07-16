@@ -19,7 +19,7 @@ class AuthGenerator extends BaseFileGenerator {
     this.outputDir = "auth";
   }
 
-  async generate(projectPath) {
+  async generate(basePath) {
     try {
       const templates = [
         { name: "auth.controller", output: "auth.controller.js" },
@@ -28,7 +28,7 @@ class AuthGenerator extends BaseFileGenerator {
         { name: `${this.authType}Loader`, output: "index.js" },
       ];
 
-      const outputPath = await this.ensureDir(projectPath, this.outputDir);
+      const outputPath = await this.ensureDir(basePath, this.outputDir);
       const preset = authControllerPresets[this.dbType] || {};
 
       for (const { name, output } of templates) {
@@ -48,7 +48,7 @@ class AuthGenerator extends BaseFileGenerator {
       this.logInfo(`✅ Auth (${this.authType}) generado en: ${outputPath}`);
     } catch (err) {
       this.logger?.error(
-        `❌ Error generating auth module (${this.authType}): ${err.message}`
+        `Error generating auth module (${this.authType}): ${err.message}`
       );
       throw err;
     }

@@ -36,7 +36,7 @@ class ModelIndexGenerator extends BaseFileGenerator {
         `📦 Archivo models/index.js generado con ${models.length} modelos: ${filePath}`
       );
     } catch (err) {
-      this.logger?.error(`❌ Error generating model index: ${err.message}`);
+      this.logger?.error(`Error generating model index: ${err.message}`);
       throw err;
     }
   }

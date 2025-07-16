@@ -70,6 +70,7 @@ await forgeAPI({
   auth: true,
   dbType: "postgres",
   authType: "ironSession",
+  force: false,
 });
 
 /* --- Optional: Copy seed.js into test project --- */

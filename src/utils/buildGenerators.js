@@ -16,7 +16,7 @@ async function buildGenerators(
 
   if (!SUPPORTED_DATABASES.includes(dbType)) {
     logger.error(
-      `❌ Unsupported database type: "${dbType}". Supported: ${SUPPORTED_DATABASES.join(
+      `Unsupported database type: "${dbType}". Supported: ${SUPPORTED_DATABASES.join(
         ", "
       )}`
     );
@@ -25,7 +25,7 @@ async function buildGenerators(
 
   if (!SUPPORTED_AUTHS.includes(authType)) {
     logger.error(
-      `❌ Unsupported auth type: "${authType}". Supported: ${SUPPORTED_AUTHS.join(
+      `Unsupported auth type: "${authType}". Supported: ${SUPPORTED_AUTHS.join(
         ", "
       )}`
     );
@@ -44,7 +44,7 @@ async function buildGenerators(
     DbGenerator = dbGeneratorModule.default;
   } catch (err) {
     logger.error(
-      `❌ Failed to load DB generator for "${dbType}": ${err.message}`
+      `Failed to load DB generator for "${dbType}": ${err.message}`
     );
     throw new Error(`Cannot find generator for dbType "${dbType}"`);
   }
@@ -53,7 +53,7 @@ async function buildGenerators(
   const templatesRootPath = fileService.joinPath(baseDir, "../templates");
 
   return {
-    structuregenerator: new OutputGenerators.ProjectStructureGenerator({
+    structureGenerator: new OutputGenerators.ProjectStructureGenerator({
       ...services,
       templateDir: templatesRootPath,
       dbType,

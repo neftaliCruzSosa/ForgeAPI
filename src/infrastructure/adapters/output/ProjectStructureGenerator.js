@@ -18,8 +18,30 @@ class ProjectStructureGenerator {
     this.authType = authType;
   }
 
-  async generate(basePath, projectName) {
+  async generate(basePath, projectName, force = false) {
+    const outputPath = this.fileService.resolvePath(basePath, projectName);
     try {
+      if (await this.fileService.pathExists(outputPath)) {
+        if (!force) {
+          throw new Error(
+            `Proyecto '${projectName}' ya existe. Usa 'force: true' para sobrescribir.`
+          );
+        }
+        await this.fileService.remove(outputPath);
+      }
+      this.logger.info(`📦 Generando proyecto en: ${outputPath}`);
+      await this.fileService.ensureDir(outputPath);
+      this.logger?.info(
+        `📁 Carpeta base del proyecto creada en: ${outputPath}`
+      );
+
+      await this.fileService.ensureDir(
+        this.fileService.joinPath(outputPath, "models")
+      );
+      await this.fileService.ensureDir(
+        this.fileService.joinPath(outputPath, "routes")
+      );
+
       const dbPreset = dbPresets[this.dbType] || {};
       const authPreset = authPresets[this.authType] || {};
       const baseDeps = {
@@ -49,12 +71,12 @@ class ProjectStructureGenerator {
         dbType: this.dbType,
       });
 
-      const filePath = this.fileService.resolvePath(basePath, "package.json");
+      const filePath = this.fileService.resolvePath(outputPath, "package.json");
       await this.fileService.writeFile(filePath, rendered, "utf-8");
 
       this.logger?.info(`📦 Archivo package.json generado en: ${filePath}`);
+      return outputPath;
     } catch (err) {
-      this.logger?.error(`❌ Error generating package.json: ${err.message}`);
       throw err;
     }
   }

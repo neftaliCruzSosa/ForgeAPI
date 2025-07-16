@@ -6,7 +6,7 @@ class ModelGenerator extends BaseFileGenerator {
     super({ fileService, templateService, logger });
   }
 
-  async generate(entities, outputBase, staticModelGenerator, dbGenerator) {
+  async generate(entities, basePath, staticModelGenerator, dbGenerator) {
     
     try {
       for (let i = 0; i < entities.length; i++) {
@@ -15,20 +15,20 @@ class ModelGenerator extends BaseFileGenerator {
         if (entity.builtIn) {
           const fullEntity = await staticModelGenerator?.generate(
             entity,
-            outputBase
+            basePath
           );
           if (fullEntity) {
             entities[i] = fullEntity;
           }
         } else {
           const def = new EntityDefinition(entity.name, entity.fields);
-          await dbGenerator?.generate(def, outputBase);
+          await dbGenerator?.generate(def, basePath);
         }
       }
 
       this.logger.info("✅ Modelos generados correctamente.");
     } catch (err) {
-      this.logger.error(`❌ Error al generar modelos: ${err.message}`);
+      this.logger.error(`Error al generar modelos: ${err.message}`);
       throw err;
     }
   }

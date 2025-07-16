@@ -30,7 +30,7 @@ class EnvExampleGenerator extends BaseFileGenerator {
       await this.writeRenderedFile(basePath, ".env.example", content);
       this.logInfo(`⚙️  .env.example generado en: ${filePath}`);
     } catch (err) {
-      this.logger?.error(`❌ Error generating .env.example: ${err.message}`);
+      this.logger?.error(`Error generating .env.example: ${err.message}`);
       throw err;
     }
   }

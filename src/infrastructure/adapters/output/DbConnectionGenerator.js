@@ -29,7 +29,7 @@ class DbConnectionGenerator extends BaseFileGenerator {
       this.logInfo(`📡 Archivo de conexión generado: ${filePath}`);
     } catch (err) {
       this.logger?.error(
-        `❌ Error generating DB connection file: ${err.message}`
+        `Error generating DB connection file: ${err.message}`
       );
       throw err;
     }

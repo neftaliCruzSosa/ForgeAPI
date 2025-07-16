@@ -23,7 +23,7 @@ class PostgresGenerator extends BaseFileGenerator {
       this.logger.info(`✅ Modelo Sequelize generado: ${filePath}`);
     } catch (err) {
       this.logger?.error(
-        `❌ Error generating Sequelize model for ${entity.name}: ${err.message}`
+        `Error generating Sequelize model for ${entity.name}: ${err.message}`
       );
       throw err;
     }

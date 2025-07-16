@@ -37,7 +37,7 @@ class ValidatorGenerator extends BaseFileGenerator {
       this.logInfo(`🧪 Validator generado para ${modelName}: ${filePath}`);
     } catch (err) {
       this.logger?.error(
-        `❌ Error generating validator for ${modelName}: ${err.message}`
+        `Error generating validator for ${modelName}: ${err.message}`
       );
       throw err;
     }
