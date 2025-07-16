@@ -188,6 +188,14 @@ You can skip these using `skipSystemFields`.
 ## 📄 Changelog
 
 See the full changelog [here](./CHANGELOG.md).
+
+---
+
+## 🗺️ Roadmap
+
+Stay updated with planned features and upcoming improvements:  
+👉 [View the ForgeAPI Roadmap](./ROADMAP.md)
+
 ---
 
 ## 📄 License
