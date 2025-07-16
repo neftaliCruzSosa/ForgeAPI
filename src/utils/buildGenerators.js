@@ -8,7 +8,7 @@ async function buildGenerators(
   authType = "jwt",
   projectName
 ) {
-  const logger = new Services.LoggerService({projectName});
+  const logger = new Services.LoggerService({ projectName });
   const fileService = new Services.FileSystemService(logger);
   const templateService = new Services.TemplateService(logger);
 
@@ -53,6 +53,15 @@ async function buildGenerators(
   const templatesRootPath = fileService.joinPath(baseDir, "../templates");
 
   return {
+    structuregenerator: new OutputGenerators.ProjectStructureGenerator({
+      ...services,
+      templateDir: templatesRootPath,
+      dbType,
+      authType,
+    }),
+    modelsGenerator: new OutputGenerators.ModelsGenerator({
+      ...services,
+    }),
     ...services,
     appGenerator: new OutputGenerators.AppGenerator({
       ...services,
@@ -73,12 +82,6 @@ async function buildGenerators(
       ...services,
       templateDir: fileService.joinPath(templatesRootPath, "crud"),
       dbType,
-    }),
-    structuregenerator: new OutputGenerators.ProjectStructureGenerator({
-      ...services,
-      templateDir: templatesRootPath,
-      dbType,
-      authType,
     }),
     autoloadGenerator: new OutputGenerators.AutoloadGenerator({
       ...services,

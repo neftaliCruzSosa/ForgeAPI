@@ -29,6 +29,7 @@ class GenerateApiUseCase {
         fileService,
         logger,
         dbGenerator,
+        modelsGenerator,
         authGenerator,
         appGenerator,
         structuregenerator,
@@ -45,6 +46,7 @@ class GenerateApiUseCase {
 
       this.fileService = fileService;
       this.logger = logger;
+      this.modelsGenerator = modelsGenerator;
       this.dbGenerator = dbGenerator;
       this.authGenerator = authGenerator;
       this.appGenerator = appGenerator;
@@ -93,22 +95,12 @@ class GenerateApiUseCase {
   async #generateModels(entities, outputBase) {
     this.logger.info("📦 Generando modelos...");
     try {
-      for (let i = 0; i < entities.length; i++) {
-        const entity = entities[i];
-
-        if (entity.builtIn) {
-          const fullEntity = await this.staticModelGenerator?.generate(
-            entity,
-            outputBase
-          );
-          if (fullEntity) {
-            entities[i] = fullEntity;
-          }
-        } else {
-          const def = new EntityDefinition(entity.name, entity.fields);
-          await this.dbGenerator?.generate(def, outputBase);
-        }
-      }
+      await this.modelsGenerator?.generate(
+        entities,
+        outputBase,
+        this.staticModelGenerator,
+        this.dbGenerator
+      );
     } catch (err) {
       this.logger.error(`❌ Error al generar modelos: ${err.message}`);
       throw err;
