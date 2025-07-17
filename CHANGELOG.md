@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [0.1.2] - 2024-07-17
+### Added
+- Summary report after project generation with auth + CRUD routes per model
+- Support for built-in model detection in summary
+- Dynamic `.env.example` generation with inline comments
+- Project overwrite validation with `force: true` to delete existing content safely
+
+### Changed
+- Package scripts and dependencies are now managed from a central config
+- `EntityValidator` handles detailed field, reference and protect-level validation
+
+---
+
 ## [0.1.1] - 2025-07-15
 ### Added
 - Error handling with contextual logging in all file and template generators
