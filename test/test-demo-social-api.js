@@ -67,7 +67,7 @@ await forgeAPI({
   entities,
   auth: true,
   dbType: "postgres",
-  authType: "ironSession",
+  authType: "jwt",
   force: true,
 });
 
@@ -82,5 +82,4 @@ const seedTargetPath = fileService.resolvePath(
 );
 
 await fileService.copyFile(seedSourcePath, seedTargetPath);
-console.log("✅ seed.js copied to test project");
 /* ---------------------------------------------------- */

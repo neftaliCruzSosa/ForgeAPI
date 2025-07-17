@@ -10,6 +10,7 @@ class ModelGenerator extends BaseFileGenerator {
   async generate(entities, basePath, staticModelGenerator, dbGenerator) {
     const validator = new EntityValidator();
     validator.validate(entities);
+    let generatedModels = [];
     try {
       for (let i = 0; i < entities.length; i++) {
         const entity = entities[i];
@@ -26,13 +27,14 @@ class ModelGenerator extends BaseFileGenerator {
           const def = new EntityDefinition(entity.name, entity.fields);
           await dbGenerator?.generate(def, basePath);
         }
+        generatedModels.push(entity)
       }
-
       this.logger.info("✅ Modelos generados correctamente.");
     } catch (err) {
       this.logger.error(`Error al generar modelos: ${err.message}`);
       throw err;
     }
+    return generatedModels;
   }
 }
 

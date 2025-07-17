@@ -1,10 +1,13 @@
+import printSummary from "../utils/printSummary.js";
+
 class GenerateApiUseCase {
   constructor({ buildGenerators }) {
     this.buildGenerators = buildGenerators;
     this.generators = null;
   }
-  //
+
   async generate(projectName, entities, options = {}) {
+    const startTime = Date.now();
     try {
       const {
         dbType = "mongo",
@@ -77,7 +80,7 @@ class GenerateApiUseCase {
       );
       await this.#generateDocumentation(projectName, entities, outputBase);
       await this.#generateDatabaseConnection(outputBase);
-      await this.#generateModels(entities, outputBase);
+      const models = await this.#generateModels(entities, outputBase);
       if (auth) await this.#generateAuth(outputBase);
       await this.#generateApp(outputBase);
       await this.#generateCRUDs(entities, outputBase);
@@ -85,7 +88,14 @@ class GenerateApiUseCase {
       await this.#generateEnv(projectName, outputBase);
       await this.#generateValidators(entities, outputBase);
       await this.#generateMiddlewares(outputBase);
-
+      printSummary({
+        projectName,
+        outputBase,
+        dbType,
+        authType,
+        models,
+        startTime,
+      });
       logger.info(`✅ Proyecto generado exitosamente en: ${outputBase}`);
     } catch (err) {
       this.generators?.logger?.error(
@@ -98,7 +108,7 @@ class GenerateApiUseCase {
   async #generateModels(entities, outputBase) {
     this.logger.info("📦 Generando modelos...");
     try {
-      await this.modelsGenerator?.generate(
+      return await this.modelsGenerator?.generate(
         entities,
         outputBase,
         this.staticModelGenerator,

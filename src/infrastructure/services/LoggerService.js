@@ -3,7 +3,7 @@ import path from "path";
 
 class LoggerService {
   constructor({
-    level = "info",
+    level = "error",
     quiet = false,
     logDir = "logs",
     projectName = "forgeapi",
