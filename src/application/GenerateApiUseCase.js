@@ -1,5 +1,3 @@
-import EntityDefinition from "../domain/models/EntityDefinition.js";
-
 class GenerateApiUseCase {
   constructor({ buildGenerators }) {
     this.buildGenerators = buildGenerators;
@@ -71,6 +69,7 @@ class GenerateApiUseCase {
         baseDir,
         "../../projects"
       );
+
       const outputBase = await this.#generateProjectStructure(
         projectName,
         projectsRoot,

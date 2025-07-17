@@ -1,5 +1,5 @@
 class EntityBuilder {
-  buildDefinition(entity, { skipSystemFields = [] } = {}) {
+  buildDefinition(entity) {
     if (!entity || typeof entity !== "object") {
       throw new Error("EntityBuilder: 'entity' must be an object.");
     }
@@ -9,16 +9,20 @@ class EntityBuilder {
         "EntityBuilder: 'entity.name' must be a non-empty string."
       );
     }
-
     const userFields = Array.isArray(entity.fields) ? entity.fields : [];
     const overrideFields = Array.isArray(entity.overrideFields)
       ? entity.overrideFields
       : [];
+    const merged = new Map(userFields.map((f) => [f.name, f]));
+    for (const override of overrideFields) {
+      merged.set(override.name, override);
+    }
 
-    let fields = overrideFields.length > 0 ? overrideFields : userFields;
+    let fields = Array.from(merged.values());
 
     const fieldNames = new Set(fields.map((f) => f.name));
-    const skipSet = new Set(skipSystemFields);
+
+    const skipSet = new Set(entity.skipSystemFields);
 
     const systemFields = [
       { name: "isDeleted", type: "Boolean", default: false },

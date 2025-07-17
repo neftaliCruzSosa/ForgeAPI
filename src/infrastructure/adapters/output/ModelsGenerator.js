@@ -1,5 +1,6 @@
 import BaseFileGenerator from "../../shared/BaseFileGenerator.js";
 import EntityDefinition from "../../../domain/models/EntityDefinition.js";
+import EntityValidator from "../../../domain/services/EntityValidator.js";
 
 class ModelGenerator extends BaseFileGenerator {
   constructor({ fileService, templateService, logger }) {
@@ -7,7 +8,8 @@ class ModelGenerator extends BaseFileGenerator {
   }
 
   async generate(entities, basePath, staticModelGenerator, dbGenerator) {
-    
+    const validator = new EntityValidator();
+    validator.validate(entities);
     try {
       for (let i = 0; i < entities.length; i++) {
         const entity = entities[i];

@@ -27,21 +27,26 @@ class StaticModelGenerator extends BaseFileGenerator {
       );
       const exists = await this.fileService.exists(definitionPath);
       if (!exists) {
-        this.logger?.warn(
-          `No se encontró definición JSON para ${entity.name}`
-        );
+        this.logger?.warn(`No se encontró definición JSON para ${entity.name}`);
         return;
       }
 
       const raw = await this.fileService.readFile(definitionPath);
       const baseDefinition = JSON.parse(raw);
-
-      const fullDefinition = this.entityBuilder.buildDefinition(
-        baseDefinition,
-        {
-          skipSystemFields: entity.skipSystemFields || [],
-        }
-      );
+      const mergedDefinition = {
+        ...baseDefinition,
+        overrideFields: Array.isArray(entity.overrideFields)
+          ? entity.overrideFields
+          : [],
+        skipSystemFields: Array.from(
+          new Set([
+            ...(baseDefinition.skipSystemFields || []),
+            ...(entity.skipSystemFields || []),
+          ])
+        ),
+      };
+      const fullDefinition =
+        this.entityBuilder.buildDefinition(mergedDefinition);
 
       const templatePath = this.fileService.resolvePath(
         this.templateDir,

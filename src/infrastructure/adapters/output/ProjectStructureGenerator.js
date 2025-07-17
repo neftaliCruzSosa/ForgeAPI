@@ -29,7 +29,7 @@ class ProjectStructureGenerator {
         }
         await this.fileService.remove(outputPath);
       }
-      this.logger.info(`📦 Generando proyecto en: ${outputPath}`);
+      this.logger.info(`📦 Generando proyecto ${projectName}`);
       await this.fileService.ensureDir(outputPath);
       this.logger?.info(
         `📁 Carpeta base del proyecto creada en: ${outputPath}`
@@ -40,6 +40,9 @@ class ProjectStructureGenerator {
       );
       await this.fileService.ensureDir(
         this.fileService.joinPath(outputPath, "routes")
+      );
+      await this.fileService.ensureDir(
+        this.fileService.joinPath(outputPath, "controllers")
       );
 
       const dbPreset = dbPresets[this.dbType] || {};

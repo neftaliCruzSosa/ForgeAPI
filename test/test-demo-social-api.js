@@ -10,8 +10,6 @@ const entities = [
   {
     name: "User",
     builtIn: true,
-    generateCrud: true,
-    skipSystemFields: ["createdBy"],
     overrideFields: [
       { name: "bio", type: "String" },
       { name: "avatar", type: "String" },
@@ -68,9 +66,9 @@ await forgeAPI({
   projectName: "demo-social-api",
   entities,
   auth: true,
-  dbType: "postgres",
+  dbType: "mongo",
   authType: "ironSession",
-  force: false,
+  force: true,
 });
 
 /* --- Optional: Copy seed.js into test project --- */
