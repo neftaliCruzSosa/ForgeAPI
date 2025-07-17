@@ -18,6 +18,7 @@ export default async function forgeAPI({
   auth = false,
   dbType = "mongo",
   authType = "jwt",
+  force = false,
 }) {
   const useCase = new GenerateApiUseCase({ buildGenerators });
 
@@ -26,9 +27,10 @@ export default async function forgeAPI({
       auth,
       dbType,
       authType,
+      force,
     });
   } catch (err) {
-    console.error(`❌ ForgeAPI failed: ${err.message}`);
-    throw err;
+    console.error(`❌ ForgeAPI falló: ${err.message}`);
+    // process.exit(1)
   }
 }

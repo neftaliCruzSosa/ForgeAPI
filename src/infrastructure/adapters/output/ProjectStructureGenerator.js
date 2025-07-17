@@ -1,5 +1,6 @@
 import dbPresets from "../../../config/dbPresets.js";
 import authPresets from "../../../config/authPresets.js";
+import * as defaultPackage from "../../../config/defaultPackageConfig.js";
 
 class ProjectStructureGenerator {
   constructor({
@@ -18,8 +19,33 @@ class ProjectStructureGenerator {
     this.authType = authType;
   }
 
-  async generate(basePath, projectName) {
+  async generate(basePath, projectName, force = false) {
+    const outputPath = this.fileService.resolvePath(basePath, projectName);
     try {
+      if (await this.fileService.pathExists(outputPath)) {
+        if (!force) {
+          throw new Error(
+            `Proyecto '${projectName}' ya existe. Usa 'force: true' para sobrescribir.`
+          );
+        }
+        await this.fileService.remove(outputPath);
+      }
+      this.logger.info(`📦 Generando proyecto ${projectName}`);
+      await this.fileService.ensureDir(outputPath);
+      this.logger?.info(
+        `📁 Carpeta base del proyecto creada en: ${outputPath}`
+      );
+
+      await this.fileService.ensureDir(
+        this.fileService.joinPath(outputPath, "models")
+      );
+      await this.fileService.ensureDir(
+        this.fileService.joinPath(outputPath, "routes")
+      );
+      await this.fileService.ensureDir(
+        this.fileService.joinPath(outputPath, "controllers")
+      );
+
       const dbPreset = dbPresets[this.dbType] || {};
       const authPreset = authPresets[this.authType] || {};
       const baseDeps = {
@@ -32,29 +58,34 @@ class ProjectStructureGenerator {
       };
 
       const allDeps = {
-        ...baseDeps,
+        ...defaultPackage.DEFAULT_DEPENDENCIES,
         ...(dbPreset.deps || {}),
         ...(authPreset.deps || {}),
       };
 
       const devDeps = {
-        nodemon: "^3.0.3",
+        ...defaultPackage.DEFAULT_DEV_DEPENDENCIES,
+      };
+
+      const scripts = {
+        ...defaultPackage.DEFAULT_SCRIPTS,
       };
 
       const rendered = await this.templateService.render(this.templatePath, {
         projectName,
         dependencies: allDeps,
         devDependencies: devDeps,
+        scripts,
         authType: this.authType,
         dbType: this.dbType,
       });
 
-      const filePath = this.fileService.resolvePath(basePath, "package.json");
+      const filePath = this.fileService.resolvePath(outputPath, "package.json");
       await this.fileService.writeFile(filePath, rendered, "utf-8");
 
       this.logger?.info(`📦 Archivo package.json generado en: ${filePath}`);
+      return outputPath;
     } catch (err) {
-      this.logger?.error(`❌ Error generating package.json: ${err.message}`);
       throw err;
     }
   }

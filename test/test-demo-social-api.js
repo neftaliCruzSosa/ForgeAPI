@@ -10,8 +10,6 @@ const entities = [
   {
     name: "User",
     builtIn: true,
-    generateCrud: true,
-    skipSystemFields: ["createdBy"],
     overrideFields: [
       { name: "bio", type: "String" },
       { name: "avatar", type: "String" },
@@ -69,7 +67,8 @@ await forgeAPI({
   entities,
   auth: true,
   dbType: "postgres",
-  authType: "ironSession",
+  authType: "jwt",
+  force: true,
 });
 
 /* --- Optional: Copy seed.js into test project --- */
@@ -83,5 +82,4 @@ const seedTargetPath = fileService.resolvePath(
 );
 
 await fileService.copyFile(seedSourcePath, seedTargetPath);
-console.log("✅ seed.js copied to test project");
 /* ---------------------------------------------------- */

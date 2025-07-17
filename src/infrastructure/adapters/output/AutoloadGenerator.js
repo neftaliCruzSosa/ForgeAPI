@@ -30,7 +30,7 @@ class AutoloadGenerator extends BaseFileGenerator {
 
       this.logInfo(`🔄 Archivo de autoload generado: ${filePath}`);
     } catch (err) {
-      this.logger?.error(`❌ Error generating autoload file: ${err.message}`);
+      this.logger?.error(`Error generating autoload file: ${err.message}`);
       throw err;
     }
   }

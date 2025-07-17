@@ -1,6 +1,6 @@
 # 🔥 ForgeAPI · Modular API Generator
 
-**Current version:** [![version](https://img.shields.io/badge/version-0.1.1-blue.svg)](https://github.com/neftaliCruzSosa/forgeapi/releases)
+**Current version:** [![version](https://img.shields.io/badge/version-0.1.2-blue.svg)](https://github.com/neftaliCruzSosa/forgeapi/releases)
 
 **ForgeAPI** is a powerful, modular API code generator designed to help developers quickly scaffold real-world backend applications with built-in authentication, validation, and access control.
 

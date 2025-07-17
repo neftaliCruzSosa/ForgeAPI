@@ -5,9 +5,10 @@
   "description": "Generated with ApiForge - Modular API Generator",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
-    "dev": "nodemon app.js"
-  },
+<%  const scriptKeys = Object.keys(scripts);
+  scriptKeys.forEach((key, i) => {
+%>    "<%= key %>": "<%= scripts[key] %>"<%= i < scriptKeys.length - 1 ? ',' : '' %>
+<% })%>  },
   "keywords": [],
   "author": "",
   "license": "ISC",

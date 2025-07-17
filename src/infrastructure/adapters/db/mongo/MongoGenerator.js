@@ -23,7 +23,7 @@ class MongoGenerator extends BaseFileGenerator {
       this.logger.info(`✅ Modelo Mongoose generado: ${filePath}`);
     } catch (err) {
       this.logger?.error(
-        `❌ Error generating Mongoose model for ${entity.name}: ${err.message}`
+        `Error generating Mongoose model for ${entity.name}: ${err.message}`
       );
       throw err;
     }

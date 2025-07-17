@@ -1,4 +1,5 @@
 import fs from "fs/promises";
+import { constants } from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -73,9 +74,28 @@ class FileSystemService {
 
   async exists(filePath) {
     try {
-      await fs.access(filePath);
+      await fs.access(filePath, constants.F_OK);
       return true;
     } catch {
+      return false;
+    }
+  }
+
+  async pathExists(dirPath) {
+    try {
+      await fs.access(dirPath, constants.F_OK);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  async remove(targetPath) {
+    try {
+      await fs.rm(targetPath, { recursive: true, force: true });
+      return true;
+    } catch (err) {
+      this.logger.error(`Failed to remove "${targetPath}": ${err.message}`);
       return false;
     }
   }

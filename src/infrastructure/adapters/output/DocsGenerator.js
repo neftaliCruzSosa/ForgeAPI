@@ -34,7 +34,7 @@ class DocsGenerator extends BaseFileGenerator {
       );
       this.logInfo(`📘 README.md generado en: ${filePath}`);
     } catch (err) {
-      this.logger?.error(`❌ Error generating README.md: ${err.message}`);
+      this.logger?.error(`Error generating README.md: ${err.message}`);
       throw err;
     }
   }

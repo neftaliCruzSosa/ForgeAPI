@@ -37,7 +37,7 @@ class MiddlewareGenerator extends BaseFileGenerator {
         this.logInfo(`🛠️  Middleware generado: ${writtenPath}`);
       }
     } catch (err) {
-      this.logger?.error(`❌ Error generating middlewares: ${err.message}`);
+      this.logger?.error(`Error generating middlewares: ${err.message}`);
       throw err;
     }
   }
