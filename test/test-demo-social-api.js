@@ -66,7 +66,7 @@ await forgeAPI({
   projectName: "demo-social-api",
   entities,
   auth: true,
-  dbType: "mongo",
+  dbType: "postgres",
   authType: "ironSession",
   force: true,
 });

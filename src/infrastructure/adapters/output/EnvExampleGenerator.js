@@ -25,7 +25,14 @@ class EnvExampleGenerator extends BaseFileGenerator {
           ? envPresets.db[this.dbType](projectName)
           : [];
 
-      const content = [...common, ...authVars, ...dbVars].join("\n") + "\n";
+      const allVars = [...common, ...authVars, ...dbVars];
+
+      const lines = allVars.map(({ key, value, comment }) => {
+        const commentLine = comment ? `# ${comment}` : "";
+        return [commentLine, `${key}=${value}`].filter(Boolean).join("\n");
+      });
+
+      const content = lines.join("\n\n") + "\n";
 
       await this.writeRenderedFile(basePath, ".env.example", content);
       this.logInfo(`⚙️  .env.example generado en: ${filePath}`);

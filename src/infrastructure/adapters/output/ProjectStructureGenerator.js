@@ -1,5 +1,6 @@
 import dbPresets from "../../../config/dbPresets.js";
 import authPresets from "../../../config/authPresets.js";
+import * as defaultPackage from "../../../config/defaultPackageConfig.js";
 
 class ProjectStructureGenerator {
   constructor({
@@ -57,19 +58,24 @@ class ProjectStructureGenerator {
       };
 
       const allDeps = {
-        ...baseDeps,
+        ...defaultPackage.DEFAULT_DEPENDENCIES,
         ...(dbPreset.deps || {}),
         ...(authPreset.deps || {}),
       };
 
       const devDeps = {
-        nodemon: "^3.0.3",
+        ...defaultPackage.DEFAULT_DEV_DEPENDENCIES,
+      };
+
+      const scripts = {
+        ...defaultPackage.DEFAULT_SCRIPTS,
       };
 
       const rendered = await this.templateService.render(this.templatePath, {
         projectName,
         dependencies: allDeps,
         devDependencies: devDeps,
+        scripts,
         authType: this.authType,
         dbType: this.dbType,
       });
