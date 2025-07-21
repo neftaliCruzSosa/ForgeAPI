@@ -20,7 +20,7 @@ class PostgresGenerator extends BaseFileGenerator {
       );
       await this.fileService.writeFile(filePath, code);
 
-      this.logger.info(`✅ Modelo Sequelize generado: ${filePath}`);
+      this.logger.info(`Sequelize model generated: ${filePath}`);
     } catch (err) {
       this.logger?.error(
         `Error generating Sequelize model for ${entity.name}: ${err.message}`

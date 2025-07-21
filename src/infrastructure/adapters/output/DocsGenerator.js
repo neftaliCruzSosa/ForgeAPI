@@ -32,7 +32,7 @@ class DocsGenerator extends BaseFileGenerator {
         "README.md",
         rendered
       );
-      this.logInfo(`📘 README.md generado en: ${filePath}`);
+      this.logInfo(`README.md generated at: ${filePath}`);
     } catch (err) {
       this.logger?.error(`Error generating README.md: ${err.message}`);
       throw err;

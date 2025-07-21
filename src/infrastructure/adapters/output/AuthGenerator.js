@@ -45,7 +45,7 @@ class AuthGenerator extends BaseFileGenerator {
         await this.writeRenderedFile(outputPath, output, rendered);
       }
 
-      this.logInfo(`✅ Auth (${this.authType}) generado en: ${outputPath}`);
+      this.logInfo(`Auth (${this.authType}) generated at: ${outputPath}`);
     } catch (err) {
       this.logger?.error(
         `Error generating auth module (${this.authType}): ${err.message}`

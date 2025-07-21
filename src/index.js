@@ -30,7 +30,7 @@ export default async function forgeAPI({
       force,
     });
   } catch (err) {
-    console.error(`❌ ForgeAPI falló: ${err.message}`);
+    console.error(`❌ ForgeAPI failed: ${err.message}`);
     // process.exit(1)
   }
 }

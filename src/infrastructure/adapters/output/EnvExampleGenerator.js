@@ -35,7 +35,7 @@ class EnvExampleGenerator extends BaseFileGenerator {
       const content = lines.join("\n\n") + "\n";
 
       await this.writeRenderedFile(basePath, ".env.example", content);
-      this.logInfo(`⚙️  .env.example generado en: ${filePath}`);
+      this.logInfo(`.env.example generated at: ${filePath}`);
     } catch (err) {
       this.logger?.error(`Error generating .env.example: ${err.message}`);
       throw err;

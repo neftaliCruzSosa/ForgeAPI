@@ -1,7 +1,7 @@
 import {  <%= modelName %>  } from '../models/index.js';
 import validate from '../validators/<%= modelName %>.validator.js';
 
-// Crear
+// Create
 export async function create<%= modelName %>(req, res) {
   const { error } = validate.validate(req.body);
   if (error) return res.status(400).json({ error: error.details[0].message });
@@ -18,7 +18,7 @@ export async function create<%= modelName %>(req, res) {
   }
 };
 
-// Obtener todos
+// GetAll
 export async function getAll<%= modelName %>(req, res) {
   try {
     const page = parseInt(req.query.page) || 1;
@@ -28,7 +28,6 @@ export async function getAll<%= modelName %>(req, res) {
 
     const { search, showDeleted, ...filters } = req.query;
 
-    //Validar campos
     const allowedFields = [<%- fields.map(f => `'${f.name}'`).join(', ') %>];
     const query = {};
 
@@ -82,7 +81,7 @@ export async function getAll<%= modelName %>(req, res) {
   }
 };
 
-// Obtener por ID
+// GetById
 export async function get<%= modelName %>ById(req, res) {
   try {
     let query = <%= modelName %>.findOne({ _id: req.params.id, isDeleted: false });
@@ -97,7 +96,7 @@ export async function get<%= modelName %>ById(req, res) {
   }
 };
 
-// Actualizar
+// Update
 export async function update<%= modelName %>(req, res) {
   try {
     const item = await <%= modelName %>.findById(req.params.id);
@@ -115,7 +114,7 @@ export async function update<%= modelName %>(req, res) {
   }
 };
 
-// Soft Delete
+// SoftDelete
 export async function delete<%= modelName %>(req, res) {
   try {
     const item = await <%= modelName %>.findById(req.params.id);
@@ -133,7 +132,7 @@ export async function delete<%= modelName %>(req, res) {
   }
 };
 
-// Restaurar
+// Restore
 export async function restore<%= modelName %>(req, res) {
   try {
     const item = await <%= modelName %>.findById(req.params.id);
@@ -151,7 +150,7 @@ export async function restore<%= modelName %>(req, res) {
   }
 };
 
-// Eliminar permanente
+// HardDelete
 export async function hardDelete<%= modelName %>(req, res) {
   try {
     const item = await <%= modelName %>.findById(req.params.id);

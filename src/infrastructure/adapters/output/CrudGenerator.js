@@ -64,9 +64,9 @@ class CrudGenerator extends BaseFileGenerator {
       renderedRoute
     );
 
-    this.logInfo(`✅ CRUD generado para ${modelName}`);
-    this.logInfo(`   ├─ Controller: ${controllerFile}`);
-    this.logInfo(`   └─ Routes:     ${routeFile}`);
+    this.logInfo(`CRUD generated for ${modelName}`);
+    this.logInfo(`  ├─ Controller: ${controllerFile}`);
+    this.logInfo(`  └─ Routes:     ${routeFile}`);
   }
 }
 

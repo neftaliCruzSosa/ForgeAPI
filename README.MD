@@ -1,4 +1,4 @@
-# 🔥 ForgeAPI · Modular API Generator
+# ForgeAPI · Modular API Generator
 
 **Current version:** [![version](https://img.shields.io/badge/version-0.1.2-blue.svg)](https://github.com/neftaliCruzSosa/forgeapi/releases)
 
@@ -6,46 +6,50 @@
 
 ---
 
-## ✨ Features
+## Features
 
-- 🔐 JWT authentication and role-based access control
-- 🧱 MongoDB and PostgreSQL support
-- 🧩 Clean, modular hexagonal architecture
-- 🛡️ Entity-level CRUD with per-route access control (`auth`, `admin`, `self`)
-- 📂 Automatically generates models, controllers, routes, validators, and middlewares
-- ⚙️ Template-based code generation using EJS
-- 🧪 Includes test scripts and seed data for rapid iteration
-- 👤 Built-in support for entities like `User`
+- JWT authentication and role-based access control
+- MongoDB and PostgreSQL support
+- Clean, modular hexagonal architecture
+- Entity-level CRUD with per-route access control (`auth`, `admin`, `self`)
+- Automatically generates models, controllers, routes, validators, and middlewares
+- Template-based code generation using EJS
+- Includes test scripts and seed data for rapid iteration
+- Built-in support for entities like `User`
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 1. **Clone the repository**
+
 ```bash
 git clone https://github.com/neftaliCruzSosa/forgeapi.git
 cd forgeapi
 ```
 
 2. **Install dependencies**
+
 ```bash
 npm install
 ```
 
 3. **Run the demo to generate a full example project including test seed data**
+
 ```bash
 npm run demo
 ```
 
 4. **Check the generated API**
-The generated project will appear under:
+   The generated project will appear under:
+
 ```
 /projects/<yourProjectName>
 ```
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 forgeapi/
@@ -62,7 +66,7 @@ forgeapi/
 
 ---
 
-## 🧪 Full Example Entity Definition
+## Full Example Entity Definition
 
 ```js
 const entities = [
@@ -127,7 +131,7 @@ const entities = [
 
 ---
 
-## 🔒 `protect` Field Explained
+## `protect` Field Explained
 
 Each entity can define access levels for CRUD routes via the `protect` field. Available roles:
 
@@ -148,11 +152,11 @@ Supported route-level protections:
 
 ---
 
-## 🔑 Auth Routes Generated
+## Auth Routes Generated
 
 When `auth: true` is enabled, ForgeAPI generates the following default authentication routes:
 
-- `POST /api/auth/register` → Register a new user  
+- `POST /api/auth/register` → Register a new user
 - `POST /api/auth/login` → Login
 - `POST /api/auth/promote` → Promote user roles (e.g., to admin) — restricted to admins
 
@@ -160,7 +164,7 @@ These routes are automatically wired with authentication, role-based access cont
 
 ---
 
-## 🔁 Routes Generated per Entity
+## Routes Generated per Entity
 
 For each defined entity, ForgeAPI generates:
 
@@ -174,7 +178,7 @@ For each defined entity, ForgeAPI generates:
 
 ---
 
-## ⚙️ System Fields
+## System Fields
 
 ForgeAPI automatically includes the following fields in every entity:
 
@@ -185,20 +189,19 @@ You can skip these using `skipSystemFields`.
 
 ---
 
-## 📄 Changelog
+## Changelog
 
 See the full changelog [here](./CHANGELOG.md).
 
 ---
 
-## 🗺️ Roadmap
+## Roadmap
 
 Stay updated with planned features and upcoming improvements:  
-👉 [View the ForgeAPI Roadmap](./ROADMAP.md)
+[View the ForgeAPI Roadmap](./ROADMAP.md)
 
 ---
 
-## 📄 License
+## License
 
 MIT © 2025 Neftali Cruz Sosa
-

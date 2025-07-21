@@ -21,11 +21,9 @@ class AppGenerator extends BaseFileGenerator {
         this.outputFile,
         rendered
       );
-      this.logInfo(`✅ Archivo ${this.outputFile} generado en ${filePath}`);
+      this.logInfo(`File ${this.outputFile} generated at ${filePath}`);
     } catch (err) {
-      this.logger?.error(
-        `Error generating ${this.outputFile}: ${err.message}`
-      );
+      this.logger?.error(`Error generating ${this.outputFile}: ${err.message}`);
       throw err;
     }
   }

@@ -27,7 +27,7 @@ class StaticModelGenerator extends BaseFileGenerator {
       );
       const exists = await this.fileService.exists(definitionPath);
       if (!exists) {
-        this.logger?.warn(`No se encontró definición JSON para ${entity.name}`);
+        this.logger?.warn(`No JSON definition found for ${entity.name}`);
         return;
       }
 
@@ -56,7 +56,7 @@ class StaticModelGenerator extends BaseFileGenerator {
       const templateExists = await this.fileService.exists(templatePath);
       if (!templateExists) {
         this.logger?.warn(
-          `No se encontró plantilla para ${entity.name} en ${this.dbType}`
+          `No template found for ${entity.name} in ${this.dbType}`
         );
         return;
       }
@@ -69,7 +69,7 @@ class StaticModelGenerator extends BaseFileGenerator {
       );
 
       fullDefinition.protect = entity.protect;
-      this.logInfo(`📄 Modelo estático ${entity.name} generado: ${filePath}`);
+      this.logInfo(`Static model ${entity.name} generated: ${filePath}`);
 
       return fullDefinition;
     } catch (err) {

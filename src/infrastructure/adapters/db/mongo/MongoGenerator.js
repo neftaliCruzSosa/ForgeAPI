@@ -20,7 +20,7 @@ class MongoGenerator extends BaseFileGenerator {
       );
       await this.fileService.writeFile(filePath, schemaCode);
 
-      this.logger.info(`✅ Modelo Mongoose generado: ${filePath}`);
+      this.logger.info(`Mongoose model generated: ${filePath}`);
     } catch (err) {
       this.logger?.error(
         `Error generating Mongoose model for ${entity.name}: ${err.message}`

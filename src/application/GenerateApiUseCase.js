@@ -96,17 +96,17 @@ class GenerateApiUseCase {
         models,
         startTime,
       });
-      logger.info(`✅ Proyecto generado exitosamente en: ${outputBase}`);
+      logger.info(`Project successfully generated at: ${outputBase}`);
     } catch (err) {
       this.generators?.logger?.error(
-        `Error durante la generación del proyecto: ${err.message}`
+        `Error during project generation: ${err.message}`
       );
       throw err;
     }
   }
 
   async #generateModels(entities, outputBase) {
-    this.logger.info("📦 Generando modelos...");
+    this.logger.info("Generating models...");
     try {
       return await this.modelsGenerator?.generate(
         entities,
@@ -115,27 +115,27 @@ class GenerateApiUseCase {
         this.dbGenerator
       );
     } catch (err) {
-      this.logger.error(`Error al generar modelos: ${err.message}`);
+      this.logger.error(`Error generating models: ${err.message}`);
       throw err;
     }
   }
 
   async #generateAuth(outputBase) {
-    this.logger.info("🔐 Generando autenticación...");
+    this.logger.info("Generating authentication...");
     try {
       await this.authGenerator?.generate(outputBase);
     } catch (err) {
-      this.logger.error(`Error al generar autenticación: ${err.message}`);
+      this.logger.error(`Error generating authentication: ${err.message}`);
       throw err;
     }
   }
 
   async #generateApp(outputBase) {
-    this.logger.info("⚙️  Generando app.js base...");
+    this.logger.info("Generating base app.js...");
     try {
       await this.appGenerator?.generate(outputBase);
     } catch (err) {
-      this.logger.error(`Error al generar app.js: ${err.message}`);
+      this.logger.error(`Error generating app.js: ${err.message}`);
       throw err;
     }
   }
@@ -149,9 +149,7 @@ class GenerateApiUseCase {
       );
       return projectFolder;
     } catch (err) {
-      this.logger.error(
-        `Error al generar estructura del proyecto: ${err.message}`
-      );
+      this.logger.error(`Error generating project structure: ${err.message}`);
       throw err;
     }
   }
@@ -160,7 +158,7 @@ class GenerateApiUseCase {
     try {
       await this.docsGenerator?.generate(outputBase, projectName, entities);
     } catch (err) {
-      this.logger.error(`Error al generar documentación: ${err.message}`);
+      this.logger.error(`Error generating documentation: ${err.message}`);
       throw err;
     }
   }
@@ -169,22 +167,20 @@ class GenerateApiUseCase {
     try {
       await this.dbConnectionGenerator?.generate(outputBase);
     } catch (err) {
-      this.logger.error(
-        `Error al generar conexión con la base de datos: ${err.message}`
-      );
+      this.logger.error(`Error generating database connection: ${err.message}`);
       throw err;
     }
   }
 
   async #generateCRUDs(entities, outputBase) {
-    this.logger.info("🔁 Generando CRUDs...");
+    this.logger.info("Generating CRUDs...");
     try {
       for (const entity of entities) {
         await this.crudGenerator?.generate(entity, outputBase);
       }
       await this.autoloadGenerator?.generate(entities, outputBase);
     } catch (err) {
-      this.logger.error(`Error al generar CRUDs: ${err.message}`);
+      this.logger.error(`Error generating CRUDs: ${err.message}`);
       throw err;
     }
   }
@@ -193,7 +189,7 @@ class GenerateApiUseCase {
     try {
       await this.modelIndexGenerator?.generate(outputBase);
     } catch (err) {
-      this.logger.error(`Error al generar índice de modelos: ${err.message}`);
+      this.logger.error(`Error generating model index: ${err.message}`);
       throw err;
     }
   }
@@ -202,7 +198,7 @@ class GenerateApiUseCase {
     try {
       await this.envExampleGenerator?.generate(outputBase, projectName);
     } catch (err) {
-      this.logger.error(`Error al generar .env.example: ${err.message}`);
+      this.logger.error(`Error generating .env.example: ${err.message}`);
       throw err;
     }
   }
@@ -213,7 +209,7 @@ class GenerateApiUseCase {
         await this.validatorGenerator?.generate(entity, outputBase);
       }
     } catch (err) {
-      this.logger.error(`Error al generar validadores: ${err.message}`);
+      this.logger.error(`Error generating validators: ${err.message}`);
       throw err;
     }
   }
@@ -222,7 +218,7 @@ class GenerateApiUseCase {
     try {
       await this.middlewareGenerator?.generate(outputBase);
     } catch (err) {
-      this.logger.error(`Error al generar middlewares: ${err.message}`);
+      this.logger.error(`Error generating middlewares: ${err.message}`);
       throw err;
     }
   }

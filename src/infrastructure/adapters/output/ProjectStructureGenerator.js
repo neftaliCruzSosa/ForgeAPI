@@ -25,16 +25,14 @@ class ProjectStructureGenerator {
       if (await this.fileService.pathExists(outputPath)) {
         if (!force) {
           throw new Error(
-            `Proyecto '${projectName}' ya existe. Usa 'force: true' para sobrescribir.`
+            `Project '${projectName}' already exists. Use 'force: true' to overwrite it.`
           );
         }
         await this.fileService.remove(outputPath);
       }
-      this.logger.info(`📦 Generando proyecto ${projectName}`);
+      this.logger.info(`Generating project ${projectName}`);
       await this.fileService.ensureDir(outputPath);
-      this.logger?.info(
-        `📁 Carpeta base del proyecto creada en: ${outputPath}`
-      );
+      this.logger?.info(`Project base folder created at: ${outputPath}`);
 
       await this.fileService.ensureDir(
         this.fileService.joinPath(outputPath, "models")
@@ -83,7 +81,7 @@ class ProjectStructureGenerator {
       const filePath = this.fileService.resolvePath(outputPath, "package.json");
       await this.fileService.writeFile(filePath, rendered, "utf-8");
 
-      this.logger?.info(`📦 Archivo package.json generado en: ${filePath}`);
+      this.logger?.info(`package.json file generated at: ${filePath}`);
       return outputPath;
     } catch (err) {
       throw err;

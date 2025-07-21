@@ -1,7 +1,7 @@
 import {  models  } from '../models/index.js';
 import validate from '../validators/<%= modelName %>.validator.js';
 
-// Crear
+// Create
 export async function create<%= modelName %>(req, res) {
   const { error } = validate.validate(req.body);
   if (error) return res.status(400).json({ error: error.details[0].message });
@@ -19,12 +19,12 @@ export async function create<%= modelName %>(req, res) {
   }
 };
 
-// Obtener todos
+// GetAll
 export async function getAll<%= modelName %>(req, res) {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
-    const offset = (page - 1) * limit;
+    const skip = (page - 1) * limit;
     const sort = req.query.sort || "id";
 
     const { search, showDeleted, ...filters } = req.query;
@@ -65,7 +65,7 @@ export async function getAll<%= modelName %>(req, res) {
       where,
       order: [[sort, 'ASC']],
       limit,
-      offset,<% if (fields.some(f => f.type === 'ref')) { %>
+      skip,<% if (fields.some(f => f.type === 'ref')) { %>
       include: [<% fields.filter(f => f.type === 'ref').forEach((f, i, arr) => { %>
         { model: models.<%= f.ref %> }<%= i < arr.length - 1 ? ',' : '' %><% }) %>
       ]
@@ -83,7 +83,7 @@ export async function getAll<%= modelName %>(req, res) {
   }
 };
 
-// Obtener por ID
+// GetById
 export async function get<%= modelName %>ById(req, res) {
   try {
     const item = await models.<%= modelName %>.findByPk(req.params.id, {
@@ -104,7 +104,7 @@ export async function get<%= modelName %>ById(req, res) {
   }
 };
 
-// Actualizar
+// Update
 export async function update<%= modelName %>(req, res) {
   try {
     const item = await models.<%= modelName %>.findByPk(req.params.id);
@@ -123,7 +123,7 @@ export async function update<%= modelName %>(req, res) {
   }
 };
 
-// Soft delete
+// SoftDelete
 export async function delete<%= modelName %>(req, res) {
   try {
     const item = await models.<%= modelName %>.findByPk(req.params.id);
@@ -157,7 +157,7 @@ export async function restore<%= modelName %>(req, res) {
   }
 };
 
-// Hard delete
+// HardDelete
 export async function hardDelete<%= modelName %>(req, res) {
   try {
     const item = await models.<%= modelName %>.findByPk(req.params.id);

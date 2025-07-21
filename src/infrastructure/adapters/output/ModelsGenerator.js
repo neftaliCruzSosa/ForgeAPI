@@ -27,11 +27,11 @@ class ModelGenerator extends BaseFileGenerator {
           const def = new EntityDefinition(entity.name, entity.fields);
           await dbGenerator?.generate(def, basePath);
         }
-        generatedModels.push(entity)
+        generatedModels.push(entity);
       }
-      this.logger.info("✅ Modelos generados correctamente.");
+      this.logger.info("Models generated successfully.");
     } catch (err) {
-      this.logger.error(`Error al generar modelos: ${err.message}`);
+      this.logger.error(`Error generating models: ${err.message}`);
       throw err;
     }
     return generatedModels;

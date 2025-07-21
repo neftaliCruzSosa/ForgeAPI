@@ -9,7 +9,7 @@ export async function register(req, res) {
     const exists = <%- preset.findByUsername %>;
     if (exists) return res.status(400).json({ error: 'User already exists' });
 
-    const hashedPassword = await bcrypt.hash(password, 10); // sal=10
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = new User({
       username,

@@ -40,7 +40,7 @@ async function seed() {
     { post: posts[0]._id, user: users[2]._id }
   ]);
 
-  console.log('✅ Seed completado');
+  console.log('Seed completado');
   mongoose.disconnect();
 }
 
