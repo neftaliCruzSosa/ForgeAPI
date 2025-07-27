@@ -4,21 +4,21 @@ import EntityBuilder from "../../../../domain/services/EntityBuilder.js";
 class PostgresGenerator extends BaseFileGenerator {
   constructor({ fileService, templateService, logger }) {
     super({ fileService, templateService, logger });
-    this.builder = new EntityBuilder();
+    this.builder = new EntityBuilder({ fileService, logger });
   }
 
   async generate(entity, basePath) {
     try {
-      const definition = this.builder.buildDefinition(entity);
+      const definition = await this.builder.buildDefinition(entity);
       const modelsPath = this.fileService.resolvePath(basePath, "models");
       await this.fileService.ensureDir(modelsPath);
 
-      const code = this.#buildSequelizeModel(definition);
+      const schemaCode = this.#buildSequelizeModel(definition);
       const filePath = this.fileService.resolvePath(
         modelsPath,
         `${definition.name}.js`
       );
-      await this.fileService.writeFile(filePath, code);
+      await this.fileService.writeFile(filePath, schemaCode);
 
       this.logger.info(`Sequelize model generated: ${filePath}`);
     } catch (err) {

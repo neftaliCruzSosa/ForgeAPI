@@ -32,20 +32,15 @@ async function buildGenerators(
     throw new Error(`Unsupported auth type: ${authType}`);
   }
 
-  const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
   let DbGenerator;
 
   try {
     const dbGeneratorModule = await import(
-      `../infrastructure/adapters/db/${dbType}/${capitalize(
-        dbType
-      )}Generator.js`
+      `../infrastructure/adapters/db/${dbType}/generator.js`
     );
     DbGenerator = dbGeneratorModule.default;
   } catch (err) {
-    logger.error(
-      `Failed to load DB generator for "${dbType}": ${err.message}`
-    );
+    logger.error(`Failed to load DB generator for "${dbType}": ${err.message}`);
     throw new Error(`Cannot find generator for dbType "${dbType}"`);
   }
 
@@ -99,11 +94,6 @@ async function buildGenerators(
     middlewareGenerator: new OutputGenerators.MiddlewareGenerator({
       ...services,
       templateDir: fileService.joinPath(templatesRootPath, "middlewares"),
-    }),
-    staticModelGenerator: new OutputGenerators.StaticModelGenerator({
-      ...services,
-      templateDir: fileService.joinPath(templatesRootPath, "models"),
-      dbType,
     }),
     docsGenerator: new OutputGenerators.DocsGenerator({
       ...services,

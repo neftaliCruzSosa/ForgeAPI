@@ -4,6 +4,6 @@
   "fields": [
     { "name": "username", "type": "String", "required": true, "unique": true },
     { "name": "password", "type": "String", "required": true },
-    { "name": "role", "type": "String", "required": true }
+    { "name": "role", "type": "String", "required": true, "default": "user" }
   ]
 }

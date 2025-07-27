@@ -46,7 +46,6 @@ class GenerateApiUseCase {
         envExampleGenerator,
         dbConnectionGenerator,
         validatorGenerator,
-        staticModelGenerator,
         middlewareGenerator,
       } = this.generators;
 
@@ -64,7 +63,6 @@ class GenerateApiUseCase {
       this.envExampleGenerator = envExampleGenerator;
       this.dbConnectionGenerator = dbConnectionGenerator;
       this.validatorGenerator = validatorGenerator;
-      this.staticModelGenerator = staticModelGenerator;
       this.middlewareGenerator = middlewareGenerator;
 
       const baseDir = this.fileService.getCurrentDir(import.meta.url);
@@ -111,7 +109,6 @@ class GenerateApiUseCase {
       return await this.modelsGenerator?.generate(
         entities,
         outputBase,
-        this.staticModelGenerator,
         this.dbGenerator
       );
     } catch (err) {

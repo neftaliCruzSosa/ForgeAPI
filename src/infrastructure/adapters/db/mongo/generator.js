@@ -4,15 +4,15 @@ import EntityBuilder from "../../../../domain/services/EntityBuilder.js";
 class MongoGenerator extends BaseFileGenerator {
   constructor({ fileService, templateService, logger }) {
     super({ fileService, templateService, logger });
-    this.builder = new EntityBuilder();
+    this.builder = new EntityBuilder({ fileService, logger });
   }
 
   async generate(entity, basePath) {
     try {
-      const definition = this.builder.buildDefinition(entity);
+      const definition = await this.builder.buildDefinition(entity);      
       const modelsPath = this.fileService.resolvePath(basePath, "models");
       await this.fileService.ensureDir(modelsPath);
-
+      
       const schemaCode = this.#buildMongooseSchema(definition);
       const filePath = this.fileService.resolvePath(
         modelsPath,

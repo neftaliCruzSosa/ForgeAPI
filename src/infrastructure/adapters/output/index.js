@@ -7,7 +7,6 @@ export { default as AutoloadGenerator } from "../autoload/generator.js";
 export { default as EnvExampleGenerator } from "../env/generator.js";
 export { default as ModelIndexGenerator } from "../modelIndex/generator.js";
 export { default as MiddlewareGenerator } from "../middleware/generator.js";
-export { default as StaticModelGenerator } from "../db/StaticModelGenerator.js";
 export { default as DocsGenerator } from "../docs/generator.js";
 export { default as AuthGenerator } from "../auth/generator.js";
 export { default as DbConnectionGenerator } from "../dbConnector/generator.js";
