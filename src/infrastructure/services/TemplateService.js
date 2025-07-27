@@ -27,7 +27,7 @@ class TemplateService {
       );
       return ejs.render(templateContent, { ...this.ctx, ...data });
     } catch (err) {
-      this.logger.error(
+      this.logger?.error(
         `Failed to render template "${templateName}": ${err.message}`
       );
       throw err;

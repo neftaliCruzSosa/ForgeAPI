@@ -93,7 +93,7 @@ export default async function generateAPI(config = {}) {
     await modelIndexGenerator.generate();
 
     printSummary(ctx, generatedModels, startTime);
-    logger.info(`Project successfully generated at: ${config.outputDir}`);
+    logger?.info(`Project successfully generated at: ${config.outputDir}`);
   } catch (err) {
     logger?.error(`Error during project generation: ${err.message}`);
     throw err;

@@ -27,6 +27,6 @@ export default class AutoloadGenerator extends BaseFileGenerator {
       content
     );
 
-    this.logInfo(`Autoload file generated: ${filePath}`);
+    this.logger?.info(`Autoload file generated: ${filePath}`);
   }
 }

@@ -22,7 +22,7 @@ class AppGenerator extends BaseFileGenerator {
 
       await this.fileService.writeFile(appPath, appCode);
 
-      this.logger.info(`Framework base generated: ${appPath}`);
+      this.logger?.info(`Framework base generated: ${appPath}`);
     } catch (err) {
       this.logger?.error(`Error generating ${this.outputFile}: ${err.message}`);
       throw err;

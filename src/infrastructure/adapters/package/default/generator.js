@@ -37,7 +37,7 @@ export default class PackageGenerator extends BaseFileGenerator {
       });
 
       await this.fileService.writeFile(pkgPath, rendered);
-      this.logInfo(`package.json generated: ${pkgPath}`);
+      this.logger?.info(`package.json generated: ${pkgPath}`);
     } catch (err) {
       this.logger?.error(`Error generating package.json: ${err.message}`);
       throw err;

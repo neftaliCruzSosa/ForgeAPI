@@ -17,9 +17,19 @@ export default async (type, name, ctx = {}) => {
   if (!existsSync(localPath)) {
     throw new Error(`Adapter not found for ${type}:${name}`);
   }
+
   const module = await import(`file://${localPath}`);
   const Generator = module.default;
   const preset = module.preset;
+
+  if (!Generator || typeof Generator !== "function") {
+    throw new Error(
+      `Adapter ${type}:${name} does not export a default class/function`
+    );
+  }
+  if (!Generator.prototype.generate) {
+    throw new Error(`Adapter ${type}:${name} is missing "generate()" method`);
+  }
 
   if (ctx && preset) {
     ctx.presets ??= {};

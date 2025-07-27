@@ -1,5 +1,4 @@
 import BaseFileGenerator from "../../../shared/BaseFileGenerator.js";
-import envPresets from "../../../../config/envPresets.js";
 
 class EnvExampleGenerator extends BaseFileGenerator {
   constructor(ctx) {
@@ -31,7 +30,7 @@ class EnvExampleGenerator extends BaseFileGenerator {
       );
 
       await this.fileService.writeFile(filePath, content);
-      this.logInfo(`.env.example generated at: ${filePath}`);
+      this.logger?.info(`.env.example generated at: ${filePath}`);
     } catch (err) {
       this.logger?.error(`Error generating .env.example: ${err.message}`);
       throw err;

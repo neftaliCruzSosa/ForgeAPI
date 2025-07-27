@@ -24,7 +24,7 @@ export default class DbConnectionGenerator extends BaseFileGenerator {
         this.outputFile,
         rendered
       );
-      this.logInfo(`DB connection file generated: ${filePath}`);
+      this.logger?.info(`DB connection file generated: ${filePath}`);
     } catch (err) {
       this.logger?.error(`Error generating DB connection file: ${err.message}`);
       throw err;

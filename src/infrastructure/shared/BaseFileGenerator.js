@@ -49,8 +49,4 @@ export default class BaseFileGenerator {
   getFolder(name, fallback = name) {
     return this.ctx.presets.framework.structure?.[name] || fallback;
   }
-
-  logInfo(message) {
-    if (this.logger) this.logger.info(message);
-  }
 }

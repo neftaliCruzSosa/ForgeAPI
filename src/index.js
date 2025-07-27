@@ -1,6 +1,6 @@
 import generateAPI from "./application/GenerateApiUseCase.js";
-import { buildDefaultServices } from "./application/factories/buildDefaultServices.js";
 import { validateConfig } from "./application/validators/configValidator.js";
+import { loadConfig } from "./application/loadConfig.js";
 
 /**
  * Main entry point for using ForgeAPI programmatically.
@@ -16,39 +16,10 @@ import { validateConfig } from "./application/validators/configValidator.js";
 
 export default async function forgeAPI(options = {}) {
   try {
-    const {
-      projectName,
-      entities,
-      dbType = "mongo",
-      authType = "jwt",
-      auth = false,
-      framework = "express",
-      force = false,
-      author = "unknown",
-      services = buildDefaultServices(projectName),
-      outputDir = `./projects/${projectName}`,
-      templateDir = `./src/templates`,
-    } = options;
-
-    const config = {
-      projectName,
-      entities,
-      dbType,
-      authType,
-      auth,
-      framework,
-      force,
-      author,
-      services,
-      outputDir,
-      templateDir,
-    };
-
+    const config = await loadConfig(options);
     await validateConfig(config);
-
     await generateAPI(config);
   } catch (err) {
     console.error(`❌ ForgeAPI failed: ${err.message}`);
-    // process.exit(1)
   }
 }

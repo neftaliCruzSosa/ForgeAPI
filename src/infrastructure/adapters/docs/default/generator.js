@@ -19,8 +19,8 @@ class DocsGenerator extends BaseFileGenerator {
         readme
       );
 
-      this.logInfo("Documentation generated:");
-      this.logInfo(`  └─ ${readmeFile}`);
+      this.logger?.info("Documentation generated:");
+      this.logger?.info(`  └─ ${readmeFile}`);
     } catch (err) {
       this.logger?.error(`Error generating README.md: ${err.message}`);
       throw err;

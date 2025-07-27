@@ -41,7 +41,7 @@ export default class ironSessionAuthGenerator extends BaseFileGenerator {
         const content = await this.templateService.render(file.template);
         const targetPath = this.fileService.resolvePath(authPath, file.output);
         await this.fileService.writeFile(targetPath, content);
-        this.logger.info(`Generated: ${targetPath}`);
+        this.logger?.info(`Generated: ${targetPath}`);
       }
     } catch (err) {
       this.logger?.error(
