@@ -93,5 +93,5 @@ const seedTargetPath = fileService.resolvePath(
   "../projects/demo-social-api/seed.js"
 );
 
-await fileService.copyFile(seedSourcePath, seedTargetPath);
+// await fileService.copyFile(seedSourcePath, seedTargetPath);
 /* ---------------------------------------------------- */

@@ -30,7 +30,7 @@ export default async function forgeAPI(options = {}) {
       templateDir = `./src/templates`,
     } = options;
 
-    const useCase = new GenerateApiUseCase({ buildGenerators });
+    const useCase = new GenerateApiUseCase();
 
     const config = {
       projectName,

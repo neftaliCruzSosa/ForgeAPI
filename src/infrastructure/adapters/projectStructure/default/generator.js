@@ -1,6 +1,6 @@
-import dbPresets from "../../../config/dbPresets.js";
-import authPresets from "../../../config/authPresets.js";
-import * as defaultPackage from "../../../config/defaultPackageConfig.js";
+import dbPresets from "../../../../config/dbPresets.js";
+import authPresets from "../../../../config/authPresets.js";
+import * as defaultPackage from "../../../../config/defaultPackageConfig.js";
 
 class ProjectStructureGenerator {
   constructor(config) {

@@ -1,23 +1,24 @@
-import BaseFileGenerator from "../../shared/BaseFileGenerator.js";
+import BaseFileGenerator from "../../../shared/BaseFileGenerator.js";
 
 class AppGenerator extends BaseFileGenerator {
-  constructor({
-    fileService,
-    templateService,
-    logger,
-    templateDir,
-    outputFile = "app.js",
-  }) {
-    super({ fileService, templateService, logger });
-    this.outputFile = outputFile;
-    this.templatePath = fileService.resolvePath(templateDir, "app.ejs");
+  constructor(config) {
+    super({
+      fileService: config.services.fileService,
+      templateService: config.services.templateService,
+      logger: config.services.logger,
+    });
+    this.outputFile = "app.js";
+    this.templatePath = this.fileService.resolvePath(
+      config.templateDir,
+      "app.ejs"
+    );
   }
 
-  async generate(basePath, auth) {
+  async generate({ outputDir, auth }) {
     try {
       const rendered = await this.renderTemplate(this.templatePath, { auth });
       const filePath = await this.writeRenderedFile(
-        basePath,
+        outputDir,
         this.outputFile,
         rendered
       );

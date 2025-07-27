@@ -1,4 +1,4 @@
-import BaseFileGenerator from "../../shared/BaseFileGenerator.js";
+import BaseFileGenerator from "../../../shared/BaseFileGenerator.js";
 
 class CrudGenerator extends BaseFileGenerator {
   constructor({

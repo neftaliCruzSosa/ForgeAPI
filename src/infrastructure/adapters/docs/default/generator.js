@@ -1,5 +1,5 @@
-import BaseFileGenerator from "../../shared/BaseFileGenerator.js";
-import dbPresets from "../../../config/dbPresets.js";
+import BaseFileGenerator from "../../../shared/BaseFileGenerator.js";
+import dbPresets from "../../../../config/dbPresets.js";
 
 class DocsGenerator extends BaseFileGenerator {
   constructor(config) {

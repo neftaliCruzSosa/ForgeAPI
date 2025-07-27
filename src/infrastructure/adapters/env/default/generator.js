@@ -1,5 +1,5 @@
-import BaseFileGenerator from "../../shared/BaseFileGenerator.js";
-import envPresets from "../../../config/envPresets.js";
+import BaseFileGenerator from "../../../shared/BaseFileGenerator.js";
+import envPresets from "../../../../config/envPresets.js";
 
 class EnvExampleGenerator extends BaseFileGenerator {
   constructor({

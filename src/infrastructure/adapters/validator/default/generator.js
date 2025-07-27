@@ -1,5 +1,5 @@
-import BaseFileGenerator from "../../shared/BaseFileGenerator.js";
-import EntityBuilder from "../../../domain/services/EntityBuilder.js";
+import BaseFileGenerator from "../../../shared/BaseFileGenerator.js";
+import EntityBuilder from "../../../../domain/services/EntityBuilder.js";
 
 class ValidatorGenerator extends BaseFileGenerator {
   constructor({

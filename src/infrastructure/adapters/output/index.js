@@ -1,12 +1,2 @@
-export { default as AppGenerator } from "../framework/generator.js";
 export { default as ModelsGenerator } from "../db/generator.js";
-export { default as CrudGenerator } from "../crud/generator.js";
-export { default as ValidatorGenerator } from "../validator/generator.js";
-export { default as ProjectStructureGenerator } from "../projectStructure/generator.js";
-export { default as AutoloadGenerator } from "../autoload/generator.js";
-export { default as EnvExampleGenerator } from "../env/generator.js";
-export { default as ModelIndexGenerator } from "../modelIndex/generator.js";
-export { default as MiddlewareGenerator } from "../middleware/generator.js";
-export { default as DocsGenerator } from "../docs/generator.js";
 export { default as AuthGenerator } from "../auth/generator.js";
-export { default as DbConnectionGenerator } from "../dbConnector/generator.js";

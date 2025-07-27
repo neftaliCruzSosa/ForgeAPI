@@ -1,4 +1,4 @@
-import BaseFileGenerator from "../../shared/BaseFileGenerator.js";
+import BaseFileGenerator from "../../../shared/BaseFileGenerator.js";
 
 class ModelIndexGenerator extends BaseFileGenerator {
   constructor({
