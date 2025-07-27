@@ -82,15 +82,15 @@ class GenerateApiUseCase {
       await this.#generateDatabaseConnection(outputBase);
       const models = await this.#generateModels(entities, outputBase);
       if (auth) await this.#generateAuth(outputBase);
-      await this.#generateApp(outputBase);
-      await this.#generateCRUDs(entities, outputBase);
+      await this.#generateApp(outputBase, auth);
+      await this.#generateCRUDs(entities, auth, outputBase);
       await this.#generateIndexing(outputBase);
       await this.#generateEnv(projectName, outputBase);
       await this.#generateValidators(entities, outputBase);
       await this.#generateMiddlewares(outputBase);
       printSummary({
         projectName,
-        outputBase,
+        outputPath: outputBase,
         dbType,
         authType,
         models,
@@ -130,10 +130,10 @@ class GenerateApiUseCase {
     }
   }
 
-  async #generateApp(outputBase) {
+  async #generateApp(outputBase, auth) {
     this.logger.info("Generating base app.js...");
     try {
-      await this.appGenerator?.generate(outputBase);
+      await this.appGenerator?.generate(outputBase, auth);
     } catch (err) {
       this.logger.error(`Error generating app.js: ${err.message}`);
       throw err;
@@ -172,11 +172,11 @@ class GenerateApiUseCase {
     }
   }
 
-  async #generateCRUDs(entities, outputBase) {
+  async #generateCRUDs(entities, auth, outputBase) {
     this.logger.info("Generating CRUDs...");
     try {
       for (const entity of entities) {
-        await this.crudGenerator?.generate(entity, outputBase);
+        await this.crudGenerator?.generate(entity, auth, outputBase);
       }
       await this.autoloadGenerator?.generate(entities, outputBase);
     } catch (err) {

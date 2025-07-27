@@ -30,7 +30,7 @@ class CrudGenerator extends BaseFileGenerator {
     this.routeTemplatePath = routeTemplatePath || defaultRoutePath;
   }
 
-  async generate(entity, basePath) {
+  async generate(entity, auth, basePath) {
     const modelName = entity.name;
     const fields = entity.overrideFields || entity.fields || [];
     const protect = entity.protect || {};
@@ -51,6 +51,7 @@ class CrudGenerator extends BaseFileGenerator {
       modelName,
       fields,
       protect,
+      auth,
     });
 
     const controllerFile = await this.writeRenderedFile(

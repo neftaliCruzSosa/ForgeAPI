@@ -5,6 +5,17 @@ import FileSystemService from "../src/infrastructure/services/FileSystemService.
 const fileService = new FileSystemService();
 /* --------------------------------------------------- */
 
+const args = process.argv.slice(2);
+const params = {};
+args.forEach((arg) => {
+  const [key, value] = arg.split("=");
+  params[key] = value;
+});
+
+const authType = params.authType || "jwt";
+const dbType = params.dbType || "mongo";
+const auth = params.auth || true
+
 // Define your entities (required)
 const entities = [
   {
@@ -65,15 +76,16 @@ const entities = [
 await forgeAPI({
   projectName: "demo-social-api",
   entities,
-  auth: true,
-  dbType: "postgres",
-  authType: "jwt",
+  auth,
+  dbType,
+  authType,
   force: true,
 });
 
 /* --- Optional: Copy seed.js into test project --- */
 const seedSourcePath = fileService.resolvePath(
   fileService.getCurrentDir(import.meta.url),
+  dbType,
   "seed.js"
 );
 const seedTargetPath = fileService.resolvePath(

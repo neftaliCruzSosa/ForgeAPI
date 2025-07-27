@@ -13,9 +13,9 @@ class AppGenerator extends BaseFileGenerator {
     this.templatePath = fileService.resolvePath(templateDir, "app.ejs");
   }
 
-  async generate(basePath) {
+  async generate(basePath, auth) {
     try {
-      const rendered = await this.renderTemplate(this.templatePath, {});
+      const rendered = await this.renderTemplate(this.templatePath, { auth });
       const filePath = await this.writeRenderedFile(
         basePath,
         this.outputFile,
