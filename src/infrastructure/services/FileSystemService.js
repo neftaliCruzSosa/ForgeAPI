@@ -25,7 +25,7 @@ class FileSystemService {
     try {
       await fs.mkdir(dirPath, { recursive: true });
     } catch (err) {
-      this.logger.error(
+      this.logger?.error(
         `Failed to create directory "${dirPath}": ${err.message}`
       );
       throw err;
@@ -36,7 +36,7 @@ class FileSystemService {
     try {
       await fs.writeFile(filePath, content, "utf-8");
     } catch (err) {
-      this.logger.error(`Failed to write file "${filePath}": ${err.message}`);
+      this.logger?.error(`Failed to write file "${filePath}": ${err.message}`);
       throw err;
     }
   }
@@ -45,7 +45,7 @@ class FileSystemService {
     try {
       return await fs.readdir(dirPath);
     } catch (err) {
-      this.logger.error(
+      this.logger?.error(
         `Failed to read directory "${dirPath}": ${err.message}`
       );
       throw err;
@@ -56,7 +56,7 @@ class FileSystemService {
     try {
       return await fs.readFile(filePath, "utf-8");
     } catch (err) {
-      this.logger.error(`Failed to read file "${filePath}": ${err.message}`);
+      this.logger?.error(`Failed to read file "${filePath}": ${err.message}`);
       throw err;
     }
   }
@@ -65,7 +65,7 @@ class FileSystemService {
     try {
       await fs.copyFile(sourcePath, targetPath);
     } catch (err) {
-      this.logger.error(
+      this.logger?.error(
         `Failed to copy from "${sourcePath}" to "${targetPath}": ${err.message}`
       );
       throw err;
@@ -95,7 +95,7 @@ class FileSystemService {
       await fs.rm(targetPath, { recursive: true, force: true });
       return true;
     } catch (err) {
-      this.logger.error(`Failed to remove "${targetPath}": ${err.message}`);
+      this.logger?.error(`Failed to remove "${targetPath}": ${err.message}`);
       return false;
     }
   }

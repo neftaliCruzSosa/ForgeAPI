@@ -1,8 +1,8 @@
 import {  <%= modelName %>  } from '../models/index.js';
 import validate from '../validators/<%= modelName %>.validator.js';
 
-// Crear
-export async function create<%= modelName %>(req, res) {
+// Create
+export async function create(req, res) {
   const { error } = validate.validate(req.body);
   if (error) return res.status(400).json({ error: error.details[0].message });
 
@@ -18,8 +18,8 @@ export async function create<%= modelName %>(req, res) {
   }
 };
 
-// Obtener todos
-export async function getAll<%= modelName %>(req, res) {
+// GetAll
+export async function getAll(req, res) {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
@@ -28,16 +28,13 @@ export async function getAll<%= modelName %>(req, res) {
 
     const { search, showDeleted, ...filters } = req.query;
 
-    //Validar campos
     const allowedFields = [<%- fields.map(f => `'${f.name}'`).join(', ') %>];
     const query = {};
 
     Object.keys(filters).forEach((key) => {
       if (key.startsWith("exclude_")) {
         const realKey = key.replace("exclude_", "");
-
         if (!allowedFields.includes(realKey)) return;
-
         const values = filters[key].split(",").map((v) => v.trim());
         query[realKey] = { $nin: values };
         return;
@@ -82,8 +79,8 @@ export async function getAll<%= modelName %>(req, res) {
   }
 };
 
-// Obtener por ID
-export async function get<%= modelName %>ById(req, res) {
+// GetById
+export async function getById(req, res) {
   try {
     let query = <%= modelName %>.findOne({ _id: req.params.id, isDeleted: false });
     <% fields.filter(f => f.type === 'ref').forEach(f => { %>
@@ -97,8 +94,8 @@ export async function get<%= modelName %>ById(req, res) {
   }
 };
 
-// Actualizar
-export async function update<%= modelName %>(req, res) {
+// Update
+export async function update(req, res) {
   try {
     const item = await <%= modelName %>.findById(req.params.id);
     if (!item) return res.status(404).json({ error: 'Not found' });
@@ -115,8 +112,8 @@ export async function update<%= modelName %>(req, res) {
   }
 };
 
-// Soft Delete
-export async function delete<%= modelName %>(req, res) {
+// SoftDelete
+export async function softDelete(req, res) {
   try {
     const item = await <%= modelName %>.findById(req.params.id);
     if (!item) return res.status(404).json({ error: 'Not found' });
@@ -133,8 +130,8 @@ export async function delete<%= modelName %>(req, res) {
   }
 };
 
-// Restaurar
-export async function restore<%= modelName %>(req, res) {
+// Restore
+export async function restore(req, res) {
   try {
     const item = await <%= modelName %>.findById(req.params.id);
     if (!item) return res.status(404).json({ error: 'Not found' });
@@ -151,8 +148,8 @@ export async function restore<%= modelName %>(req, res) {
   }
 };
 
-// Eliminar permanente
-export async function hardDelete<%= modelName %>(req, res) {
+// HardDelete
+export async function hardDelete(req, res) {
   try {
     const item = await <%= modelName %>.findById(req.params.id);
     if (!item) return res.status(404).json({ error: 'Not found' });

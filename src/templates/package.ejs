@@ -2,7 +2,7 @@
   "type": "module",
   "name": "<%= projectName %>",
   "version": "1.0.0",
-  "description": "Generated with ApiForge - Modular API Generator",
+  "description": "Generated with ForgeAPI - Modular API Generator",
   "main": "app.js",
   "scripts": {
 <%  const scriptKeys = Object.keys(scripts);
@@ -22,8 +22,8 @@
   devKeys.forEach((name, i) => {%>    "<%= name %>": "<%= devDependencies[name] %>"<%= i < devKeys.length - 1 ? ',' : '' %>
 <% }) %>  },
   "generator": {
-    "name": "ApiForge",
-    "version": "1.0.0",
+    "name": "ForgeAPI",
+    "version": "0.1.3",
     "auth": "<%= authType %>",
     "db": "<%= dbType %>"
   }

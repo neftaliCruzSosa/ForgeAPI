@@ -5,6 +5,18 @@ import FileSystemService from "../src/infrastructure/services/FileSystemService.
 const fileService = new FileSystemService();
 /* --------------------------------------------------- */
 
+const args = process.argv.slice(2);
+const params = {};
+args.forEach((arg) => {
+  const [key, value] = arg.split("=");
+  params[key] = value;
+});
+
+const authType = params.authType || "jwt";
+const dbType = params.dbType || "mongo";
+const auth = params.auth === "false" ? false : true;
+const force = params.force === "false" ? false : true;
+
 // Define your entities (required)
 const entities = [
   {
@@ -62,24 +74,29 @@ const entities = [
 ];
 
 // Core: Generate the API project
-await forgeAPI({
-  projectName: "demo-social-api",
-  entities,
-  auth: true,
-  dbType: "postgres",
-  authType: "jwt",
-  force: true,
-});
+try {
+  await forgeAPI({
+    projectName: "demo-social-api",
+    entities,
+    auth,
+    dbType,
+    authType,
+    force,
+  });
 
-/* --- Optional: Copy seed.js into test project --- */
-const seedSourcePath = fileService.resolvePath(
-  fileService.getCurrentDir(import.meta.url),
-  "seed.js"
-);
-const seedTargetPath = fileService.resolvePath(
-  fileService.getCurrentDir(import.meta.url),
-  "../projects/demo-social-api/seed.js"
-);
+  /* --- Optional: Copy seed.js into test project --- */
+  const seedSourcePath = fileService.resolvePath(
+    fileService.getCurrentDir(import.meta.url),
+    dbType,
+    "seed.js"
+  );
+  const seedTargetPath = fileService.resolvePath(
+    fileService.getCurrentDir(import.meta.url),
+    "../projects/demo-social-api/seed.js"
+  );
 
-await fileService.copyFile(seedSourcePath, seedTargetPath);
-/* ---------------------------------------------------- */
+  await fileService.copyFile(seedSourcePath, seedTargetPath);
+  /* ---------------------------------------------------- */
+} catch (err) {
+  console.error(err.message);
+}

@@ -1,5 +1,6 @@
-import GenerateApiUseCase from "./application/GenerateApiUseCase.js";
-import buildGenerators from "./utils/buildGenerators.js";
+import generateAPI from "./application/GenerateApiUseCase.js";
+import { validateConfig } from "./application/validators/configValidator.js";
+import { loadConfig } from "./application/loadConfig.js";
 
 /**
  * Main entry point for using ForgeAPI programmatically.
@@ -10,27 +11,15 @@ import buildGenerators from "./utils/buildGenerators.js";
  * @param {boolean} [options.auth=true] - Enable auth system
  * @param {string} [options.dbType="mongo"] - Database type (e.g. "mongo", "postgres", more supported in the future)
  * @param {string} [options.authType="jwt"] - Auth strategy (e.g. "jwt", "ironSession", more supported in the future)
+ * @param {string} [options.framework="express"] - Framework to generate the API with (e.g. "express", more supported in the future)
  */
 
-export default async function forgeAPI({
-  projectName,
-  entities,
-  auth = false,
-  dbType = "mongo",
-  authType = "jwt",
-  force = false,
-}) {
-  const useCase = new GenerateApiUseCase({ buildGenerators });
-
+export default async function forgeAPI(options = {}) {
   try {
-    await useCase.generate(projectName, entities, {
-      auth,
-      dbType,
-      authType,
-      force,
-    });
+    const config = await loadConfig(options);
+    await validateConfig(config);
+    await generateAPI(config);
   } catch (err) {
-    console.error(`❌ ForgeAPI falló: ${err.message}`);
-    // process.exit(1)
+    console.error(`❌ ForgeAPI failed: ${err.message}`);
   }
 }

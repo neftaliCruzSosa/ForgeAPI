@@ -5,7 +5,7 @@ export async function register(req, res) {
   const { username, password, ...extra } = req.body;
 
   try {
-    const exists = await <%- preset.findByUsername %>;
+    const exists = await <%- presets.db.controller.findByUsername %>;
     if (exists) return res.status(400).json({ error: 'User already exists' });
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -28,7 +28,7 @@ export async function login(req, res) {
   const { username, password } = req.body;
 
   try {
-    const user = <%- preset.findByUsername %>;
+    const user = <%- presets.db.controller.findByUsername %>;
     if (!user) return res.status(401).json({ error: 'Invalid credentials' });
 
     const valid = await bcrypt.compare(password, user.password);
@@ -60,7 +60,7 @@ export async function promoteToAdmin(req, res) {
   const { username } = req.params;
 
   try {
-    const user = await <%- preset.findByUsername %>;
+    const user = await <%- presets.db.controller.findByUsername %>;
     if (!user) return res.status(404).json({ error: 'User not found' });
 
     user.role = 'admin';

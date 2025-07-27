@@ -1,5 +1,9 @@
 class EntityBuilder {
-  buildDefinition(entity) {
+  constructor({ fileService, logger }) {
+    this.fileService = fileService;
+    this.logger = logger;
+  }
+  async buildDefinition(entity) {
     if (!entity || typeof entity !== "object") {
       throw new Error("EntityBuilder: 'entity' must be an object.");
     }
@@ -9,9 +13,41 @@ class EntityBuilder {
         "EntityBuilder: 'entity.name' must be a non-empty string."
       );
     }
-    const userFields = Array.isArray(entity.fields) ? entity.fields : [];
-    const overrideFields = Array.isArray(entity.overrideFields)
-      ? entity.overrideFields
+
+    let baseDefinition = entity;
+
+    if (entity.builtIn) {
+      const defPath = this.fileService.resolvePath(
+        "src/templates/models/builtIn",
+        `${entity.name}.json`
+      );
+      
+      const exists = await this.fileService.exists(defPath);
+      if (!exists) {
+        this.logger?.warn(`No built-in definition found for ${entity.name}`);
+        return;
+      }
+
+      const raw = await this.fileService.readFile(defPath);
+      const parsed = JSON.parse(raw);
+
+      baseDefinition = {
+        ...parsed,
+        overrideFields: Array.isArray(entity.overrideFields)
+          ? entity.overrideFields
+          : [],
+        skipSystemFields: Array.from(
+          new Set([
+            ...(parsed.skipSystemFields || []),
+            ...(entity.skipSystemFields || []),
+          ])
+        ),
+      };
+    }
+
+    const userFields = Array.isArray(baseDefinition.fields) ? baseDefinition.fields : [];
+    const overrideFields = Array.isArray(baseDefinition.overrideFields)
+      ? baseDefinition.overrideFields
       : [];
     const merged = new Map(userFields.map((f) => [f.name, f]));
     for (const override of overrideFields) {
@@ -22,7 +58,7 @@ class EntityBuilder {
 
     const fieldNames = new Set(fields.map((f) => f.name));
 
-    const skipSet = new Set(entity.skipSystemFields);
+    const skipSet = new Set(baseDefinition.skipSystemFields);
 
     const systemFields = [
       { name: "isDeleted", type: "Boolean", default: false },
@@ -36,7 +72,7 @@ class EntityBuilder {
     }
 
     return {
-      name: entity.name,
+      name: baseDefinition.name,
       fields,
     };
   }
