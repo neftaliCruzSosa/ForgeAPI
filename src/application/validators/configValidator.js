@@ -11,7 +11,7 @@ export async function validateConfig({
   authType,
   framework,
   services,
-  outputPath,
+  outputDir,
   force,
 }) {
   if (!projectName || typeof projectName !== "string") {
@@ -46,12 +46,12 @@ export async function validateConfig({
     );
   }
 
-  if (await services.fileService.pathExists(outputPath)) {
+  if (await services.fileService.pathExists(outputDir)) {
     if (!force) {
       throw new Error(
         `Project '${projectName}' already exists. Use 'force: true' to overwrite it.`
       );
     }
-    await services.fileService.remove(outputPath);
+    await services.fileService.remove(outputDir);
   }
 }

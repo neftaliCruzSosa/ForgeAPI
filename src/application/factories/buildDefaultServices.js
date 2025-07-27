@@ -4,10 +4,12 @@ import FileSystemService from "../../infrastructure/services/FileSystemService.j
 
 export function buildDefaultServices(projectName) {
   const logger = new LoggerService({ projectName });
+  const fileService = new FileSystemService(logger);
+  const templateService = new TemplateService(logger, fileService);
 
   return {
     logger,
-    templateService: new TemplateService(logger),
-    fileService: new FileSystemService(logger),
+    fileService,
+    templateService,
   };
 }

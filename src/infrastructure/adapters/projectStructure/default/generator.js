@@ -1,38 +1,34 @@
 import dbPresets from "../../../../config/dbPresets.js";
 import authPresets from "../../../../config/authPresets.js";
 import * as defaultPackage from "../../../../config/defaultPackageConfig.js";
+import BaseFileGenerator from "../../../shared/BaseFileGenerator.js";
 
-class ProjectStructureGenerator {
+class ProjectStructureGenerator extends BaseFileGenerator {
   constructor(config) {
-    this.templatePath = config.services.fileService.resolvePath(
-      config.templateDir,
-      "package.ejs"
-    );
-    this.fileService = config.services.fileService;
-    this.templateService = config.services.templateService;
-    this.logger = config.services.logger;
-    this.dbType = config.dbType;
-    this.authType = config.authType;
+    super({
+      fileService: config.services.fileService,
+      templateService: config.services.templateService,
+      logger: config.services.logger,
+    });
   }
 
-  async generate({ outputDir, projectName }) {
+  async generate(config) {
     try {
-      this.logger.info(`Generating project ${projectName}`);
-      await this.fileService.ensureDir(outputDir);
-      this.logger?.info(`Project base folder created at: ${outputDir}`);
+      this.logger.info(`Generating project ${config.projectName}`);
+      this.logger?.info(`Project base folder created at: ${config.outputDir}`);
 
       await this.fileService.ensureDir(
-        this.fileService.joinPath(outputDir, "models")
+        this.fileService.joinPath(config.outputDir, "models")
       );
       await this.fileService.ensureDir(
-        this.fileService.joinPath(outputDir, "routes")
+        this.fileService.joinPath(config.outputDir, "routes")
       );
       await this.fileService.ensureDir(
-        this.fileService.joinPath(outputDir, "controllers")
+        this.fileService.joinPath(config.outputDir, "controllers")
       );
 
-      const dbPreset = dbPresets[this.dbType] || {};
-      const authPreset = authPresets[this.authType] || {};
+      const dbPreset = dbPresets[config.dbType] || {};
+      const authPreset = authPresets[config.authType] || {};
 
       const allDeps = {
         ...defaultPackage.DEFAULT_DEPENDENCIES,
@@ -48,16 +44,19 @@ class ProjectStructureGenerator {
         ...defaultPackage.DEFAULT_SCRIPTS,
       };
 
-      const rendered = await this.templateService.render(this.templatePath, {
-        projectName,
+      const rendered = await this.templateService.render("package.ejs", {
+        projectName: config.projectName,
         dependencies: allDeps,
         devDependencies: devDeps,
         scripts,
-        authType: this.authType,
-        dbType: this.dbType,
+        authType: config.authType,
+        dbType: config.dbType,
       });
 
-      const filePath = this.fileService.resolvePath(outputDir, "package.json");
+      const filePath = this.fileService.resolvePath(
+        config.outputDir,
+        "package.json"
+      );
       await this.fileService.writeFile(filePath, rendered, "utf-8");
 
       this.logger?.info(`package.json file generated at: ${filePath}`);
