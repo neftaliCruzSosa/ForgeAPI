@@ -1,39 +1,41 @@
 import BaseFileGenerator from "../../../shared/BaseFileGenerator.js";
 
 class ModelIndexGenerator extends BaseFileGenerator {
-  constructor({
-    fileService,
-    templateService,
-    logger,
-    templateDir,
-    outputDir = "models",
-    outputFile = "index.js",
-  }) {
-    super({ fileService, templateService, logger });
-    this.outputDir = outputDir;
-    this.outputFile = outputFile;
-    this.templatePath = fileService.resolvePath(templateDir, `index.ejs`);
+  constructor(ctx) {
+    super({
+      fileService: ctx.config.services.fileService,
+      templateService: ctx.config.services.templateService,
+      logger: ctx.config.services.logger,
+      ctx,
+    });
+    this.ctx = ctx;
   }
 
-  async generate(basePath) {
+  async generate() {
     try {
-      const modelsPath = await this.ensureDir(basePath, this.outputDir);
+      const modelsPath = await this.ensureDir(
+        this.ctx.config.outputDir,
+        this.getFolder("models")
+      );
+      const dbType = this.ctx.config.dbType;
 
-      const modelFiles = await this.fileService.readDir(modelsPath);
-      const models = modelFiles
-        .filter((f) => f.endsWith(".js") && f !== "index.js")
-        .map((f) => f.replace(".js", ""));
+      const files = await this.fileService.readDir(modelsPath);
+      const modelFiles = files
+        .filter((file) => file.endsWith(".js") && file !== "index.js")
+        .map((file) => file.replace(".js", ""));
 
-      const rendered = await this.renderTemplate(this.templatePath, { models });
+      const code = await this.renderTemplate(`models/${dbType}/index.ejs`, {
+        models: modelFiles,
+      });
 
-      const filePath = await this.writeRenderedFile(
+      const indexPath = await this.writeRenderedFile(
         modelsPath,
-        this.outputFile,
-        rendered
+        "index.js",
+        code
       );
 
       this.logInfo(
-        `models/index.js file generated with ${models.length} models: ${filePath}`
+        `models/index.js file generated with ${modelFiles.length} models: ${indexPath}`
       );
     } catch (err) {
       this.logger?.error(`Error generating model index: ${err.message}`);

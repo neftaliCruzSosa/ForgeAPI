@@ -1,15 +1,15 @@
-# <%= projectName %>
+# <%= config.projectName %>
 
-Project generated automatically with **API Forge** 🛠️
+Project generated automatically with **ForgeAPI** 🛠️
 
 ---
 
 ## 🧰 Technologies Used
 
 - Node.js
-- Express
-- <%= dbLabel %>
-- JSON Web Tokens (JWT)
+- <%= presets.framework.label %>
+- <%= presets.db.label %>
+- <%= presets.auth.label %>
 - Dotenv
 
 ---
@@ -39,7 +39,7 @@ Edit the values based on your environment:
 PORT=3000
 JWT_SECRET=supersecret
 JWT_EXPIRES_IN=7d
-<% dbEnvVars.forEach(line => { -%>
+<% presets.db.env(config.projectName).forEach(line => { -%>
 <%- line %>
 <% }) %>
 ```
@@ -53,9 +53,7 @@ JWT_EXPIRES_IN=7d
 
 ---
 
-## 🔁 Entity Endpoints
-
-<% entities.forEach(entity => { %>
+## 🔁 Entity Endpoints<% config.entities.forEach(entity => { %>
 
 ### `/api/<%= entity.name.toLowerCase() %>`
 
@@ -65,8 +63,7 @@ JWT_EXPIRES_IN=7d
 - `PUT /:id` → Update a <%= entity.name.toLowerCase() %>
 - `DELETE /:id` → Soft delete
 - `PATCH /:id/restore` → Restore a deleted <%= entity.name.toLowerCase() %>
-- `DELETE /:id/hard` → Hard delete (Permanent)
-  <% }); %>
+- `DELETE /:id/hard` → Hard delete (Permanent)<% }); %>
 
 ---
 

@@ -1,19 +1,22 @@
 import BaseFileGenerator from "../../../shared/BaseFileGenerator.js";
-import authControllerPresets from "../../../../config/authControllerPresets.js";
 
 export default class ironSessionAuthGenerator extends BaseFileGenerator {
-  constructor(config) {
+  constructor(ctx) {
     super({
-      fileService: config.services.fileService,
-      templateService: config.services.templateService,
-      logger: config.services.logger,
+      fileService: ctx.config.services.fileService,
+      templateService: ctx.config.services.templateService,
+      logger: ctx.config.services.logger,
+      ctx,
     });
+    this.ctx = ctx;
   }
-  async generate({ outputDir, templateDir, dbType, authType }) {
+  async generate() {
     try {
-      const authPath = this.fileService.resolvePath(outputDir, "auth");
+      const authPath = this.fileService.resolvePath(
+        this.ctx.config.outputDir,
+        this.getFolder("auth")
+      );
       await this.fileService.ensureDir(authPath);
-      const preset = authControllerPresets[dbType] || {};
 
       const files = [
         {
@@ -35,20 +38,15 @@ export default class ironSessionAuthGenerator extends BaseFileGenerator {
       ];
 
       for (const file of files) {
-        const templatePath = this.fileService.resolvePath(
-          templateDir,
-          file.template
-        );
-        const content = await this.templateService.render(templatePath, {
-          authType,
-          preset,
-        });
+        const content = await this.templateService.render(file.template);
         const targetPath = this.fileService.resolvePath(authPath, file.output);
         await this.fileService.writeFile(targetPath, content);
         this.logger.info(`Generated: ${targetPath}`);
       }
     } catch (err) {
-      this.logger?.error(`Error generating auth module (ironSession): ${err.message}`);
+      this.logger?.error(
+        `Error generating auth module (ironSession): ${err.message}`
+      );
       throw err;
     }
   }

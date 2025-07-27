@@ -2,7 +2,7 @@ import {
   SUPPORTED_DATABASES,
   SUPPORTED_AUTHS,
   SUPPORTED_FRAMEWORKS,
-} from "../../config/constants.js";
+} from "../../config/default/constants.js";
 
 export async function validateConfig({
   projectName,

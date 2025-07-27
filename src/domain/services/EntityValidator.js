@@ -1,7 +1,7 @@
 import {
   ALLOWED_PROTECT_ROLES,
   SUPPORTED_CRUD_ACTIONS,
-} from "../../config/constants.js";
+} from "../../config/default/constants.js";
 
 class EntityValidator {
   validate(entities) {

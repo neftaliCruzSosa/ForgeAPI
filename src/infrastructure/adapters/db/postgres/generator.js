@@ -2,23 +2,35 @@ import BaseFileGenerator from "../../../shared/BaseFileGenerator.js";
 import EntityBuilder from "../../../../domain/services/EntityBuilder.js";
 
 class PostgresGenerator extends BaseFileGenerator {
-  constructor({ fileService, templateService, logger }) {
-    super({ fileService, templateService, logger });
-    this.builder = new EntityBuilder({ fileService, logger });
+  constructor(ctx) {
+    super({
+      fileService: ctx.config.services.fileService,
+      templateService: ctx.config.services.templateService,
+      logger: ctx.config.services.logger,
+      ctx,
+    });
+    this.ctx = ctx;
+    this.builder = new EntityBuilder({
+      fileService: this.fileService,
+      logger: this.logger,
+    });
   }
 
-  async generate(entity, basePath) {
+  async generate(entity) {
     try {
-      const definition = await this.builder.buildDefinition(entity);
-      const modelsPath = this.fileService.resolvePath(basePath, "models");
+      const modelsPath = this.fileService.resolvePath(
+        this.ctx.config.outputDir,
+        this.getFolder("models")
+      );
       await this.fileService.ensureDir(modelsPath);
 
-      const schemaCode = this.#buildSequelizeModel(definition);
+      const definition = await this.builder.buildDefinition(entity);
+      const modelCode = this.#buildSequelizeModel(definition);
       const filePath = this.fileService.resolvePath(
         modelsPath,
         `${definition.name}.js`
       );
-      await this.fileService.writeFile(filePath, schemaCode);
+      await this.fileService.writeFile(filePath, modelCode);
 
       this.logger.info(`Sequelize model generated: ${filePath}`);
     } catch (err) {

@@ -1,15 +1,9 @@
-import { AUTH_CRUD_ROUTES, MODELS_CRUD_ROUTES } from "../config/constants.js";
+import {
+  AUTH_CRUD_ROUTES,
+  MODELS_CRUD_ROUTES,
+} from "../config/default/constants.js";
 
-export default function printSummary({
-  projectName,
-  outputDir,
-  dbType,
-  authType,
-  auth,
-  models = [],
-  files = [],
-  startTime,
-}) {
+export default function printSummary(ctx, models, startTime) {
   const endTime = Date.now();
   const duration = ((endTime - startTime) / 1000).toFixed(2);
 
@@ -18,21 +12,18 @@ export default function printSummary({
     return `${m.name}${isBuiltIn}`;
   });
 
-  const fileList =
-    files.length > 0 ? files.join(", ") : ".env.example, app.js, README";
-
   console.log("\nGENERATION SUMMARY");
   console.log("──────────────────────────────────────────────");
-  console.log(`Project:       ${projectName}`);
-  console.log(`Output Path:   ${outputDir}`);
-  console.log(`Database:      ${dbType}`);
-  console.log(`Auth:          ${authType || "none"}`);
+  console.log(`Project:       ${ctx?.config?.projectName}`);
+  console.log(`Output Path:   ${ctx?.config?.outputDir}`);
+  console.log(`Database:      ${ctx?.config?.dbType}`);
+  console.log(`Auth:          ${ctx?.config?.authType || "none"}`);
   console.log(`Models:        ${models.length} (${modelSummaries.join(", ")})`);
 
   models.forEach((model) => {
     console.log(`  - ${model.name}${model.builtIn ? " [builtIn]" : ""}`);
 
-    const protect = auth ? model.protect || {} : {};
+    const protect = ctx.config.auth ? model.protect || {} : {};
     const base = `/${model.name.toLowerCase()}`;
 
     MODELS_CRUD_ROUTES.forEach(({ action, method, path }) => {
@@ -45,14 +36,20 @@ export default function printSummary({
     });
   });
 
-  if (auth && authType && AUTH_CRUD_ROUTES[authType]) {
+  if (
+    ctx.config.auth &&
+    ctx.config.authType &&
+    AUTH_CRUD_ROUTES[ctx.config.authType]
+  ) {
     console.log(`Auth Routes:`);
-    AUTH_CRUD_ROUTES[authType].forEach(({ method, path, description }) => {
-      console.log(`   ${method.padEnd(6)} ${path.padEnd(28)} (${description})`);
-    });
+    AUTH_CRUD_ROUTES[ctx.config.authType].forEach(
+      ({ method, path, description }) => {
+        console.log(
+          `   ${method.padEnd(6)} ${path.padEnd(28)} (${description})`
+        );
+      }
+    );
   }
-
-  console.log(`Files:         ${fileList}`);
   console.log(`Time:          ${duration}s`);
   console.log("──────────────────────────────────────────────\n");
 }

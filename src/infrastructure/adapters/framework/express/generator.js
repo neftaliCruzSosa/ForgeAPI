@@ -1,28 +1,28 @@
 import BaseFileGenerator from "../../../shared/BaseFileGenerator.js";
 
 class AppGenerator extends BaseFileGenerator {
-  constructor(config) {
+  constructor(ctx) {
     super({
-      fileService: config.services.fileService,
-      templateService: config.services.templateService,
-      logger: config.services.logger,
+      fileService: ctx.config.services.fileService,
+      templateService: ctx.config.services.templateService,
+      logger: ctx.config.services.logger,
+      ctx,
     });
-    this.outputFile = "app.js";
-    this.templatePath = this.fileService.resolvePath(
-      config.templateDir,
-      "app.ejs"
-    );
+    this.ctx = ctx;
   }
 
-  async generate({ outputDir, auth }) {
+  async generate() {
     try {
-      const rendered = await this.renderTemplate(this.templatePath, { auth });
-      const filePath = await this.writeRenderedFile(
-        outputDir,
-        this.outputFile,
-        rendered
+      const appCode = await this.renderTemplate("app.ejs", this.ctx.config);
+
+      const appPath = this.fileService.resolvePath(
+        this.ctx.config.outputDir,
+        "app.js"
       );
-      this.logInfo(`File ${this.outputFile} generated at ${filePath}`);
+
+      await this.fileService.writeFile(appPath, appCode);
+
+      this.logger.info(`Framework base generated: ${appPath}`);
     } catch (err) {
       this.logger?.error(`Error generating ${this.outputFile}: ${err.message}`);
       throw err;

@@ -2,39 +2,35 @@ import BaseFileGenerator from "../../../shared/BaseFileGenerator.js";
 import envPresets from "../../../../config/envPresets.js";
 
 class EnvExampleGenerator extends BaseFileGenerator {
-  constructor({
-    fileService,
-    templateService,
-    logger,
-    dbType = "mongo",
-    authType = "jwt",
-  }) {
-    super({ fileService, templateService, logger });
-    this.dbType = dbType;
-    this.authType = authType;
+  constructor(ctx) {
+    super({
+      fileService: ctx.config.services.fileService,
+      templateService: ctx.config.services.templateService,
+      logger: ctx.config.services.logger,
+      ctx,
+    });
+    this.ctx = ctx;
   }
 
-  async generate(basePath, projectName = "my-api") {
+  async generate() {
     try {
-      const filePath = this.fileService.resolvePath(basePath, ".env.example");
-
-      const common = envPresets.common || [];
-      const authVars = envPresets.auth[this.authType] || [];
-      const dbVars =
-        typeof envPresets.db[this.dbType] === "function"
-          ? envPresets.db[this.dbType](projectName)
-          : [];
-
-      const allVars = [...common, ...authVars, ...dbVars];
-
+      const allVars = [
+        ...(this.ctx.presets.db.env(this.ctx.projectName) || []),
+        ...(this.ctx.presets.auth.env || []),
+        ...(this.ctx.presets.framework.env || []),
+      ];
       const lines = allVars.map(({ key, value, comment }) => {
         const commentLine = comment ? `# ${comment}` : "";
         return [commentLine, `${key}=${value}`].filter(Boolean).join("\n");
       });
+      const content = lines.join("\n") + "\n";
 
-      const content = lines.join("\n\n") + "\n";
+      const filePath = this.fileService.resolvePath(
+        this.ctx.config.outputDir,
+        ".env.example"
+      );
 
-      await this.writeRenderedFile(basePath, ".env.example", content);
+      await this.fileService.writeFile(filePath, content);
       this.logInfo(`.env.example generated at: ${filePath}`);
     } catch (err) {
       this.logger?.error(`Error generating .env.example: ${err.message}`);

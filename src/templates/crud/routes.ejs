@@ -2,19 +2,19 @@ import express from 'express';
 const router = express.Router();
 import * as controller from '../controllers/<%= modelName %>.controller.js';
 
-<% if (auth && protect) { %>import auth from '../auth/auth.middleware.js';<% } %>
+<% if (config.auth && protect) { %>import auth from '../auth/auth.middleware.js';<% } %>
 <% function authOptions(level) {
   if (level === 'admin') return '{ required: true, admin: true }';
   if (level === 'auth') return '{ required: true }';
   if (level === 'self') return '{ required: true, self: true }';
   return '';
 } %>
-router.post('/', <%= auth ? protect?.create ? `auth(${authOptions(protect.create)}),` : 'auth(),' : '' %> controller.create<%= modelName %>);
-router.get('/', <%= auth ? protect?.getAll ? `auth(${authOptions(protect.getAll)}),` : 'auth(),' : '' %> controller.getAll<%= modelName %>);
-router.get('/:id', <%= auth ? protect?.getById ? `auth(${authOptions(protect.getById)}),` : 'auth(),' : '' %> controller.get<%= modelName %>ById);
-router.put('/:id', <%= auth ? protect?.update ? `auth(${authOptions(protect.update)}),` : 'auth(),' : '' %> controller.update<%= modelName %>);
-router.delete('/:id', <%= auth ? protect?.delete ? `auth(${authOptions(protect.delete)}),` : 'auth(),' : '' %> controller.delete<%= modelName %>);
-router.patch('/:id', <%= auth ? protect?.restore ? `auth(${authOptions(protect.restore)}),` : 'auth(),' : '' %> controller.restore<%= modelName %>);
-router.delete('/:id/hardDelete', <%= auth ? protect?.hardDelete ? `auth(${authOptions(protect.hardDelete)}),` : 'auth(),' : '' %> controller.hardDelete<%= modelName %>);
+router.post('/', <%= config.auth ? protect?.create ? `auth(${authOptions(protect.create)}),` : 'auth(),' : '' %> controller.create<%= modelName %>);
+router.get('/', <%= config.auth ? protect?.getAll ? `auth(${authOptions(protect.getAll)}),` : 'auth(),' : '' %> controller.getAll<%= modelName %>);
+router.get('/:id', <%= config.auth ? protect?.getById ? `auth(${authOptions(protect.getById)}),` : 'auth(),' : '' %> controller.get<%= modelName %>ById);
+router.put('/:id', <%= config.auth ? protect?.update ? `auth(${authOptions(protect.update)}),` : 'auth(),' : '' %> controller.update<%= modelName %>);
+router.delete('/:id', <%= config.auth ? protect?.delete ? `auth(${authOptions(protect.delete)}),` : 'auth(),' : '' %> controller.delete<%= modelName %>);
+router.patch('/:id', <%= config.auth ? protect?.restore ? `auth(${authOptions(protect.restore)}),` : 'auth(),' : '' %> controller.restore<%= modelName %>);
+router.delete('/:id/hardDelete', <%= config.auth ? protect?.hardDelete ? `auth(${authOptions(protect.hardDelete)}),` : 'auth(),' : '' %> controller.hardDelete<%= modelName %>);
 
 export default router;

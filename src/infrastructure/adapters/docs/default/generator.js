@@ -1,39 +1,26 @@
 import BaseFileGenerator from "../../../shared/BaseFileGenerator.js";
-import dbPresets from "../../../../config/dbPresets.js";
 
 class DocsGenerator extends BaseFileGenerator {
-  constructor(config) {
+  constructor(ctx) {
     super({
-      fileService: config.services.fileService,
-      templateService: config.services.templateService,
-      logger: config.services.logger,
+      fileService: ctx.config.services.fileService,
+      templateService: ctx.config.services.templateService,
+      logger: ctx.config.services.logger,
+      ctx,
     });
-
-    this.templatePath = config.services.fileService.resolvePath(
-      config.templateDir,
-      "README.ejs"
-    );
-    this.dbType = config.dbType;
+    this.ctx = ctx;
   }
-  async generate({ outputDir, projectName, entities }) {
+  async generate() {
     try {
-      const preset = dbPresets[this.dbType] || {};
-
-      const rendered = await this.renderTemplate(this.templatePath, {
-        projectName,
-        entities,
-        dbType: this.dbType,
-        dbLabel: preset.label,
-        dbEnvVars:
-          typeof preset.env === "function" ? preset.env(projectName) : [],
-      });
-
-      const filePath = await this.writeRenderedFile(
-        outputDir,
+      const readme = await this.renderTemplate("README.ejs");
+      const readmeFile = await this.writeRenderedFile(
+        this.ctx.config.outputDir,
         "README.md",
-        rendered
+        readme
       );
-      this.logInfo(`README.md generated at: ${filePath}`);
+
+      this.logInfo("Documentation generated:");
+      this.logInfo(`  └─ ${readmeFile}`);
     } catch (err) {
       this.logger?.error(`Error generating README.md: ${err.message}`);
       throw err;

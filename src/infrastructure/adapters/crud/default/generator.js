@@ -1,42 +1,46 @@
 import BaseFileGenerator from "../../../shared/BaseFileGenerator.js";
 
-class CrudGenerator extends BaseFileGenerator {
-  constructor({
-    fileService,
-    templateService,
-    logger,
-    templateDir,
-    dbType = "mongo",
-    controllerTemplatePath,
-    routeTemplatePath,
-    controllersDir = "controllers",
-    routesDir = "routes",
-  }) {
-    super({ fileService, templateService, logger });
+export default class CrudGenerator extends BaseFileGenerator {
+  constructor(ctx) {
+    super({
+      fileService: ctx.config.services.fileService,
+      templateService: ctx.config.services.templateService,
+      logger: ctx.config.services.logger,
+      ctx,
+    });
+    this.ctx = ctx;
 
-    this.dbType = dbType;
-    this.templateDir = templateDir;
-    this.controllersDir = controllersDir;
-    this.routesDir = routesDir;
+    this.dbType = ctx?.config?.dbType || "mongo";
+    this.templateDir = ctx?.templateDir || "crud";
 
-    const defaultControllerPath =
-      templateDir &&
-      fileService.joinPath(templateDir, dbType, "controller.ejs");
-    const defaultRoutePath =
-      templateDir && fileService.joinPath(templateDir, "routes.ejs");
+    const defaultControllerPath = this.fileService.joinPath(
+      this.templateDir,
+      this.dbType,
+      "controller.ejs"
+    );
 
-    this.controllerTemplatePath =
-      controllerTemplatePath || defaultControllerPath;
-    this.routeTemplatePath = routeTemplatePath || defaultRoutePath;
+    const defaultRoutePath = this.fileService.joinPath(
+      this.templateDir,
+      "routes.ejs"
+    );
+
+    this.controllerTemplatePath = defaultControllerPath;
+    this.routeTemplatePath = defaultRoutePath;
   }
 
-  async generate(entity, auth, basePath) {
+  async generate(entity) {
     const modelName = entity.name;
     const fields = entity.overrideFields || entity.fields || [];
     const protect = entity.protect || {};
 
-    const controllersPath = await this.ensureDir(basePath, this.controllersDir);
-    const routesPath = await this.ensureDir(basePath, this.routesDir);
+    const controllersPath = await this.ensureDir(
+      this.ctx.config.outputDir,
+      this.getFolder("controllers")
+    );
+    const routesPath = await this.ensureDir(
+      this.ctx.config.outputDir,
+      this.getFolder("routes")
+    );
 
     const renderedController = await this.renderTemplate(
       this.controllerTemplatePath,
@@ -51,7 +55,6 @@ class CrudGenerator extends BaseFileGenerator {
       modelName,
       fields,
       protect,
-      auth,
     });
 
     const controllerFile = await this.writeRenderedFile(
@@ -59,6 +62,7 @@ class CrudGenerator extends BaseFileGenerator {
       `${modelName}.controller.js`,
       renderedController
     );
+
     const routeFile = await this.writeRenderedFile(
       routesPath,
       `${modelName}.routes.js`,
@@ -70,5 +74,3 @@ class CrudGenerator extends BaseFileGenerator {
     this.logInfo(`  └─ Routes:     ${routeFile}`);
   }
 }
-
-export default CrudGenerator;

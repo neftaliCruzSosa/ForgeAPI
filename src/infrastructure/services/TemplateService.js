@@ -1,5 +1,4 @@
 import ejs from "ejs";
-import fs from "fs/promises";
 
 class TemplateService {
   constructor(logger = console, fileService) {
@@ -9,22 +8,24 @@ class TemplateService {
       this.fileService.getCurrentDir(import.meta.url),
       "../../templates"
     );
-    this.context = {};
+    this.ctx = {};
   }
 
-  setContext(context = {}) {
-    this.context = context;
+  setContext(ctx = {}) {
+    this.ctx = ctx;
   }
 
   async render(templateName, data = {}) {
-    console.log(this.templateDir);
     try {
       const templatePath = this.fileService.joinPath(
         this.templateDir,
         templateName
       );
-      const templateContent = await fs.readFile(templatePath, "utf-8");
-      return ejs.render(templateContent, data);
+      const templateContent = await this.fileService.readFile(
+        templatePath,
+        "utf-8"
+      );
+      return ejs.render(templateContent, { ...this.ctx, ...data });
     } catch (err) {
       this.logger.error(
         `Failed to render template "${templateName}": ${err.message}`

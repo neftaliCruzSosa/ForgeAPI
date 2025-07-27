@@ -1,8 +1,9 @@
-class BaseFileGenerator {
-  constructor({ fileService, templateService, logger }) {
+export default class BaseFileGenerator {
+  constructor({ fileService, templateService, logger, ctx = {} }) {
     this.fileService = fileService;
     this.templateService = templateService;
     this.logger = logger;
+    this.ctx = ctx;
   }
 
   async ensureDir(basePath, subdir) {
@@ -20,7 +21,10 @@ class BaseFileGenerator {
 
   async renderTemplate(templatePath, data) {
     try {
-      return await this.templateService.render(templatePath, data);
+      return await this.templateService.render(templatePath, {
+        ...this.ctx,
+        ...data,
+      });
     } catch (err) {
       this.logger?.error(
         `Error rendering template "${templatePath}": ${err.message}`
@@ -42,9 +46,11 @@ class BaseFileGenerator {
     }
   }
 
+  getFolder(name, fallback = name) {
+    return this.ctx.presets.framework.structure?.[name] || fallback;
+  }
+
   logInfo(message) {
     if (this.logger) this.logger.info(message);
   }
 }
-
-export default BaseFileGenerator;

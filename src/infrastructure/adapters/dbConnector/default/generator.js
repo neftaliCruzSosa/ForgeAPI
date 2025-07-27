@@ -1,28 +1,26 @@
 import BaseFileGenerator from "../../../shared/BaseFileGenerator.js";
 
-class DbConnectionGenerator extends BaseFileGenerator {
-  constructor({
-    dbType = "mongo",
-    fileService,
-    templateService,
-    logger,
-    templateDir,
-    outputFile = "db.js",
-  }) {
-    super({ fileService, templateService, logger });
-
-    this.dbType = dbType;
-    this.templatePath = this.fileService.joinPath(templateDir, "connect.ejs");
-    this.outputFile = outputFile;
+export default class DbConnectionGenerator extends BaseFileGenerator {
+  constructor(ctx) {
+    super({
+      fileService: ctx.config.services.fileService,
+      templateService: ctx.config.services.templateService,
+      logger: ctx.config.services.logger,
+      ctx,
+    });
+    this.ctx = ctx;
+    this.dbType = ctx.config.dbType;
+    this.templatePath = `db/${this.dbType}/connect.ejs`;
+    this.outputFile = "db.js";
   }
 
-  async generate(basePath) {
+  async generate() {
     try {
       const rendered = await this.renderTemplate(this.templatePath, {
         dbType: this.dbType,
       });
       const filePath = await this.writeRenderedFile(
-        basePath,
+        this.ctx.config.outputDir,
         this.outputFile,
         rendered
       );
@@ -33,5 +31,3 @@ class DbConnectionGenerator extends BaseFileGenerator {
     }
   }
 }
-
-export default DbConnectionGenerator;

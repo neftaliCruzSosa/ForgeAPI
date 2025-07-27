@@ -1,39 +1,38 @@
 import BaseFileGenerator from "../../../shared/BaseFileGenerator.js";
 
 class MiddlewareGenerator extends BaseFileGenerator {
-  constructor({
-    templateDir,
-    fileService,
-    templateService,
-    logger,
-    outputDir = "middlewares",
-  }) {
-    super({ fileService, templateService, logger });
-    this.templateDir = templateDir;
-    this.outputDir = outputDir;
+  constructor(ctx) {
+    super({
+      fileService: ctx.config.services.fileService,
+      templateService: ctx.config.services.templateService,
+      logger: ctx.config.services.logger,
+      ctx,
+    });
+    this.ctx = ctx;
+
+    const preset = this.ctx.presets.framework;
+    this.templateDir = preset.middlewareTemplateDir || "middlewares";
+    this.middlewareFiles = preset.middlewares || [];
   }
 
-  async generate(basePath) {
+  async generate() {
     try {
-      const outputPath = await this.ensureDir(basePath, this.outputDir);
+      const middlewaresPath = this.fileService.resolvePath(
+        this.ctx.config.outputDir,
+        this.getFolder("middlewares")
+      );
+      await this.fileService.ensureDir(middlewaresPath);
 
-      const templateFiles = (
-        await this.fileService.readDir(this.templateDir)
-      ).filter((file) => file.endsWith(".ejs"));
-
-      for (const file of templateFiles) {
-        const templatePath = this.fileService.resolvePath(
-          this.templateDir,
-          file
-        );
+      for (const file of this.middlewareFiles) {
+        const templatePath = `${this.templateDir}/${file}`;
         const rendered = await this.renderTemplate(templatePath);
         const outputName = file.replace(/\.ejs$/, ".js");
-
         const writtenPath = await this.writeRenderedFile(
-          outputPath,
+          middlewaresPath,
           outputName,
           rendered
         );
+
         this.logInfo(`Middleware generated: ${writtenPath}`);
       }
     } catch (err) {

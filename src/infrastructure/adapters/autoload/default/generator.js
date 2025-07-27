@@ -1,39 +1,32 @@
 import BaseFileGenerator from "../../../shared/BaseFileGenerator.js";
 
-class AutoloadGenerator extends BaseFileGenerator {
-  constructor({
-    fileService,
-    templateService,
-    logger,
-    templateDir,
-    routesDir = "routes",
-    outputFile = "autoload.js",
-  }) {
-    super({ fileService, templateService, logger });
-
-    this.templatePath = fileService.joinPath(templateDir, "crud/autoload.ejs");
-    this.routesDir = routesDir;
-    this.outputFile = outputFile;
+export default class AutoloadGenerator extends BaseFileGenerator {
+  constructor(ctx) {
+    super({
+      fileService: ctx.config.services.fileService,
+      templateService: ctx.config.services.templateService,
+      logger: ctx.config.services.logger,
+      ctx,
+    });
+    this.ctx = ctx;
   }
 
-  async generate(entities, basePath) {
-    try {
-      const rendered = await this.renderTemplate(this.templatePath, {
-        entities,
-      });
-      const outputPath = await this.ensureDir(basePath, this.routesDir);
-      const filePath = await this.writeRenderedFile(
-        outputPath,
-        this.outputFile,
-        rendered
-      );
+  async generate() {
+    const autoloadPath = await this.ensureDir(
+      this.ctx.config.outputDir,
+      this.getFolder("routes")
+    );
 
-      this.logInfo(`Autoload file generated: ${filePath}`);
-    } catch (err) {
-      this.logger?.error(`Error generating autoload file: ${err.message}`);
-      throw err;
-    }
+    const content = await this.renderTemplate("crud/autoload.ejs", {
+      entities: this.ctx.config.entities || [],
+    });
+
+    const filePath = await this.writeRenderedFile(
+      autoloadPath,
+      "autoload.js",
+      content
+    );
+
+    this.logInfo(`Autoload file generated: ${filePath}`);
   }
 }
-
-export default AutoloadGenerator;

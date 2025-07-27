@@ -2,7 +2,7 @@ import {  models  } from '../models/index.js';
 import validate from '../validators/<%= modelName %>.validator.js';
 
 // Create
-export async function create<%= modelName %>(req, res) {
+export async function create(req, res) {
   const { error } = validate.validate(req.body);
   if (error) return res.status(400).json({ error: error.details[0].message });
 
@@ -20,7 +20,7 @@ export async function create<%= modelName %>(req, res) {
 };
 
 // GetAll
-export async function getAll<%= modelName %>(req, res) {
+export async function getAll(req, res) {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
@@ -84,7 +84,7 @@ export async function getAll<%= modelName %>(req, res) {
 };
 
 // GetById
-export async function get<%= modelName %>ById(req, res) {
+export async function getById(req, res) {
   try {
     const item = await models.<%= modelName %>.findByPk(req.params.id, {
       <% if (fields.some(f => f.type === 'ref')) { %>
@@ -105,7 +105,7 @@ export async function get<%= modelName %>ById(req, res) {
 };
 
 // Update
-export async function update<%= modelName %>(req, res) {
+export async function update(req, res) {
   try {
     const item = await models.<%= modelName %>.findByPk(req.params.id);
     if (!item || item.isDeleted) {
@@ -124,7 +124,7 @@ export async function update<%= modelName %>(req, res) {
 };
 
 // SoftDelete
-export async function delete<%= modelName %>(req, res) {
+export async function softDelete(req, res) {
   try {
     const item = await models.<%= modelName %>.findByPk(req.params.id);
     if (!item || item.isDeleted) return res.status(404).json({ error: 'Not found' });
@@ -141,7 +141,7 @@ export async function delete<%= modelName %>(req, res) {
 };
 
 // Restore
-export async function restore<%= modelName %>(req, res) {
+export async function restore(req, res) {
   try {
     const item = await models.<%= modelName %>.findByPk(req.params.id);
     if (!item) return res.status(404).json({ error: 'Not found' });
@@ -158,7 +158,7 @@ export async function restore<%= modelName %>(req, res) {
 };
 
 // HardDelete
-export async function hardDelete<%= modelName %>(req, res) {
+export async function hardDelete(req, res) {
   try {
     const item = await models.<%= modelName %>.findByPk(req.params.id);
     if (!item) return res.status(404).json({ error: 'Not found' });

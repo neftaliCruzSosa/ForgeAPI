@@ -1,5 +1,4 @@
-import GenerateApiUseCase from "./application/GenerateApiUseCase.js";
-import buildGenerators from "./utils/buildGenerators.js";
+import generateAPI from "./application/GenerateApiUseCase.js";
 import { buildDefaultServices } from "./application/factories/buildDefaultServices.js";
 import { validateConfig } from "./application/validators/configValidator.js";
 
@@ -12,6 +11,7 @@ import { validateConfig } from "./application/validators/configValidator.js";
  * @param {boolean} [options.auth=true] - Enable auth system
  * @param {string} [options.dbType="mongo"] - Database type (e.g. "mongo", "postgres", more supported in the future)
  * @param {string} [options.authType="jwt"] - Auth strategy (e.g. "jwt", "ironSession", more supported in the future)
+ * @param {string} [options.framework="express"] - Framework to generate the API with (e.g. "express", more supported in the future)
  */
 
 export default async function forgeAPI(options = {}) {
@@ -30,8 +30,6 @@ export default async function forgeAPI(options = {}) {
       templateDir = `./src/templates`,
     } = options;
 
-    const useCase = new GenerateApiUseCase();
-
     const config = {
       projectName,
       entities,
@@ -48,7 +46,7 @@ export default async function forgeAPI(options = {}) {
 
     await validateConfig(config);
 
-    await useCase.generate(config);
+    await generateAPI(config);
   } catch (err) {
     console.error(`❌ ForgeAPI failed: ${err.message}`);
     // process.exit(1)
