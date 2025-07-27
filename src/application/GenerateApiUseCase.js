@@ -6,15 +6,21 @@ class GenerateApiUseCase {
     this.generators = null;
   }
 
-  async generate(projectName, entities, options = {}) {
+  async generate(config = {}) {
+    const { logger } = config.services;
+    this.logger = logger;
     const startTime = Date.now();
     try {
       const {
-        dbType = "mongo",
-        auth = false,
-        authType = "jwt",
-        force = false,
-      } = options;
+        projectName,
+        entities,
+        dbType,
+        auth,
+        authType,
+        force,
+        outputPath,
+        services,
+      } = config;
 
       if (!projectName || typeof projectName !== "string") {
         throw new Error("Invalid or missing 'projectName'.");
@@ -27,13 +33,11 @@ class GenerateApiUseCase {
         this.generators = await this.buildGenerators(
           dbType,
           authType,
-          projectName
+          services
         );
       }
 
       const {
-        fileService,
-        logger,
         dbGenerator,
         modelsGenerator,
         authGenerator,
@@ -49,8 +53,6 @@ class GenerateApiUseCase {
         middlewareGenerator,
       } = this.generators;
 
-      this.fileService = fileService;
-      this.logger = logger;
       this.modelsGenerator = modelsGenerator;
       this.dbGenerator = dbGenerator;
       this.authGenerator = authGenerator;
@@ -65,15 +67,9 @@ class GenerateApiUseCase {
       this.validatorGenerator = validatorGenerator;
       this.middlewareGenerator = middlewareGenerator;
 
-      const baseDir = this.fileService.getCurrentDir(import.meta.url);
-      const projectsRoot = this.fileService.resolvePath(
-        baseDir,
-        "../../projects"
-      );
-
       const outputBase = await this.#generateProjectStructure(
         projectName,
-        projectsRoot,
+        outputPath,
         force
       );
       await this.#generateDocumentation(projectName, entities, outputBase);
@@ -91,14 +87,13 @@ class GenerateApiUseCase {
         outputPath: outputBase,
         dbType,
         authType,
+        auth,
         models,
         startTime,
       });
       logger.info(`Project successfully generated at: ${outputBase}`);
     } catch (err) {
-      this.generators?.logger?.error(
-        `Error during project generation: ${err.message}`
-      );
+      logger?.error(`Error during project generation: ${err.message}`);
       throw err;
     }
   }

@@ -1,5 +1,6 @@
 export const SUPPORTED_DATABASES = ["mongo", "postgres"];
 export const SUPPORTED_AUTHS = ["jwt", "ironSession"];
+export const SUPPORTED_FRAMEWORKS = ["express"];
 export const SUPPORTED_CRUD_ACTIONS = [
   "create",
   "getAll",

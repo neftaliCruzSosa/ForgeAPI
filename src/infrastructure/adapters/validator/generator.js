@@ -1,4 +1,5 @@
 import BaseFileGenerator from "../../shared/BaseFileGenerator.js";
+import EntityBuilder from "../../../domain/services/EntityBuilder.js";
 
 class ValidatorGenerator extends BaseFileGenerator {
   constructor({
@@ -10,21 +11,22 @@ class ValidatorGenerator extends BaseFileGenerator {
     validatorsDir = "validators",
   }) {
     super({ fileService, templateService, logger });
+    this.builder = new EntityBuilder({ fileService, logger });
     this.templatePath = fileService.joinPath(templateDir, "validator.ejs");
     this.validatorsDir = validatorsDir;
     this.dbType = dbType;
   }
 
   async generate(entity, basePath) {
+    const definition = await this.builder.buildDefinition(entity);
     const modelName = entity.name;
-    const fields = entity.overrideFields || entity.fields || [];
 
     try {
       const validatorsPath = await this.ensureDir(basePath, this.validatorsDir);
 
       const rendered = await this.renderTemplate(this.templatePath, {
         modelName,
-        fields,
+        fields: definition.fields,
         dbType: this.dbType,
       });
 

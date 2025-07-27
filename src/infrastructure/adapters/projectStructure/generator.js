@@ -19,17 +19,8 @@ class ProjectStructureGenerator {
     this.authType = authType;
   }
 
-  async generate(basePath, projectName, force = false) {
-    const outputPath = this.fileService.resolvePath(basePath, projectName);
+  async generate(outputPath, projectName, force = false) {
     try {
-      if (await this.fileService.pathExists(outputPath)) {
-        if (!force) {
-          throw new Error(
-            `Project '${projectName}' already exists. Use 'force: true' to overwrite it.`
-          );
-        }
-        await this.fileService.remove(outputPath);
-      }
       this.logger.info(`Generating project ${projectName}`);
       await this.fileService.ensureDir(outputPath);
       this.logger?.info(`Project base folder created at: ${outputPath}`);

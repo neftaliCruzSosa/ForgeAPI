@@ -3,19 +3,9 @@ import * as OutputGenerators from "../infrastructure/adapters/output/index.js";
 
 import { SUPPORTED_DATABASES, SUPPORTED_AUTHS } from "../config/constants.js";
 
-async function buildGenerators(
-  dbType = "mongo",
-  authType = "jwt",
-  projectName
-) {
-  const logger = new Services.LoggerService({ projectName });
-  const fileService = new Services.FileSystemService(logger);
-  const templateService = new Services.TemplateService(logger);
-
-  const services = { fileService, templateService, logger };
-
+async function buildGenerators(dbType = "mongo", authType = "jwt", services) {
   if (!SUPPORTED_DATABASES.includes(dbType)) {
-    logger.error(
+    services.logger.error(
       `Unsupported database type: "${dbType}". Supported: ${SUPPORTED_DATABASES.join(
         ", "
       )}`
@@ -24,7 +14,7 @@ async function buildGenerators(
   }
 
   if (!SUPPORTED_AUTHS.includes(authType)) {
-    logger.error(
+    services.logger.error(
       `Unsupported auth type: "${authType}". Supported: ${SUPPORTED_AUTHS.join(
         ", "
       )}`
@@ -40,13 +30,17 @@ async function buildGenerators(
     );
     DbGenerator = dbGeneratorModule.default;
   } catch (err) {
-    logger.error(`Failed to load DB generator for "${dbType}": ${err.message}`);
+    services.logger.error(
+      `Failed to load DB generator for "${dbType}": ${err.message}`
+    );
     throw new Error(`Cannot find generator for dbType "${dbType}"`);
   }
 
-  const baseDir = fileService.getCurrentDir(import.meta.url);
-  const templatesRootPath = fileService.joinPath(baseDir, "../templates");
-
+  const baseDir = services.fileService.getCurrentDir(import.meta.url);
+  const templatesRootPath = services.fileService.joinPath(
+    baseDir,
+    "../templates"
+  );
   return {
     structureGenerator: new OutputGenerators.ProjectStructureGenerator({
       ...services,
@@ -54,10 +48,7 @@ async function buildGenerators(
       dbType,
       authType,
     }),
-    modelsGenerator: new OutputGenerators.ModelsGenerator({
-      ...services,
-    }),
-    ...services,
+    modelsGenerator: new OutputGenerators.ModelsGenerator({ ...services }),
     appGenerator: new OutputGenerators.AppGenerator({
       ...services,
       templateDir: templatesRootPath,
@@ -65,17 +56,21 @@ async function buildGenerators(
     dbGenerator: new DbGenerator(services),
     dbConnectionGenerator: new OutputGenerators.DbConnectionGenerator({
       ...services,
-      templateDir: fileService.joinPath(templatesRootPath, "db", dbType),
+      templateDir: services.fileService.joinPath(
+        templatesRootPath,
+        "db",
+        dbType
+      ),
       dbType,
     }),
     crudGenerator: new OutputGenerators.CrudGenerator({
       ...services,
-      templateDir: fileService.joinPath(templatesRootPath, "crud"),
+      templateDir: services.fileService.joinPath(templatesRootPath, "crud"),
       dbType,
     }),
     validatorGenerator: new OutputGenerators.ValidatorGenerator({
       ...services,
-      templateDir: fileService.joinPath(templatesRootPath, "crud"),
+      templateDir: services.fileService.joinPath(templatesRootPath, "crud"),
       dbType,
     }),
     autoloadGenerator: new OutputGenerators.AutoloadGenerator({
@@ -89,11 +84,18 @@ async function buildGenerators(
     }),
     modelIndexGenerator: new OutputGenerators.ModelIndexGenerator({
       ...services,
-      templateDir: fileService.joinPath(templatesRootPath, "models", dbType),
+      templateDir: services.fileService.joinPath(
+        templatesRootPath,
+        "models",
+        dbType
+      ),
     }),
     middlewareGenerator: new OutputGenerators.MiddlewareGenerator({
       ...services,
-      templateDir: fileService.joinPath(templatesRootPath, "middlewares"),
+      templateDir: services.fileService.joinPath(
+        templatesRootPath,
+        "middlewares"
+      ),
     }),
     docsGenerator: new OutputGenerators.DocsGenerator({
       ...services,
@@ -102,7 +104,11 @@ async function buildGenerators(
     }),
     authGenerator: new OutputGenerators.AuthGenerator({
       ...services,
-      templateDir: fileService.joinPath(templatesRootPath, "auth", authType),
+      templateDir: services.fileService.joinPath(
+        templatesRootPath,
+        "auth",
+        authType
+      ),
       authType,
       dbType,
     }),

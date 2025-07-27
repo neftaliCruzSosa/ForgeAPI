@@ -5,6 +5,7 @@ export default function printSummary({
   outputPath,
   dbType,
   authType,
+  auth,
   models = [],
   files = [],
   startTime,
@@ -26,14 +27,12 @@ export default function printSummary({
   console.log(`Output Path:   ${outputPath}`);
   console.log(`Database:      ${dbType}`);
   console.log(`Auth:          ${authType || "none"}`);
-  console.log(
-    `Models:        ${models.length} (${modelSummaries.join(", ")})`
-  );
+  console.log(`Models:        ${models.length} (${modelSummaries.join(", ")})`);
 
   models.forEach((model) => {
     console.log(`  - ${model.name}${model.builtIn ? " [builtIn]" : ""}`);
 
-    const protect = model.protect || {};
+    const protect = auth ? model.protect || {} : {};
     const base = `/${model.name.toLowerCase()}`;
 
     MODELS_CRUD_ROUTES.forEach(({ action, method, path }) => {
@@ -46,7 +45,7 @@ export default function printSummary({
     });
   });
 
-  if (authType && AUTH_CRUD_ROUTES[authType]) {
+  if (auth && authType && AUTH_CRUD_ROUTES[authType]) {
     console.log(`Auth Routes:`);
     AUTH_CRUD_ROUTES[authType].forEach(({ method, path, description }) => {
       console.log(`   ${method.padEnd(6)} ${path.padEnd(28)} (${description})`);
