@@ -26,7 +26,8 @@ export default async function forgeAPI(options = {}) {
       force = false,
       author = "unknown",
       services = buildDefaultServices(projectName),
-      outputPath = `./projects/${projectName}`,
+      outputDir = `./projects/${projectName}`,
+      templateDir = `./src/templates`,
     } = options;
 
     const useCase = new GenerateApiUseCase({ buildGenerators });
@@ -41,7 +42,8 @@ export default async function forgeAPI(options = {}) {
       force,
       author,
       services,
-      outputPath,
+      outputDir,
+      templateDir,
     };
 
     await validateConfig(config);

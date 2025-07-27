@@ -2,19 +2,20 @@ import BaseFileGenerator from "../../shared/BaseFileGenerator.js";
 import dbPresets from "../../../config/dbPresets.js";
 
 class DocsGenerator extends BaseFileGenerator {
-  constructor({
-    templateDir,
-    dbType = "mongo",
-    fileService,
-    templateService,
-    logger,
-  }) {
-    super({ fileService, templateService, logger });
-    this.templatePath = fileService.joinPath(templateDir, "README.ejs");
-    this.dbType = dbType;
-  }
+  constructor(config) {
+    super({
+      fileService: config.services.fileService,
+      templateService: config.services.templateService,
+      logger: config.services.logger,
+    });
 
-  async generate(basePath, projectName, entities) {
+    this.templatePath = config.services.fileService.resolvePath(
+      config.templateDir,
+      "README.ejs"
+    );
+    this.dbType = config.dbType;
+  }
+  async generate({ outputDir, projectName, entities }) {
     try {
       const preset = dbPresets[this.dbType] || {};
 
@@ -28,7 +29,7 @@ class DocsGenerator extends BaseFileGenerator {
       });
 
       const filePath = await this.writeRenderedFile(
-        basePath,
+        outputDir,
         "README.md",
         rendered
       );

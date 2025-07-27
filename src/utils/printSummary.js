@@ -2,7 +2,7 @@ import { AUTH_CRUD_ROUTES, MODELS_CRUD_ROUTES } from "../config/constants.js";
 
 export default function printSummary({
   projectName,
-  outputPath,
+  outputDir,
   dbType,
   authType,
   auth,
@@ -24,7 +24,7 @@ export default function printSummary({
   console.log("\nGENERATION SUMMARY");
   console.log("──────────────────────────────────────────────");
   console.log(`Project:       ${projectName}`);
-  console.log(`Output Path:   ${outputPath}`);
+  console.log(`Output Path:   ${outputDir}`);
   console.log(`Database:      ${dbType}`);
   console.log(`Auth:          ${authType || "none"}`);
   console.log(`Models:        ${models.length} (${modelSummaries.join(", ")})`);

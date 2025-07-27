@@ -1,4 +1,5 @@
 import printSummary from "../utils/printSummary.js";
+import loadAdapter from "../utils/loadAdapter.js";
 
 class GenerateApiUseCase {
   constructor({ buildGenerators }) {
@@ -18,16 +19,10 @@ class GenerateApiUseCase {
         auth,
         authType,
         force,
-        outputPath,
+        outputDir,
+        templateDir,
         services,
       } = config;
-
-      if (!projectName || typeof projectName !== "string") {
-        throw new Error("Invalid or missing 'projectName'.");
-      }
-      if (!Array.isArray(entities) || entities.length === 0) {
-        throw new Error("Entity list is empty or invalid.");
-      }
 
       if (!this.generators) {
         this.generators = await this.buildGenerators(
@@ -42,11 +37,9 @@ class GenerateApiUseCase {
         modelsGenerator,
         authGenerator,
         appGenerator,
-        structureGenerator,
         crudGenerator,
         autoloadGenerator,
         modelIndexGenerator,
-        docsGenerator,
         envExampleGenerator,
         dbConnectionGenerator,
         validatorGenerator,
@@ -57,53 +50,58 @@ class GenerateApiUseCase {
       this.dbGenerator = dbGenerator;
       this.authGenerator = authGenerator;
       this.appGenerator = appGenerator;
-      this.structureGenerator = structureGenerator;
       this.crudGenerator = crudGenerator;
       this.autoloadGenerator = autoloadGenerator;
       this.modelIndexGenerator = modelIndexGenerator;
-      this.docsGenerator = docsGenerator;
+
       this.envExampleGenerator = envExampleGenerator;
       this.dbConnectionGenerator = dbConnectionGenerator;
       this.validatorGenerator = validatorGenerator;
       this.middlewareGenerator = middlewareGenerator;
 
-      const outputBase = await this.#generateProjectStructure(
-        projectName,
-        outputPath,
-        force
-      );
-      await this.#generateDocumentation(projectName, entities, outputBase);
-      await this.#generateDatabaseConnection(outputBase);
-      const models = await this.#generateModels(entities, outputBase);
-      if (auth) await this.#generateAuth(outputBase);
-      await this.#generateApp(outputBase, auth);
-      await this.#generateCRUDs(entities, auth, outputBase);
-      await this.#generateIndexing(outputBase);
-      await this.#generateEnv(projectName, outputBase);
-      await this.#generateValidators(entities, outputBase);
-      await this.#generateMiddlewares(outputBase);
+      
+      
+      const { generator: projectStructureGenerator } = await loadAdapter("projectStructure", config);      
+      const { generator: docsGenerator } = await loadAdapter("docs", config);
+
+      await docsGenerator.generate(config);
+      await projectStructureGenerator.generate(config);
+
+      
+      
+      
+      
+      await this.#generateDatabaseConnection(outputDir);
+      const models = await this.#generateModels(entities, outputDir);
+      if (auth) await this.#generateAuth(outputDir);
+      await this.#generateApp(outputDir, auth);
+      await this.#generateCRUDs(entities, auth, outputDir);
+      await this.#generateIndexing(outputDir);
+      await this.#generateEnv(projectName, outputDir);
+      await this.#generateValidators(entities, outputDir);
+      await this.#generateMiddlewares(outputDir);
       printSummary({
         projectName,
-        outputPath: outputBase,
+        outputDir,
         dbType,
         authType,
         auth,
         models,
         startTime,
       });
-      logger.info(`Project successfully generated at: ${outputBase}`);
+      logger.info(`Project successfully generated at: ${outputDir}`);
     } catch (err) {
       logger?.error(`Error during project generation: ${err.message}`);
       throw err;
     }
   }
 
-  async #generateModels(entities, outputBase) {
+  async #generateModels(entities, outputDir) {
     this.logger.info("Generating models...");
     try {
       return await this.modelsGenerator?.generate(
         entities,
-        outputBase,
+        outputDir,
         this.dbGenerator
       );
     } catch (err) {
@@ -112,93 +110,70 @@ class GenerateApiUseCase {
     }
   }
 
-  async #generateAuth(outputBase) {
+  async #generateAuth(outputDir) {
     this.logger.info("Generating authentication...");
     try {
-      await this.authGenerator?.generate(outputBase);
+      await this.authGenerator?.generate(outputDir);
     } catch (err) {
       this.logger.error(`Error generating authentication: ${err.message}`);
       throw err;
     }
   }
 
-  async #generateApp(outputBase, auth) {
+  async #generateApp(outputDir, auth) {
     this.logger.info("Generating base app.js...");
     try {
-      await this.appGenerator?.generate(outputBase, auth);
+      await this.appGenerator?.generate(outputDir, auth);
     } catch (err) {
       this.logger.error(`Error generating app.js: ${err.message}`);
       throw err;
     }
   }
 
-  async #generateProjectStructure(projectName, projectsRoot, force) {
+  async #generateDatabaseConnection(outputDir) {
     try {
-      const projectFolder = await this.structureGenerator?.generate(
-        projectsRoot,
-        projectName,
-        force
-      );
-      return projectFolder;
-    } catch (err) {
-      this.logger.error(`Error generating project structure: ${err.message}`);
-      throw err;
-    }
-  }
-
-  async #generateDocumentation(projectName, entities, outputBase) {
-    try {
-      await this.docsGenerator?.generate(outputBase, projectName, entities);
-    } catch (err) {
-      this.logger.error(`Error generating documentation: ${err.message}`);
-      throw err;
-    }
-  }
-
-  async #generateDatabaseConnection(outputBase) {
-    try {
-      await this.dbConnectionGenerator?.generate(outputBase);
+      await this.dbConnectionGenerator?.generate(outputDir);
     } catch (err) {
       this.logger.error(`Error generating database connection: ${err.message}`);
       throw err;
     }
   }
 
-  async #generateCRUDs(entities, auth, outputBase) {
+  async #generateCRUDs(entities, auth, outputDir) {
     this.logger.info("Generating CRUDs...");
     try {
       for (const entity of entities) {
-        await this.crudGenerator?.generate(entity, auth, outputBase);
+        await this.crudGenerator?.generate(entity, auth, outputDir);
       }
-      await this.autoloadGenerator?.generate(entities, outputBase);
+      await this.autoloadGenerator?.generate(entities, outputDir);
     } catch (err) {
       this.logger.error(`Error generating CRUDs: ${err.message}`);
       throw err;
     }
   }
 
-  async #generateIndexing(outputBase) {
+  async #generateIndexing(outputDir) {
     try {
-      await this.modelIndexGenerator?.generate(outputBase);
+      await this.modelIndexGenerator?.generate(outputDir);
     } catch (err) {
       this.logger.error(`Error generating model index: ${err.message}`);
       throw err;
     }
   }
 
-  async #generateEnv(projectName, outputBase) {
+  async #generateEnv(projectName, outputDir) {
     try {
-      await this.envExampleGenerator?.generate(outputBase, projectName);
+      await this.envExampleGenerator?.generate(outputDir, projectName);
     } catch (err) {
       this.logger.error(`Error generating .env.example: ${err.message}`);
       throw err;
     }
   }
 
-  async #generateValidators(entities, outputBase) {
+  async #generateValidators(entities, outputDir) {
     try {
       for (const entity of entities) {
-        await this.validatorGenerator?.generate(entity, outputBase);
+        await this.validatorGenerator?.generate(entity, outputDir);
       }
     } catch (err) {
       this.logger.error(`Error generating validators: ${err.message}`);
@@ -206,9 +181,9 @@ class GenerateApiUseCase {
     }
   }
 
-  async #generateMiddlewares(outputBase) {
+  async #generateMiddlewares(outputDir) {
     try {
-      await this.middlewareGenerator?.generate(outputBase);
+      await this.middlewareGenerator?.generate(outputDir);
     } catch (err) {
       this.logger.error(`Error generating middlewares: ${err.message}`);
       throw err;

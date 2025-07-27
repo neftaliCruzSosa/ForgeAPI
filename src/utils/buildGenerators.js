@@ -1,4 +1,3 @@
-import * as Services from "../infrastructure/services/index.js";
 import * as OutputGenerators from "../infrastructure/adapters/output/index.js";
 
 import { SUPPORTED_DATABASES, SUPPORTED_AUTHS } from "../config/constants.js";
@@ -42,12 +41,6 @@ async function buildGenerators(dbType = "mongo", authType = "jwt", services) {
     "../templates"
   );
   return {
-    structureGenerator: new OutputGenerators.ProjectStructureGenerator({
-      ...services,
-      templateDir: templatesRootPath,
-      dbType,
-      authType,
-    }),
     modelsGenerator: new OutputGenerators.ModelsGenerator({ ...services }),
     appGenerator: new OutputGenerators.AppGenerator({
       ...services,
@@ -96,11 +89,6 @@ async function buildGenerators(dbType = "mongo", authType = "jwt", services) {
         templatesRootPath,
         "middlewares"
       ),
-    }),
-    docsGenerator: new OutputGenerators.DocsGenerator({
-      ...services,
-      templateDir: templatesRootPath,
-      dbType,
     }),
     authGenerator: new OutputGenerators.AuthGenerator({
       ...services,

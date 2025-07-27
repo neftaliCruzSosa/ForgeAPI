@@ -1,5 +1,5 @@
 export { default as AppGenerator } from "../framework/generator.js";
-export { default as ModelsGenerator } from "../db/ModelsGenerator.js";
+export { default as ModelsGenerator } from "../db/generator.js";
 export { default as CrudGenerator } from "../crud/generator.js";
 export { default as ValidatorGenerator } from "../validator/generator.js";
 export { default as ProjectStructureGenerator } from "../projectStructure/generator.js";

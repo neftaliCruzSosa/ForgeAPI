@@ -3,48 +3,36 @@ import authPresets from "../../../config/authPresets.js";
 import * as defaultPackage from "../../../config/defaultPackageConfig.js";
 
 class ProjectStructureGenerator {
-  constructor({
-    templateDir,
-    fileService,
-    templateService,
-    logger,
-    dbType,
-    authType,
-  }) {
-    this.templatePath = fileService.joinPath(templateDir, "package.ejs");
-    this.fileService = fileService;
-    this.templateService = templateService;
-    this.logger = logger;
-    this.dbType = dbType;
-    this.authType = authType;
+  constructor(config) {
+    this.templatePath = config.services.fileService.resolvePath(
+      config.templateDir,
+      "package.ejs"
+    );
+    this.fileService = config.services.fileService;
+    this.templateService = config.services.templateService;
+    this.logger = config.services.logger;
+    this.dbType = config.dbType;
+    this.authType = config.authType;
   }
 
-  async generate(outputPath, projectName, force = false) {
+  async generate({ outputDir, projectName }) {
     try {
       this.logger.info(`Generating project ${projectName}`);
-      await this.fileService.ensureDir(outputPath);
-      this.logger?.info(`Project base folder created at: ${outputPath}`);
+      await this.fileService.ensureDir(outputDir);
+      this.logger?.info(`Project base folder created at: ${outputDir}`);
 
       await this.fileService.ensureDir(
-        this.fileService.joinPath(outputPath, "models")
+        this.fileService.joinPath(outputDir, "models")
       );
       await this.fileService.ensureDir(
-        this.fileService.joinPath(outputPath, "routes")
+        this.fileService.joinPath(outputDir, "routes")
       );
       await this.fileService.ensureDir(
-        this.fileService.joinPath(outputPath, "controllers")
+        this.fileService.joinPath(outputDir, "controllers")
       );
 
       const dbPreset = dbPresets[this.dbType] || {};
       const authPreset = authPresets[this.authType] || {};
-      const baseDeps = {
-        express: "^4.18.2",
-        dotenv: "^16.3.1",
-        helmet: "^7.0.0",
-        cors: "^2.8.5",
-        morgan: "^1.10.0",
-        joi: "^17.9.2",
-      };
 
       const allDeps = {
         ...defaultPackage.DEFAULT_DEPENDENCIES,
@@ -69,11 +57,10 @@ class ProjectStructureGenerator {
         dbType: this.dbType,
       });
 
-      const filePath = this.fileService.resolvePath(outputPath, "package.json");
+      const filePath = this.fileService.resolvePath(outputDir, "package.json");
       await this.fileService.writeFile(filePath, rendered, "utf-8");
 
       this.logger?.info(`package.json file generated at: ${filePath}`);
-      return outputPath;
     } catch (err) {
       throw err;
     }
