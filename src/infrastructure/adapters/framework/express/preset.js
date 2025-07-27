@@ -8,8 +8,8 @@ export default {
     joi: "^17.13.3",
   },
   env: [
-    { key: "PORT", value: "3000", comment: "Puerto en que corre la app" },
-    { key: "NODE_ENV", value: "development", comment: "Modo de ejecución" },
+    { key: "PORT", value: "3000", comment: "Port where the app runs" },
+    { key: "NODE_ENV", value: "development", comment: "Execution mode" },
   ],
   structure: {
     auth: "auth",

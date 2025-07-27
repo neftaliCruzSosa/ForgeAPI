@@ -4,7 +4,22 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-## [0.1.2] - 2024-07-17
+## [0.1.3] - 2025-07-26
+### Added
+- Modular adapter system replacing static generators
+- Per-adapter presets and index entry points
+- Global template context to simplify variable passing
+- Config loader with defaults and external config support
+- CLI demo script now supports dbType and authType parameters
+
+### Changed
+- All generators refactored into adapter structure
+- Default services injection standardized
+- index.js simplified with unified config loading
+
+---
+
+## [0.1.2] - 2025-07-17
 ### Added
 - Summary report after project generation with auth + CRUD routes per model
 - Support for built-in model detection in summary

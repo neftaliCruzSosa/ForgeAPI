@@ -36,23 +36,23 @@ cp .env.example .env
 Edit the values based on your environment:
 
 ```env
-PORT=3000
-JWT_SECRET=supersecret
-JWT_EXPIRES_IN=7d
-<% presets.db.env(config.projectName).forEach(line => { -%>
-<%- line %>
+<% presets.framework.env.forEach(line => { -%>
+<%- line.key %>=<%- line.value %>
+<% }) %><%config.auth && presets.auth.env.forEach(line => { -%>
+<%- line.key %>=<%- line.value %>
+<% }) %><% presets.db.env(config.projectName).forEach(line => { -%>
+<%- line.key %>=<%- line.value %>
 <% }) %>
 ```
-
----
+<% if (config.auth) {%>
+----
 
 ## 🔐 Auth Routes
-
-- `POST /auth/register`
-- `POST /auth/login`
-
+<% presets.auth.routes.forEach(line => { -%>
+- `<%- line.method %> <%- line.path %>` - <%- line.description %>
+<% }) %>
 ---
-
+<% } %>
 ## 🔁 Entity Endpoints<% config.entities.forEach(entity => { %>
 
 ### `/api/<%= entity.name.toLowerCase() %>`

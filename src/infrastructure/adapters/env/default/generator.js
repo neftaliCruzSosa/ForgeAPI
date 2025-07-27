@@ -14,7 +14,7 @@ class EnvExampleGenerator extends BaseFileGenerator {
   async generate() {
     try {
       const allVars = [
-        ...(this.ctx.presets.db.env(this.ctx.projectName) || []),
+        ...(this.ctx.presets.db.env(this.ctx.config.projectName) || []),
         ...(this.ctx.presets.auth.env || []),
         ...(this.ctx.presets.framework.env || []),
       ];

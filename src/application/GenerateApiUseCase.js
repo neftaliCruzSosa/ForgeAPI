@@ -76,7 +76,7 @@ export default async function generateAPI(config = {}) {
     );
 
     await frameworkGenerator.generate();
-    await authGenerator.generate();
+    if (config.auth) await authGenerator.generate();
     await docsGenerator.generate();
     await envGenerator.generate();
     await autoloadGenerator.generate();

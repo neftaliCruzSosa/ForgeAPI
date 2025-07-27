@@ -34,9 +34,7 @@ export async function getAll(req, res) {
     Object.keys(filters).forEach((key) => {
       if (key.startsWith("exclude_")) {
         const realKey = key.replace("exclude_", "");
-
         if (!allowedFields.includes(realKey)) return;
-
         const values = filters[key].split(",").map((v) => v.trim());
         query[realKey] = { $nin: values };
         return;

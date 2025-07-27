@@ -8,9 +8,9 @@ export default {
     {
       key: "JWT_SECRET",
       value: "supersecret",
-      comment: "Clave secreta usada para firmar JWTs",
+      comment: "Secret key used to sign JWTs",
     },
-    { key: "JWT_EXPIRES_IN", value: "7d", comment: "Duración del JWT" },
+    { key: "JWT_EXPIRES_IN", value: "7d", comment: "JWT expiration time" },
   ],
   routes: [
     { method: "POST", path: "/auth/register", description: "register" },

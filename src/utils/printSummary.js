@@ -17,7 +17,7 @@ export default function printSummary(ctx, models, startTime) {
   console.log(`Project:       ${ctx?.config?.projectName}`);
   console.log(`Output Path:   ${ctx?.config?.outputDir}`);
   console.log(`Database:      ${ctx?.config?.dbType}`);
-  console.log(`Auth:          ${ctx?.config?.authType || "none"}`);
+  console.log(`Auth:          ${ctx?.config?.auth && ctx?.config?.authType || "none"}`);
   console.log(`Models:        ${models.length} (${modelSummaries.join(", ")})`);
 
   models.forEach((model) => {

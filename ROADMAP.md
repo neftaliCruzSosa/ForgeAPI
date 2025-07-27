@@ -18,7 +18,7 @@
 - **Technical refactors:**
   - Extract `printSummary()` and `validateEntities()` as reusable helper functions
 
-## v0.1.3 - "Modularization Patch – CLI-Ready" (next patch)
+## v0.1.3 - "Modularization Patch – CLI-Ready"
 
 - **Modular architecture foundation:**
   - Create common interfaces for framework, database and auth
@@ -35,7 +35,7 @@
   - Ensure all generators can run programatically with injected options
   - Add runtime validation to detect missing/invalid adapters
 
-## v0.2.0 (CLI Tool)
+## v0.2.0 (CLI Tool) (next minor update)
 
 - Interactive CLI to select DB, auth, and entities
 - Enhanced developer experience: progress, colors, clear output

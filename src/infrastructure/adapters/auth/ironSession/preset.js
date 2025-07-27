@@ -9,7 +9,7 @@ export default {
       key: "IRON_SESSION_PASSWORD",
       value: "this_is_a_very_secure_password_that_is_32_chars_min",
       comment:
-        "Contraseña secreta usada por Iron Session (mínimo 32 caracteres)",
+        "Secret password used by Iron Session (minimum 32 characters)",
     },
   ],
   routes: [

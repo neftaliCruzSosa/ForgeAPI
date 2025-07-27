@@ -12,6 +12,7 @@ class DocsGenerator extends BaseFileGenerator {
   }
   async generate() {
     try {
+      console.log(this.ctx.presets.auth.routes)
       const readme = await this.renderTemplate("README.ejs");
       const readmeFile = await this.writeRenderedFile(
         this.ctx.config.outputDir,
