@@ -6,8 +6,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "echo `No build step required`",
+    "postinstall": "npx prisma generate",
     "start": "node src/index.js",
     "demo": "node test/test-demo-social-api.js"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.js"
   },
   "type": "module",
   "keywords": [
@@ -21,6 +25,10 @@
   "author": "Neftali Cruz Sosa",
   "license": "MIT",
   "dependencies": {
+    "@prisma/client": "^6.13.0",
     "ejs": "^3.1.10"
+  },
+  "devDependencies": {
+    "prisma": "^6.13.0"
   }
 }
