@@ -1,0 +1,73 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Proyect {
+  id    Int     @id @default(autoincrement())
+  name String  @unique
+  auth  Boolean
+  dbType String
+  authType String
+  framework String
+  entities Entity[]
+}
+
+enum Method {
+  CREATE
+  GET_ALL
+  GET_BY_ID
+  UPDATE
+  DELETE
+  RESTORE
+  HARD_DELETE
+}
+
+enum AuthLevel {
+  ADMIN
+  AUTH
+  SELF
+}
+
+model Protect {
+  id        Int      @id @default(autoincrement())
+  method Method
+  authLevel AuthLevel
+  entityId Int
+  Entity Entity    @relation(fields: [entityId], references: [id])
+}
+enum Type {
+  STRING
+  NUMBER
+  BOOLEAN
+  ARRAY
+  REF
+}
+
+model Field {
+  id        Int      @id @default(autoincrement())
+  name String
+  type Type
+  ref String?
+  required Boolean @default(false)
+  entityId Int
+  Entity Entity    @relation(fields: [entityId], references: [id])
+}
+
+model Entity {
+  id        Int      @id @default(autoincrement())
+  name String
+  builtIn Boolean @default(false)
+  protect Protect[]
+  fields Field[]
+  proyect    Proyect     @relation(fields: [proyectId], references: [id])
+  proyectId  Int
+}
