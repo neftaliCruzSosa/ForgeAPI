@@ -17,6 +17,7 @@ async function main() {
   const userEntity = await prisma.entity.create({
     data: {
       name: 'User',
+      builtIn: true,
       proyect: {
         connect: {
           id: proyect.id,

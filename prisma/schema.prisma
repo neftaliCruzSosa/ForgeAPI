@@ -65,7 +65,7 @@ model Field {
 model Entity {
   id        Int      @id @default(autoincrement())
   name String
-  builtIn Boolean
+  builtIn Boolean @default(false)
   protect Protect[]
   fields Field[]
   proyect    Proyect     @relation(fields: [proyectId], references: [id])
