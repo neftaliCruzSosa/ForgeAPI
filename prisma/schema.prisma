@@ -18,4 +18,56 @@ model Proyect {
   dbType String
   authType String
   framework String
+  entities Entity[]
+}
+
+enum Method {
+  CREATE
+  GET_ALL
+  GET_BY_ID
+  UPDATE
+  DELETE
+  RESTORE
+  HARD_DELETE
+}
+
+enum AuthLevel {
+  ADMIN
+  AUTH
+  SELF
+}
+
+model Protect {
+  id        Int      @id @default(autoincrement())
+  method Method
+  authLevel AuthLevel
+  entityId Int
+  Entity Entity    @relation(fields: [entityId], references: [id])
+}
+enum Type {
+  STRING
+  NUMBER
+  BOOLEAN
+  ARRAY
+  REF
+}
+
+model Field {
+  id        Int      @id @default(autoincrement())
+  name String
+  type Type
+  ref String?
+  required Boolean
+  entityId Int
+  Entity Entity    @relation(fields: [entityId], references: [id])
+}
+
+model Entity {
+  id        Int      @id @default(autoincrement())
+  name String
+  builtIn Boolean
+  protect Protect[]
+  fields Field[]
+  proyect    Proyect     @relation(fields: [proyectId], references: [id])
+  proyectId  Int
 }

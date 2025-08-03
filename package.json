@@ -8,10 +8,8 @@
     "build": "echo `No build step required`",
     "postinstall": "npx prisma generate",
     "start": "node src/index.js",
-    "demo": "node test/test-demo-social-api.js"
-  },
-  "prisma": {
-    "seed": "node prisma/seed.js"
+    "demo": "node test/test-demo-social-api.js",
+    "demo-seed-db": "node prisma/seed.js"
   },
   "type": "module",
   "keywords": [

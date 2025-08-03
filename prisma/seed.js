@@ -4,8 +4,7 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
-  // Example: Create a user
-  await prisma.proyect.create({
+  const proyect = await prisma.proyect.create({
     data: {
       name: 'demo-social-api',
       auth: true,
@@ -14,7 +13,50 @@ async function main() {
       framework: 'express',
     },
   });
-  
+
+  const userEntity = await prisma.entity.create({
+    data: {
+      name: 'User',
+      proyect: {
+        connect: {
+          id: proyect.id,
+        },
+      },
+    },
+  });
+
+  const createUserProtect = await prisma.protect.create({
+    data: {
+      method: 'CREATE',
+      authLevel: 'ADMIN',
+      entityId: userEntity.id,
+    },
+  });
+
+  const updateUserProtect = await prisma.protect.create({
+    data: {
+      method: 'UPDATE',
+      authLevel: 'SELF',
+      entityId: userEntity.id,
+    },
+  });
+
+  const bioField = await prisma.field.create({
+    data: {
+      name: 'bio',
+      type: 'String',
+      entityId: userEntity.id,
+    },
+  });
+
+  const avatarField = await prisma.field.create({
+    data: {
+      name: 'avatar',
+      type: 'String',
+      entityId: userEntity.id,
+    },
+  });
+
   console.log('Seed data inserted successfully!');
 
 }
