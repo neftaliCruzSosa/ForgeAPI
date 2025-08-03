@@ -9,7 +9,8 @@
     "postinstall": "npx prisma generate",
     "start": "node src/index.js",
     "demo": "node test/test-demo-social-api.js",
-    "demo-seed-db": "node prisma/seed.js"
+    "demo-seed-db": "node prisma/seed.js",
+    "restart-db": "rm prisma/dev.db && touch prisma/dev.db && npx prisma migrate deploy"
   },
   "type": "module",
   "keywords": [

@@ -45,7 +45,7 @@ async function main() {
   const bioField = await prisma.field.create({
     data: {
       name: 'bio',
-      type: 'String',
+      type: 'STRING',
       entityId: userEntity.id,
     },
   });
@@ -53,7 +53,7 @@ async function main() {
   const avatarField = await prisma.field.create({
     data: {
       name: 'avatar',
-      type: 'String',
+      type: 'STRING',
       entityId: userEntity.id,
     },
   });

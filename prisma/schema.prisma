@@ -57,7 +57,7 @@ model Field {
   name String
   type Type
   ref String?
-  required Boolean
+  required Boolean @default(false)
   entityId Int
   Entity Entity    @relation(fields: [entityId], references: [id])
 }

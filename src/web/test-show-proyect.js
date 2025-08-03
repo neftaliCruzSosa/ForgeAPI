@@ -3,8 +3,17 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
-    const proyects = await prisma.proyect.findMany();
-    console.log(proyects);
+    const proyects = await prisma.proyect.findMany({
+        include: {
+            entities: {
+                include: {
+                    fields: true,
+                    protect: true,
+                }
+            },
+        }
+    });
+    console.log(JSON.stringify(proyects, null, 2));
 }
 
 main()
