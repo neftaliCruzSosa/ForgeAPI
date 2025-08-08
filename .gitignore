@@ -40,7 +40,7 @@ temp/
 *.bak
 
 # Test db files
-*.db
+prisma/*.db
 
 # Output from CLI tests
 test-output/
