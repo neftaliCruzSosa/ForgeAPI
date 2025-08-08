@@ -1,5 +1,6 @@
 import printSummary from "../utils/printSummary.js";
 import loadAdapter from "../utils/loadAdapter.js";
+import { saveOrUpdateProject } from "../infrastructure/persistence/projectRepository.js";
 
 export default async function generateAPI(config = {}) {
   const { fileService, templateService, logger } = config.services;
@@ -91,6 +92,13 @@ export default async function generateAPI(config = {}) {
       generatedModels.push(entity);
     }
     await modelIndexGenerator.generate();
+
+    try {
+      await saveOrUpdateProject({ config, models: generatedModels });
+      logger?.info(`Project metadata saved to SQLite via Prisma.`);
+    } catch (err) {
+      logger?.warn?.(`Could not persist project metadata: ${err.message}`);
+    }
 
     printSummary(ctx, generatedModels, startTime);
     logger?.info(`Project successfully generated at: ${config.outputDir}`);

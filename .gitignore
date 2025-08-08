@@ -39,5 +39,8 @@ temp/
 *.tmp
 *.bak
 
+# Test db files
+*.db
+
 # Output from CLI tests
 test-output/
