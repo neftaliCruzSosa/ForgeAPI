@@ -10,7 +10,8 @@
     "start": "node src/index.js",
     "demo": "node test/test-demo-social-api.js",
     "demo-seed-db": "node prisma/seed.js",
-    "restart-db": "rm prisma/dev.db && touch prisma/dev.db && npx prisma migrate deploy"
+    "restart-db": "rm prisma/dev.db && touch prisma/dev.db && npx prisma migrate deploy",
+    "api": "node api/server.js"
   },
   "type": "module",
   "keywords": [
@@ -25,7 +26,9 @@
   "license": "MIT",
   "dependencies": {
     "@prisma/client": "^6.13.0",
-    "ejs": "^3.1.10"
+    "cors": "^2.8.5",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0"
   },
   "devDependencies": {
     "prisma": "^6.13.0"
