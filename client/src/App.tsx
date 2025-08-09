@@ -21,6 +21,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { MoreHorizontal, Plus, Search, Database, Shield, Wrench, Server } from 'lucide-react'
+import logo from '../public/forge.svg'
 
 const getFrameworkColor = (framework: string) => {
   switch (framework.toLowerCase()) {
@@ -150,9 +151,12 @@ function App() {
     <div className="container mx-auto p-4 space-y-6 mt-6">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">API Projects</h1>
+          <div className="flex items-center gap-2">
+            <h1 className="text-3xl font-bold tracking-tight">Projects</h1>
+            <img src={logo} alt="Forge API" className="w-16 h-16 mt-[-12px]" />
+          </div>
           <p className="text-muted-foreground mt-2">
-            Manage your backend API projects and configurations
+            Manage your projects and configurations
           </p>
         </div>
         <Button>
