@@ -62,6 +62,9 @@ body {
   min-width: 320px;
   min-height: 100vh;
 }
+button {
+  cursor: pointer;
+}
 
 h1 {
   font-size: 3.2em;
