@@ -27,7 +27,30 @@ app.get('/', async (req, res) => {
             },
         }
     });
+    
     res.send(proyects);
+});
+
+app.get('/:proyectId', async (req, res) => {
+    const proyectId = req.params.proyectId;
+    const proyect = await prisma.proyect.findUnique({
+        where: {
+            id: parseInt(proyectId),
+        },
+        include: {
+            entities: {
+                include: {
+                    fields: true,
+                    protect: true,
+                }
+            },
+        }
+    });
+    if (!proyect) {
+        res.status(404).send('Proyect not found');
+        return;
+    }
+    res.send(proyect);
 });
 
 

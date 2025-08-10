@@ -9,6 +9,10 @@ export default tseslint.config([
   globalIgnores(['dist']),
   {
     files: ['**/*.{ts,tsx}'],
+    rules: {
+      "indent": ["error", 2],
+      "no-trailing-spaces": "error"
+    },
     extends: [
       js.configs.recommended,
       tseslint.configs.recommended,
