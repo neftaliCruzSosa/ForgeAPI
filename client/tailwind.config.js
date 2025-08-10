@@ -7,10 +7,6 @@ module.exports = {
     theme: {
       extend: {
         // Custom theme configurations (e.g., colors, fonts, spacing)
-        colors: {
-          'primary': '#FF6347',
-          'secondary': '#4682B4',
-        },
         fontFamily: {
           'sans': ['Roboto', 'sans-serif'],
         },
@@ -18,7 +14,5 @@ module.exports = {
     },
     plugins: [
       // Tailwind CSS plugins
-    ],
-    // Other configuration options (e.g., darkMode, prefix)
-    darkMode: 'media', // or 'class'
+    ]
   };
