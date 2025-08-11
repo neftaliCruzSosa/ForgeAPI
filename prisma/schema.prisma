@@ -41,7 +41,7 @@ model Protect {
   method Method
   authLevel AuthLevel
   entityId Int
-  Entity Entity    @relation(fields: [entityId], references: [id])
+  Entity   Entity @relation(fields: [entityId], references: [id], onDelete: Cascade)
 }
 enum Type {
   STRING
@@ -58,15 +58,14 @@ model Field {
   ref String?
   required Boolean @default(false)
   entityId Int
-  Entity Entity    @relation(fields: [entityId], references: [id])
+  Entity   Entity @relation(fields: [entityId], references: [id], onDelete: Cascade)
 }
 
 model Entity {
   id        Int      @id @default(autoincrement())
   name String
-  builtIn Boolean @default(false)
   protect Protect[]
   fields Field[]
-  proyect    Proyect     @relation(fields: [proyectId], references: [id])
+  proyect   Proyect @relation(fields: [proyectId], references: [id], onDelete: Cascade)
   proyectId  Int
 }

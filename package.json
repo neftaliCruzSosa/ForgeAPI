@@ -4,13 +4,23 @@
   "description": "Modular API code generator with auth, CRUD and validation.",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "echo `No build step required`",
-    "postinstall": "npx prisma generate",
-    "start": "node src/index.js",
-    "demo": "node test/test-demo-social-api.js",
-    "restart-db": "rm prisma/dev.db && touch prisma/dev.db && npx prisma migrate deploy",
-    "api": "node api/server.js"
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint \"src/**/*.{ts,tsx,js}\" --fix",
+    "format": "prettier -w .",
+    
+    "db:gen": "prisma generate",
+    "db:dev": "prisma migrate dev --name init",
+    "db:deploy": "prisma migrate deploy",
+    "db:reset": "prisma migrate reset --force",
+    
+    "demo": "tsx test/test-demo-social-api.js",
+    "api": "node api/server.js",
+
+    "setup": "node scripts/setup.js",
+    "postinstall": "npm run setup",
+
+    "test": "echo \"No hay tests aún\" && exit 0"
   },
   "type": "module",
   "keywords": [
@@ -30,7 +40,17 @@
     "express": "^5.1.0"
   },
   "devDependencies": {
-    "prisma": "^6.13.0"
+    "@types/ejs": "^3.1.5",
+    "@types/node": "^24.2.1",
+    "@typescript-eslint/eslint-plugin": "^8.39.0",
+    "@typescript-eslint/parser": "^8.39.0",
+    "eslint": "^9.33.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-import": "^2.32.0",
+    "prettier": "^3.6.2",
+    "prisma": "^6.13.0",
+    "tsx": "^4.20.3",
+    "typescript": "^5.9.2"
   },
   "prisma": {
     "schema": "prisma/schema.prisma"
