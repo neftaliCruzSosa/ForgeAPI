@@ -1,4 +1,6 @@
 import generateAPI from "./application/GenerateApiUseCase.js";
+import updateModelsUseCase from "./application/UpdateModelsUseCase.js";
+
 import { validateConfig } from "./application/validators/configValidator.js";
 import { loadConfig } from "./application/loadConfig.js";
 
@@ -7,6 +9,7 @@ import type {
   GenerateApiConfig,
   EntityDefinition,
   ValidateConfigOptions,
+  UpdateModelsOptions,
 } from "types";
 
 /**
@@ -53,3 +56,18 @@ export default async function forgeAPI(
     throw err;
   }
 }
+
+export async function updateModels(options: UpdateModelsOptions): Promise<void> {
+  const { projectName } = options;
+
+  const cfg = await loadConfig({ projectName });
+
+  await updateModelsUseCase({
+    projectName,
+    changes: options.changes,
+    services: cfg.services,
+  });
+}
+
+export { default as generateAPI } from "./application/GenerateApiUseCase.js";
+export { default as updateModelsUseCase } from "./application/UpdateModelsUseCase.js";

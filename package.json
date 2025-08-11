@@ -8,13 +8,15 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "lint": "eslint \"src/**/*.{ts,tsx,js}\" --fix",
     "format": "prettier -w .",
-    
+
     "db:gen": "prisma generate",
     "db:dev": "prisma migrate dev --name init",
     "db:deploy": "prisma migrate deploy",
     "db:reset": "prisma migrate reset --force",
     
     "demo": "tsx test/test-demo-social-api.js",
+    "demo:update": "tsx test/test-demo-update.js",
+    
     "api": "node api/server.js",
 
     "setup": "node scripts/setup.js",

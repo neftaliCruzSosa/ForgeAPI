@@ -10,7 +10,7 @@ import type {
   SupportedCrudAction,
   AllowedProtectRole,
   EntityProtectRules,
-} from "../types";
+} from "types";
 
 export default function printSummary(
   ctx: AdapterContext,

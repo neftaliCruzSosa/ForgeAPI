@@ -2,8 +2,8 @@ import express from 'express';
 const router = express.Router();
 
 <% entities.forEach(entity => { %>
-import <%= entity.name %>Routes from './<%= entity.name %>.routes.js';
-router.use('/<%= entity.name.toLowerCase() %>', <%= entity.name %>Routes);
+import <%= entity %>Routes from './<%= entity %>.routes.js';
+router.use('/<%= entity.toLowerCase() %>', <%= entity %>Routes);
 <% }); %>
 
 export default router;

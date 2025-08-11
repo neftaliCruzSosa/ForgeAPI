@@ -16,8 +16,10 @@ export interface AdapterConfig {
   entities?: EntityDefinition[];
   dbType?: string;
   authType?: string;
+  framework?: string;
   projectName: string;
   auth?: boolean;
+  author?:string;
 }
 
 export interface AdapterContext extends AnyRecord {

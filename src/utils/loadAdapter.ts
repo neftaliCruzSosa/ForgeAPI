@@ -1,7 +1,7 @@
 import path from "node:path";
 import { existsSync } from "node:fs";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import type { AdapterModule, AdapterInstance, AdapterContext } from "../types";
+import type { AdapterModule, AdapterInstance, AdapterContext } from "types";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

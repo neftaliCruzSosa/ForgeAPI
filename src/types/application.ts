@@ -39,3 +39,34 @@ export interface ValidateConfigOptions {
   outputDir: string;
   force?: boolean;
 }
+
+export type ModelOption = "create" | "update" | "delete";
+
+export interface UpdateModelsChange {
+  option: ModelOption;
+  entity: EntityDefinition;
+}
+
+export interface UpdateModelsOptions {
+  projectName: string;
+  changes: UpdateModelsChange[];
+  services: Services;
+}
+
+export interface PrismaFieldRow {
+  name: string;
+  type: string;
+  ref: string | null;
+  required: boolean;
+}
+
+export interface PrismaProtectRow {
+  method: any;
+  authLevel: any;
+}
+
+export interface PrismaEntityRow {
+  name: string;
+  fields: PrismaFieldRow[];
+  protect: PrismaProtectRow[];
+}

@@ -13,7 +13,7 @@ args.forEach((arg) => {
 });
 
 const authType = params.authType || "jwt";
-const dbType = params.dbType || "mongo";
+const dbType = params.dbType || "postgres";
 const auth = params.auth === "false" ? false : true;
 const force = params.force === "false" ? false : true;
 

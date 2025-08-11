@@ -41,7 +41,6 @@ export default async function generateAPI(config: GenerateApiConfig): Promise<vo
     if (config.auth) await authGenerator.generate();
     await docsGenerator.generate();
     await envGenerator.generate();
-    await autoloadGenerator.generate();
     await middlewareGenerator.generate();
     await dbConnectorGenerator.generate();
     await packageGenerator.generate();
@@ -54,6 +53,7 @@ export default async function generateAPI(config: GenerateApiConfig): Promise<vo
       generatedModels.push(entity);
     }
 
+    await autoloadGenerator.generate();
     await modelIndexGenerator.generate();
 
     try {
