@@ -21,10 +21,13 @@ const force = params.force === "false" ? false : true;
 const entities = [
   {
     name: "User",
-    builtIn: true,
-    overrideFields: [
+    skipSystemFields: ["createdBy"],
+    fields: [
       { name: "bio", type: "String" },
       { name: "avatar", type: "String" },
+      { name: "username", type: "String", required: true, unique: true },
+      { name: "password", type: "String", required: true },
+      { name: "role", type: "String", required: true, default: "user" },
     ],
     protect: {
       create: "admin",

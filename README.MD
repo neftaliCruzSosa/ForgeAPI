@@ -75,9 +75,7 @@ forgeapi/
 const entities = [
   {
     name: "User",
-    builtIn: true,
-    skipSystemFields: ["createdBy"],
-    overrideFields: [
+   fields: [
       { name: "bio", type: "String" },
       { name: "avatar", type: "String" },
     ],
@@ -187,8 +185,6 @@ ForgeAPI automatically includes the following fields in every entity:
 
 - `isDeleted` (for soft deletes)
 - `createdBy` (if authentication is enabled)
-
-You can skip these using `skipSystemFields`.
 
 ---
 
