@@ -18,7 +18,7 @@ export default async function generateAPI(config: GenerateApiConfig): Promise<vo
       presets: {},
     };
 
-    templateService.setContext?.(ctx as Record<string, unknown>);
+    templateService.setContext?.(ctx);
 
     const outputDirPath = config.outputDir;
 

@@ -1,12 +1,10 @@
 import {
-  AUTH_CRUD_ROUTES,
   MODELS_CRUD_ROUTES,
 } from "../config/default/constants.js";
 
 import type {
   AdapterContext,
   EntityDefinition,
-  SupportedAuth,
   SupportedCrudAction,
   AllowedProtectRole,
   EntityProtectRules,
@@ -64,9 +62,7 @@ export default function printSummary(
 
   if (ctx.config.auth && ctx.config.authType) {
     console.log(`Auth Routes:`);
-    const authRoutes = AUTH_CRUD_ROUTES[
-      ctx.config.authType as SupportedAuth
-    ] as readonly {
+    const authRoutes = ctx.presets?.auth?.routes as readonly {
       method: string;
       path: string;
       description: string;

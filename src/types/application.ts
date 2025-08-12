@@ -16,18 +16,16 @@ export interface LoadConfigOptions {
   validator?: SupportedValidator;
   services?: Services;
   outputDir?: string | ((projectName: string) => string);
+  auth?: boolean;
   force?: boolean;
 }
 
-export type LoadedConfig = Omit<DefaultConfig, "outputDir"> & {
-  outputDir: string;
-  projectName: string;
-  services: Services;
-};
+export type LoadedConfig =
+  Omit<Required<LoadConfigOptions>, "outputDir"> & {
+    outputDir: string;
+  };
 
-export type GenerateApiConfig = LoadedConfig & {
-  entities: EntityDefinition[];
-};
+export type GenerateApiConfig = LoadedConfig;
 
 export interface ValidateConfigOptions {
   projectName: string;
