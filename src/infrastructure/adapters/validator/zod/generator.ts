@@ -35,7 +35,7 @@ export default class ValidatorGenerator
       const validatorName = this.ctx.config?.validator || "";
       const refRules = this.ctx.presets?.db?.validation?.ref?.[validatorName];
 
-      const code = await this.renderTemplate("validator/joi.ejs", {
+      const code = await this.renderTemplate("validator/zod.ejs", {
         entity: definition,
         modelName,
         fields,

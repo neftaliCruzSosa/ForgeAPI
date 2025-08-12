@@ -30,4 +30,10 @@ export default {
   controller: {
     findByUsername: "await User.findOne({ where: { username } });",
   },
+  validation: {
+    ref: {
+      joi: "Joi.number()",
+      zod: "z.number()",
+    },
+  },
 };

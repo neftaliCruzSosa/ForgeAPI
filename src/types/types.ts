@@ -37,6 +37,9 @@ export interface AdapterPreset {
   controller?: PresetControllerSnippets;
   structure?: PresetStructure;
   middlewares?: string[];
+  validation?: {
+    ref?: Record<string, { joi?: string; zod?: string }>;
+  };
 }
 
 export type AdapterPresets = Record<string, AdapterPreset>;

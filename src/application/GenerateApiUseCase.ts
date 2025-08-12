@@ -29,7 +29,6 @@ export default async function generateAPI(config: GenerateApiConfig): Promise<vo
     const { generator: frameworkGenerator }   = await loadAdapter("framework",   config.framework,  ctx);
     const { generator: dbGenerator }          = await loadAdapter("db",          config.dbType,     ctx);
     const { generator: authGenerator }        = await loadAdapter("auth",        config.authType,   ctx);
-    // const { generator: validatorGenerator }   = await loadAdapter("validator",   config.validator,  ctx);
     const { generator: crudGenerator }        = await loadAdapter("crud",        "default",         ctx);
     const { generator: docsGenerator }        = await loadAdapter("docs",        "default",         ctx);
     const { generator: autoloadGenerator }    = await loadAdapter("autoload",    "default",         ctx);

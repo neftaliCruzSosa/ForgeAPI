@@ -16,7 +16,7 @@ const authType = params.authType || "jwt";
 const dbType = params.dbType || "mongo";
 const auth = params.auth === "false" ? false : true;
 const force = params.force === "false" ? false : true;
-const validator = "joi";
+const validator = "zod";
 
 // Define your entities (required)
 const entities = [

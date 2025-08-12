@@ -1,7 +1,7 @@
 export const SUPPORTED_DATABASES = ["mongo", "postgres"] as const;
 export const SUPPORTED_AUTHS = ["jwt", "ironSession"] as const;
 export const SUPPORTED_FRAMEWORKS = ["express"] as const;
-export const SUPPORTED_VALIDATORS = ["joi"] as const;
+export const SUPPORTED_VALIDATORS = ["joi", "zod"] as const;
 
 export const SUPPORTED_CRUD_ACTIONS = [
   "create",
