@@ -51,7 +51,7 @@ export interface UpdateModelsChange {
 export interface UpdateModelsOptions {
   projectName: string;
   changes: UpdateModelsChange[];
-  services: Services;
+  services?: Services;
 }
 
 export interface PrismaFieldRow {

@@ -174,11 +174,12 @@ export default async function updateModelsUseCase({
     const ctx: AdapterContext = { config: cfgForAdapters, presets: {} };
 
     await loadAdapter("framework", project.framework, ctx);
-
+    const validatorUsed = project.validator;
     const dbAdapterName = project.dbType;
+
     const db = await loadAdapter("db", dbAdapterName, ctx);
     const crud = await loadAdapter("crud", "default", ctx);
-    const validator = await loadAdapter("validator", "default", ctx);
+    const validator = await loadAdapter("validator", validatorUsed, ctx);
 
     for (const entity of finalEntities) {
       await validator.generator.generate(entity);
