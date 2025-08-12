@@ -6,6 +6,7 @@ CREATE TABLE "Proyect" (
     "dbType" TEXT NOT NULL,
     "authType" TEXT NOT NULL,
     "framework" TEXT NOT NULL,
+    "validator" TEXT NOT NULL,
     "author" TEXT,
     "auth" BOOLEAN
 );

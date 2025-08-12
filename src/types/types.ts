@@ -17,6 +17,7 @@ export interface AdapterConfig {
   dbType?: string;
   authType?: string;
   framework?: string;
+  validator?: string;
   projectName: string;
   auth?: boolean;
   author?:string;
@@ -75,8 +76,9 @@ export interface ProjectConfig {
   projectName: string;
   outputDir: string;
   dbType: string;
-  authType?: string;
+  authType: string;
   framework: string;
+  validator: string;
   author?: string;
   auth?: boolean;
 }

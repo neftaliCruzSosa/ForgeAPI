@@ -15,6 +15,7 @@ model Proyect {
   dbType String
   authType String
   framework String
+  validator String
   author String?
   auth  Boolean?
   entities Entity[]

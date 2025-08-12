@@ -25,9 +25,12 @@ export default class PackageGenerator
       );
 
       const rendered = await this.renderTemplate("package.ejs", {
-        projectName: this.ctx.projectName,
+        projectName: this.ctx.config.projectName,
         dbType: this.ctx.config.dbType,
+        auth: this.ctx.config.auth,
         authType: this.ctx.config.authType,
+        validator: this.ctx.config.validator,
+        framework: this.ctx.config.framework,
         scripts: {
           dev: "nodemon app.js",
           start: "node app.js",
@@ -35,7 +38,8 @@ export default class PackageGenerator
         dependencies: {
           ...(this.ctx.presets?.framework?.deps ?? {}),
           ...(this.ctx.presets?.db?.deps ?? {}),
-          ...(this.ctx.presets?.auth?.deps ?? {}),
+          ...(this.ctx.config.auth ? (this.ctx.presets?.auth?.deps ?? {}) : {}),
+          ...(this.ctx.presets?.validator?.deps ?? {}),
         },
         devDependencies: {
           nodemon: "^2.0.22",

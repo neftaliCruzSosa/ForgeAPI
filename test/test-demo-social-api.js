@@ -13,9 +13,10 @@ args.forEach((arg) => {
 });
 
 const authType = params.authType || "jwt";
-const dbType = params.dbType || "postgres";
+const dbType = params.dbType || "mongo";
 const auth = params.auth === "false" ? false : true;
 const force = params.force === "false" ? false : true;
+const validator = "joi";
 
 // Define your entities (required)
 const entities = [
@@ -85,6 +86,7 @@ try {
     dbType,
     authType,
     force,
+    validator
   });
 
   /* --- Optional: Copy seed.js into test project --- */

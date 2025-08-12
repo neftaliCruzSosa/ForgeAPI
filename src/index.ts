@@ -22,6 +22,7 @@ import type {
  *   dbType: "mongo",
  *   authType: "jwt",
  *   framework: "express",
+ *   validator: "joi",
  *   auth: true
  * });
  */
@@ -42,6 +43,7 @@ export default async function forgeAPI(
       dbType: fullConfig.dbType,
       authType: fullConfig.authType,
       framework: fullConfig.framework,
+      validator: fullConfig.validator,
       services: { fileService: fullConfig.services.fileService },
       outputDir: fullConfig.outputDir,
       force: fullConfig.force,

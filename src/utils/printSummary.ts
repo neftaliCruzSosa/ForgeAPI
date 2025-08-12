@@ -29,6 +29,9 @@ export default function printSummary(
     `Auth:          ${(ctx?.config?.auth && ctx?.config?.authType) || "none"}`
   );
   console.log(
+    `Validator:     ${(ctx?.config?.auth && ctx?.config?.validator) || "none"}`
+  );
+  console.log(
     `Models:        ${models.length} (${models.map((m) => m.name).join(", ")})`
   );
 

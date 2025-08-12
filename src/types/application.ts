@@ -4,6 +4,7 @@ import type {
   SupportedAuth,
   SupportedDatabase,
   SupportedFramework,
+  SupportedValidator,
 } from "./config.js";
 
 export interface LoadConfigOptions {
@@ -12,6 +13,7 @@ export interface LoadConfigOptions {
   dbType?: SupportedDatabase;
   authType?: SupportedAuth;
   framework?: SupportedFramework;
+  validator?: SupportedValidator;
   services?: Services;
   outputDir?: string | ((projectName: string) => string);
   force?: boolean;
@@ -33,6 +35,7 @@ export interface ValidateConfigOptions {
   dbType: SupportedDatabase;
   authType: SupportedAuth;
   framework: SupportedFramework;
+  validator: SupportedValidator;
   services: {
     fileService: Services["fileService"];
   };

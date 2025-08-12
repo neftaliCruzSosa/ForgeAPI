@@ -30,12 +30,12 @@ export default class ValidatorGenerator
       );
 
       const { name: modelName, fields } = definition;
-
+      
       const code = await this.renderTemplate("crud/validator.ejs", {
         entity: definition,
         modelName,
         fields,
-        dbType: this.ctx.dbLabel,
+        dbType: this.ctx.config.dbType,
       });
 
       const filePath = await this.writeRenderedFile(
