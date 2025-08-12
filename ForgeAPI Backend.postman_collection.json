@@ -1,0 +1,112 @@
+{
+	"info": {
+		"_postman_id": "b7a31a6a-3572-46c3-b3fd-3db912d799c9",
+		"name": "ForgeAPI Backend",
+		"description": "Colección para probar el backend de ForgeAPI (crear proyecto y actualizar modelos)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26244425"
+	},
+	"item": [
+		{
+			"name": "Create Project",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"projectName\": \"demo-social-api\",\n  \"dbType\": \"mongo\",\n  \"authType\": \"jwt\",\n  \"framework\": \"express\",\n  \"validator\": \"zod\",\n  \"auth\": true,\n  \"entities\": [\n    {\n      \"name\": \"User\",\n      \"fields\": [\n        { \"name\": \"username\", \"type\": \"String\", \"required\": true },\n        { \"name\": \"password\", \"type\": \"String\", \"required\": true }\n      ]\n    }\n  ]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:4000/v1/projects",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"v1",
+						"projects"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Models",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"changes\": [\n    {\n      \"option\": \"create\",\n      \"entity\": {\n        \"name\": \"Category\",\n        \"fields\": [\n          { \"name\": \"name\", \"type\": \"String\", \"required\": true },\n          { \"name\": \"description\", \"type\": \"String\" }\n        ],\n        \"protect\": {\n          \"create\": \"admin\",\n          \"update\": \"admin\",\n          \"delete\": \"admin\",\n          \"getAll\": \"auth\"\n        }\n      }\n    },\n    {\n      \"option\": \"update\",\n      \"entity\": {\n        \"name\": \"Post\",\n        \"fields\": [\n          { \"name\": \"title\", \"type\": \"String\", \"required\": true },\n          { \"name\": \"content\", \"type\": \"String\" },\n          { \"name\": \"tags\", \"type\": \"Array\" },\n          { \"name\": \"category\", \"type\": \"ref\", \"ref\": \"Category\", \"required\": true }\n        ],\n        \"protect\": {\n          \"create\": \"auth\",\n          \"update\": \"self\",\n          \"delete\": \"self\",\n          \"restore\": \"admin\",\n          \"hardDelete\": \"admin\"\n        }\n      }\n    },\n    {\n      \"option\": \"delete\",\n      \"entity\": { \"name\": \"Like\" }\n    }\n  ]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:4000/v1/projects/demo-social-api/models",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"v1",
+						"projects",
+						"demo-social-api",
+						"models"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Projects",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/v1/projects",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"v1",
+						"projects"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Project By Name",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/v1/projects/demo-social-api",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"v1",
+						"projects",
+						"demo-social-api"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
