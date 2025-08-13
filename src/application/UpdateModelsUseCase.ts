@@ -162,7 +162,7 @@ export default async function updateModelsUseCase({
     }
 
     const cfgForAdapters: AdapterConfig = {
-      services,
+      services: services!,
       outputDir: project.outputDir,
       projectName,
       dbType: project.dbType,
