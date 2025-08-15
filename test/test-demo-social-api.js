@@ -12,9 +12,8 @@ args.forEach((arg) => {
   params[key] = value;
 });
 
-const authType = params.authType || "jwt";
+const authType = params.authType || false;
 const dbType = params.dbType || "mongo";
-const auth = params.auth === "false" ? false : true;
 const force = params.force === "false" ? false : true;
 const validator = "zod";
 
@@ -82,7 +81,6 @@ try {
   await forgeAPI({
     projectName: "demo-social-api",
     entities,
-    auth,
     dbType,
     authType,
     force,

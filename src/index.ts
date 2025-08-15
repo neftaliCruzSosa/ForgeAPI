@@ -23,7 +23,6 @@ import type {
  *   authType: "jwt",
  *   framework: "express",
  *   validator: "joi",
- *   auth: true
  * });
  */
 export default async function forgeAPI(

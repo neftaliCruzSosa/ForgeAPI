@@ -16,7 +16,6 @@ export interface LoadConfigOptions {
   validator?: SupportedValidator;
   services?: Services;
   outputDir?: string | ((projectName: string) => string);
-  auth?: boolean;
   force?: boolean;
 }
 

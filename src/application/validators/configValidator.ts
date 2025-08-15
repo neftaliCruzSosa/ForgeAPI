@@ -29,7 +29,7 @@ export async function validateConfig({
       `Unsupported database type: "${dbType}". Supported: ${SUPPORTED_DATABASES.join(", ")}`
     );
   }
-  if (!SUPPORTED_AUTHS.includes(authType)) {
+  if (authType && !SUPPORTED_AUTHS.includes(authType)) {
     throw new Error(
       `Unsupported auth type: "${authType}". Supported: ${SUPPORTED_AUTHS.join(", ")}`
     );

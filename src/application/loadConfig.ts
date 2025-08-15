@@ -61,9 +61,6 @@ const framework =
 const validator =
   options.validator ?? externalConfig.validator ?? defaultConfig.validator;
 
-const auth =
-  options.auth ?? externalConfig.auth ?? defaultConfig.auth ?? false;
-
 const force =
   options.force ?? externalConfig.force ?? defaultConfig.force ?? false;
 
@@ -76,7 +73,6 @@ return {
   authType,
   framework,
   validator,
-  auth,
   force,
 }
 }

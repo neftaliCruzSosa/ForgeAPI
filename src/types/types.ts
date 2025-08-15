@@ -53,7 +53,6 @@ export interface AdapterConfig {
   framework?: string;
   validator?: string;
   projectName: string;
-  auth?: boolean;
   author?: string;
 }
 
@@ -110,7 +109,6 @@ export interface ProjectConfig {
   framework: SupportedFramework;
   validator: SupportedValidator;
   author?: string;
-  auth?: boolean;
 }
 
 export interface LoggerServiceOptions {

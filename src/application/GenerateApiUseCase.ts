@@ -28,7 +28,6 @@ export default async function generateAPI(config: GenerateApiConfig): Promise<vo
 
     const { generator: frameworkGenerator }   = await loadAdapter("framework",   config.framework,  ctx);
     const { generator: dbGenerator }          = await loadAdapter("db",          config.dbType,     ctx);
-    const { generator: authGenerator }        = await loadAdapter("auth",        config.authType,   ctx);
     const { generator: crudGenerator }        = await loadAdapter("crud",        "default",         ctx);
     const { generator: docsGenerator }        = await loadAdapter("docs",        "default",         ctx);
     const { generator: autoloadGenerator }    = await loadAdapter("autoload",    "default",         ctx);
@@ -39,11 +38,15 @@ export default async function generateAPI(config: GenerateApiConfig): Promise<vo
     const { generator: packageGenerator }     = await loadAdapter("package",     "default",         ctx);
 
     const { generator: validatorGenerator = noOp } = config.validator
-  ? await loadAdapter("validator", config.validator, ctx)
-  : { generator: noOp };
+    ? await loadAdapter("validator", config.validator, ctx)
+    : { generator: noOp };
+
+    const { generator: authGenerator = noOp } = config.authType
+    ? await loadAdapter("auth", config.authType, ctx)
+    : { generator: noOp };
 
     await frameworkGenerator.generate();
-    if (config.auth) await authGenerator.generate();
+    await authGenerator.generate();
     await docsGenerator.generate();
     await envGenerator.generate();
     await middlewareGenerator.generate();

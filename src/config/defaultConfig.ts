@@ -12,7 +12,6 @@ import {
 const defaultConfig: DefaultConfig = {
   dbType: SUPPORTED_DATABASES[0],
   authType: SUPPORTED_AUTHS[0],
-  auth: false,
   framework: SUPPORTED_FRAMEWORKS[0],
   validator: SUPPORTED_VALIDATORS[0],
   force: false,

@@ -82,7 +82,6 @@ export async function saveOrUpdateProject({ config, models }: SaveOrUpdateProjec
     framework: config.framework!,
     validator: config.validator!,
     author: config.author ?? null,
-    auth: !!config.auth,
     entities: { create: entitiesData },
   };
 
@@ -101,7 +100,6 @@ export async function saveOrUpdateProject({ config, models }: SaveOrUpdateProjec
       framework: data.framework,
       validator: data.validator,
       author: data.author,
-      auth: data.auth,
       entities: { create: entitiesData },
     },
   });

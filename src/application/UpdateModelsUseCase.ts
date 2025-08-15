@@ -168,7 +168,6 @@ export default async function updateModelsUseCase({
       dbType: project.dbType,
       authType: project.authType,
       framework: project.framework,
-      auth: !!project.auth,
       entities: finalEntities,
     };
     const ctx: AdapterContext = { config: cfgForAdapters, presets: {} };

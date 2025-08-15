@@ -19,7 +19,6 @@ export type AllowedProtectRole =
 export interface DefaultConfig {
   dbType: SupportedDatabase;
   authType: SupportedAuth;
-  auth: boolean;
   framework: SupportedFramework;
   validator: SupportedValidator;
   force: boolean;
