@@ -44,3 +44,7 @@ prisma/*.db
 
 # Output from CLI tests
 test-output/
+
+# Claude
+.claude/
+
