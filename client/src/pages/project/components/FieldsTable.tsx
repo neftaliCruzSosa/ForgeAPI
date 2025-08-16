@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Edit, Plus, Trash2 } from "lucide-react"
+import { getFieldTypeColor } from "@/utils/colors"
 
 interface Field {
   id: number
@@ -15,20 +16,6 @@ interface Field {
   entityBuiltIn: boolean
 }
 
-const getTypeColor = (type: string) => {
-  switch (type) {
-  case "STRING":
-    return "bg-blue-100 text-blue-800"
-  case "BOOLEAN":
-    return "bg-green-100 text-green-800"
-  case "ARRAY":
-    return "bg-purple-100 text-purple-800"
-  case "REF":
-    return "bg-orange-100 text-orange-800"
-  default:
-    return "bg-gray-100 text-gray-800"
-  }
-}
 
 interface FieldsTableProps {
   fields: Field[]
@@ -76,7 +63,7 @@ export function FieldsTable({
                   <div className="flex items-center gap-2">
                     <span className="font-medium">{field.entityName}</span>
                     {field.entityBuiltIn && (
-                      <Badge variant="secondary" className="text-xs">
+                      <Badge variant="secondary" className="text-xs uppercase">
                         Built-in
                       </Badge>
                     )}
@@ -84,17 +71,17 @@ export function FieldsTable({
                 </TableCell>
                 <TableCell className="font-mono">{field.name}</TableCell>
                 <TableCell>
-                  <Badge className={getTypeColor(field.type)}>{field.type}</Badge>
+                  <Badge className={`${getFieldTypeColor(field.type)} uppercase`}>{field.type}</Badge>
                 </TableCell>
                 <TableCell>
                   {field.ref ? (
-                    <Badge variant="outline">{field.ref}</Badge>
+                    <Badge variant="outline" className="uppercase">{field.ref}</Badge>
                   ) : (
                     <span className="text-muted-foreground">-</span>
                   )}
                 </TableCell>
                 <TableCell>
-                  <Badge variant={field.required ? "default" : "secondary"}>
+                  <Badge variant={field.required ? "default" : "secondary"} className="uppercase">
                     {field.required ? "Required" : "Optional"}
                   </Badge>
                 </TableCell>

@@ -9,59 +9,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { CheckCircle, FolderOpen } from 'lucide-react'
+import { getFrameworkColor, getDbTypeColor, getAuthTypeColor } from '@/utils/colors'
 
-const getFrameworkColor = (framework: string) => {
-  switch (framework.toLowerCase()) {
-  case "express":
-    return "bg-gray-800 text-white"
-  case "fastify":
-    return "bg-black text-white"
-  case "nestjs":
-    return "bg-red-600 text-white"
-  case "koa":
-    return "bg-blue-600 text-white"
-  case "socket.io":
-    return "bg-green-600 text-white"
-  default:
-    return "bg-gray-500 text-white"
-  }
-}
-
-const getDbTypeColor = (dbType: string) => {
-  switch (dbType.toLowerCase()) {
-  case "mongo":
-    return "bg-green-700 text-white"
-  case "postgres":
-    return "bg-blue-600 text-white"
-  case "mysql":
-    return "bg-orange-500 text-white"
-  case "sqlite":
-    return "bg-gray-600 text-white"
-  case "redis":
-    return "bg-red-500 text-white"
-  default:
-    return "bg-gray-500 text-white"
-  }
-}
-
-const getAuthTypeColor = (authType: string) => {
-  switch (authType.toLowerCase()) {
-  case "jwt":
-    return "bg-purple-600 text-white"
-  case "oauth2":
-    return "bg-blue-500 text-white"
-  case "session":
-    return "bg-yellow-600 text-white"
-  case "apikey":
-    return "bg-gray-700 text-white"
-  case "bearer":
-    return "bg-indigo-600 text-white"
-  case "websocket":
-    return "bg-teal-600 text-white"
-  default:
-    return "bg-gray-500 text-white"
-  }
-}
 
 interface GeneratedProject {
   name: string
@@ -116,7 +65,7 @@ export function SuccessModal({
                 <div>
                   <span className="font-medium text-gray-700">Framework:</span>
                   <div className="mt-1">
-                    <Badge className={getFrameworkColor(generatedProject.framework)}>
+                    <Badge className={`${getFrameworkColor(generatedProject.framework)} uppercase`}>
                       {generatedProject.framework}
                     </Badge>
                   </div>
@@ -124,19 +73,19 @@ export function SuccessModal({
                 <div>
                   <span className="font-medium text-gray-700">Database:</span>
                   <div className="mt-1">
-                    <Badge className={getDbTypeColor(generatedProject.dbType)}>{generatedProject.dbType}</Badge>
+                    <Badge className={`${getDbTypeColor(generatedProject.dbType)} uppercase`}>{generatedProject.dbType}</Badge>
                   </div>
                 </div>
                 <div>
                   <span className="font-medium text-gray-700">Auth Type:</span>
                   <div className="mt-1">
-                    <Badge className={getAuthTypeColor(generatedProject.authType)}>{generatedProject.authType}</Badge>
+                    <Badge className={`${getAuthTypeColor(generatedProject.authType)} uppercase`}>{generatedProject.authType}</Badge>
                   </div>
                 </div>
                 <div>
                   <span className="font-medium text-gray-700">Auth Status:</span>
                   <div className="mt-1">
-                    <Badge variant={generatedProject.auth ? "default" : "secondary"}>
+                    <Badge variant={generatedProject.auth ? "default" : "secondary"} className="uppercase">
                       {generatedProject.auth ? "Enabled" : "Disabled"}
                     </Badge>
                   </div>

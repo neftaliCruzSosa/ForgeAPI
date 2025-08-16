@@ -12,59 +12,8 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { MoreHorizontal, Database, Shield, Wrench, Server, FileCode } from 'lucide-react'
 import { Link } from 'react-router-dom';
+import { getFrameworkColor, getDbTypeColor, getAuthTypeColor } from '@/utils/colors'
 
-const getFrameworkColor = (framework: string) => {
-  switch (framework.toLowerCase()) {
-  case "express":
-    return "bg-gray-800 text-white"
-  case "fastify":
-    return "bg-black text-white"
-  case "nestjs":
-    return "bg-red-600 text-white"
-  case "koa":
-    return "bg-blue-600 text-white"
-  case "socket.io":
-    return "bg-green-600 text-white"
-  default:
-    return "bg-gray-500 text-white"
-  }
-}
-
-const getDbTypeColor = (dbType: string) => {
-  switch (dbType.toLowerCase()) {
-  case "mongo":
-    return "bg-green-700 text-white"
-  case "postgres":
-    return "bg-blue-600 text-white"
-  case "mysql":
-    return "bg-orange-500 text-white"
-  case "sqlite":
-    return "bg-gray-600 text-white"
-  case "redis":
-    return "bg-red-500 text-white"
-  default:
-    return "bg-gray-500 text-white"
-  }
-}
-
-const getAuthTypeColor = (authType: string) => {
-  switch (authType.toLowerCase()) {
-  case "jwt":
-    return "bg-purple-600 text-white"
-  case "oauth2":
-    return "bg-blue-500 text-white"
-  case "session":
-    return "bg-yellow-600 text-white"
-  case "apikey":
-    return "bg-gray-700 text-white"
-  case "bearer":
-    return "bg-indigo-600 text-white"
-  case "websocket":
-    return "bg-teal-600 text-white"
-  default:
-    return "bg-gray-500 text-white"
-  }
-}
 
 interface ProjectTableProps {
   paginatedProjects: Proyect[]
@@ -114,27 +63,27 @@ export function ProjectTable({
                 </div>
               </TableCell>
               <TableCell>
-                <Badge className={getFrameworkColor(project.framework)}>
+                <Badge className={`${getFrameworkColor(project.framework)} uppercase`}>
                   {project.framework}
                 </Badge>
               </TableCell>
               <TableCell>
                 <div className="flex items-center gap-2">
                   <Database className="h-4 w-4 text-muted-foreground" />
-                  <Badge className={getDbTypeColor(project.dbType)}>
+                  <Badge className={`${getDbTypeColor(project.dbType)} uppercase`}>
                     {project.dbType}
                   </Badge>
                 </div>
               </TableCell>
               <TableCell>
-                <Badge className={getAuthTypeColor(project.authType)}>
+                <Badge className={`${getAuthTypeColor(project.authType)} uppercase`}>
                   {project.authType}
                 </Badge>
               </TableCell>
               <TableCell>
                 <div className="flex items-center gap-2">
                   <Shield className="h-4 w-4 text-muted-foreground" />
-                  <Badge variant={project.auth ? "default" : "secondary"}>
+                  <Badge variant={project.auth ? "default" : "secondary"} className="uppercase">
                     {project.auth ? "Enabled" : "Disabled"}
                   </Badge>
                 </div>

@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Edit, Plus, Trash2 } from "lucide-react"
+import { getAuthLevelColor, getMethodColor } from "@/utils/colors"
 
 interface Method {
   id: number
@@ -13,35 +14,6 @@ interface Method {
   entityBuiltIn: boolean
 }
 
-const getAuthLevelColor = (level: string) => {
-  switch (level) {
-  case "ADMIN":
-    return "bg-red-100 text-red-800"
-  case "AUTH":
-    return "bg-yellow-100 text-yellow-800"
-  case "SELF":
-    return "bg-green-100 text-green-800"
-  default:
-    return "bg-gray-100 text-gray-800"
-  }
-}
-
-const getMethodColor = (method: string) => {
-  switch (method) {
-  case "CREATE":
-    return "bg-green-100 text-green-800"
-  case "GET_ALL":
-    return "bg-blue-100 text-blue-800"
-  case "UPDATE":
-    return "bg-yellow-100 text-yellow-800"
-  case "DELETE":
-    return "bg-red-100 text-red-800"
-  case "RESTORE":
-    return "bg-purple-100 text-purple-800"
-  default:
-    return "bg-gray-100 text-gray-800"
-  }
-}
 
 const getMethodDescription = (method: string) => {
   switch (method) {
@@ -105,17 +77,17 @@ export function MethodsTable({
                   <div className="flex items-center gap-2">
                     <span className="font-medium">{method.entityName}</span>
                     {method.entityBuiltIn && (
-                      <Badge variant="secondary" className="text-xs">
+                      <Badge variant="secondary" className="text-xs uppercase">
                         Built-in
                       </Badge>
                     )}
                   </div>
                 </TableCell>
                 <TableCell>
-                  <Badge className={getMethodColor(method.method)}>{method.method}</Badge>
+                  <Badge className={`${getMethodColor(method.method)} uppercase`}>{method.method}</Badge>
                 </TableCell>
                 <TableCell>
-                  <Badge className={getAuthLevelColor(method.authLevel)}>{method.authLevel}</Badge>
+                  <Badge className={`${getAuthLevelColor(method.authLevel)} uppercase`}>{method.authLevel}</Badge>
                 </TableCell>
                 <TableCell className="text-sm text-muted-foreground">
                   {getMethodDescription(method.method)}

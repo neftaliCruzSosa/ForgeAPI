@@ -198,9 +198,9 @@ function Project() {
           </div>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
-              <Badge variant="outline">{projectData.entities.length} entities</Badge>
-              <Badge variant="outline">{allFields.length} fields</Badge>
-              <Badge variant="outline">{allMethods.length} methods</Badge>
+              <Badge variant="outline" className="uppercase">{projectData.entities.length} entities</Badge>
+              <Badge variant="outline" className="uppercase">{allFields.length} fields</Badge>
+              <Badge variant="outline" className="uppercase">{allMethods.length} methods</Badge>
             </div>
             <Button
               onClick={() => {
