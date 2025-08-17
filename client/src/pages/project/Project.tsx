@@ -7,21 +7,24 @@ import { useParams, Link } from "react-router-dom"
 import NotFound from "../NotFound"
 import logo from '../../../public/forge.svg'
 import { EntityFilters } from "./components/EntityFilters"
-import { FieldsTable } from "./components/FieldsTable"
-import { MethodsTable } from "./components/MethodsTable"
+import { FieldsTable, type FieldDecorator } from "./components/FieldsTable"
+import { MethodsTable, type ProtectDecorator } from "./components/MethodsTable"
 import { FieldModal } from "./components/FieldModal"
 import { MethodModal } from "./components/MethodModal"
 import { EntityModal } from "./components/EntityModal"
 import { DeleteConfirmModal } from "./components/DeleteConfirmModal"
+import type { IProject } from '@model/project';
+import type { IEntity } from '@model/entity';
+import type { Field, Protect } from "@prisma/client"
 
 
 function Project() {
-  const [projectData, setProjectData] = useState<any | null>(null)
+  const [projectData, setProjectData] = useState<IProject | null>(null)
   const [selectedEntity, setSelectedEntity] = useState<string>("all")
   const [fieldModalOpen, setFieldModalOpen] = useState(false)
   const [methodModalOpen, setMethodModalOpen] = useState(false)
-  const [editingField, setEditingField] = useState<any>(null)
-  const [editingMethod, setEditingMethod] = useState<any>(null)
+  const [editingField, setEditingField] = useState<Field | null>(null)
+  const [editingMethod, setEditingMethod] = useState<Protect | null>(null)
   const [fieldForm, setFieldForm] = useState({
     name: "",
     type: "STRING",
@@ -38,7 +41,7 @@ function Project() {
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false)
   const [deleteItem, setDeleteItem] = useState<{ type: "field" | "method" | "entity"; item: any } | null>(null)
   const [entityModalOpen, setEntityModalOpen] = useState(false)
-  const [editingEntity, setEditingEntity] = useState<any>(null)
+  const [editingEntity, setEditingEntity] = useState<IEntity | null>(null)
   const [entityForm, setEntityForm] = useState({
     name: "",
   })
@@ -53,7 +56,7 @@ function Project() {
           setNotFound(true)
           return
         }
-        const data : any = await response.json();
+        const data : IProject = await response.json();
         setProjectData(data);
         // Process the data
       } catch (error) {
@@ -64,29 +67,27 @@ function Project() {
   }, []);
 
   // Get all fields from all entities
-  const allFields = projectData?.entities.flatMap((entity: any) =>
-    entity.fields.map((field: any) => ({
+  const allFields : FieldDecorator[] = projectData?.entities.flatMap((entity: IEntity) =>
+    entity.fields.map((field: Field) => ({
       ...field,
       entityName: entity.name,
-      entityBuiltIn: entity.builtIn,
     })),
-  )
+  ) || []
 
   // Get all protection methods from all entities
-  const allMethods = projectData?.entities.flatMap((entity: any) =>
-    entity.protect.map((method: any) => ({
+  const allMethods : ProtectDecorator[] = projectData?.entities.flatMap((entity: IEntity) =>
+    entity.protect.map((method: Protect) => ({
       ...method,
       entityName: entity.name,
-      entityBuiltIn: entity.builtIn,
     })),
-  )
+  ) || []
 
   // Filter data based on selected entity
   const filteredFields =
-    selectedEntity === "all" ? allFields : allFields.filter((field : any) => field.entityName === selectedEntity)
+    selectedEntity === "all" ? allFields : allFields.filter((field : FieldDecorator) => field.entityName === selectedEntity)
 
   const filteredMethods =
-    selectedEntity === "all" ? allMethods : allMethods.filter((method : any) => method.entityName === selectedEntity)
+    selectedEntity === "all" ? allMethods : allMethods.filter((method : ProtectDecorator) => method.entityName === selectedEntity)
 
 
   const handleFieldSubmit = () => {
@@ -142,7 +143,7 @@ function Project() {
     setFieldModalOpen(true)
   }
 
-  const handleEditField = (field: any) => {
+  const handleEditField = (field: Field) => {
     setEditingField(field)
     setFieldForm({
       name: field.name,
@@ -154,7 +155,7 @@ function Project() {
     setFieldModalOpen(true)
   }
 
-  const handleDeleteField = (field: any) => {
+  const handleDeleteField = (field: Field) => {
     setDeleteItem({ type: "field", item: field })
     setDeleteConfirmOpen(true)
   }
@@ -165,7 +166,7 @@ function Project() {
     setMethodModalOpen(true)
   }
 
-  const handleEditMethod = (method: any) => {
+  const handleEditMethod = (method: Protect) => {
     setEditingMethod(method)
     setMethodForm({
       method: method.method,
@@ -175,7 +176,7 @@ function Project() {
     setMethodModalOpen(true)
   }
 
-  const handleDeleteMethod = (method: any) => {
+  const handleDeleteMethod = (method: Protect) => {
     setDeleteItem({ type: "method", item: method })
     setDeleteConfirmOpen(true)
   }
@@ -217,7 +218,11 @@ function Project() {
         <div className="flex flex-col gap-6 max-w-4xl mx-auto my-8">
           <EntityFilters
             selectedEntity={selectedEntity}
-            entities={projectData.entities}
+            entities={projectData.entities.map(entity => ({
+              id: entity.id,
+              name: entity.name,
+              builtIn: false
+            }))}
             onEntityChange={setSelectedEntity}
           />
 

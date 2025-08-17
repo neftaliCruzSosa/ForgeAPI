@@ -1,4 +1,5 @@
-import type { Proyect } from "@prisma/client";
+
+import type { IProject } from '@model/project';
 import { Button } from '@/components/ui/button';
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -16,13 +17,13 @@ import { getFrameworkColor, getDbTypeColor, getAuthTypeColor } from '@/utils/col
 
 
 interface ProjectTableProps {
-  paginatedProjects: Proyect[]
-  filteredProjects: Proyect[]
+  paginatedProjects: IProject[]
+  filteredProjects: IProject[]
   currentPage: number
   itemsPerPage: number
   totalPages: number
   onPageChange: (page: number) => void
-  onGenerateCode: (project: Proyect) => void
+  onGenerateCode: (project: IProject) => void
   onClearFilters: () => void
 }
 
@@ -49,6 +50,7 @@ export function ProjectTable({
             <TableHead>Database</TableHead>
             <TableHead>Auth Type</TableHead>
             <TableHead>Auth Status</TableHead>
+            <TableHead>Entities</TableHead>
             <TableHead className="w-[70px]">Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -86,6 +88,11 @@ export function ProjectTable({
                   <Badge variant={project.auth ? "default" : "secondary"} className="uppercase">
                     {project.auth ? "Enabled" : "Disabled"}
                   </Badge>
+                </div>
+              </TableCell>
+              <TableCell>
+                <div className=" gap-2 text-center">
+                  {project.entities.length}
                 </div>
               </TableCell>
               <TableCell>

@@ -12,7 +12,7 @@ import { CheckCircle, FolderOpen } from 'lucide-react'
 import { getFrameworkColor, getDbTypeColor, getAuthTypeColor } from '@/utils/colors'
 
 
-interface GeneratedProject {
+export interface GeneratedProject {
   name: string
   framework: string
   dbType: string

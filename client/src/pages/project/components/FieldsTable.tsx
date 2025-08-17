@@ -4,24 +4,18 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Edit, Plus, Trash2 } from "lucide-react"
 import { getFieldTypeColor } from "@/utils/colors"
+import type { Field } from "@prisma/client"
 
-interface Field {
-  id: number
-  name: string
-  type: string
-  ref?: string
-  required: boolean
-  entityId: number
+export type FieldDecorator = Field & {
   entityName: string
-  entityBuiltIn: boolean
 }
 
 
 interface FieldsTableProps {
-  fields: Field[]
+  fields: FieldDecorator[]
   onAddField: () => void
-  onEditField: (field: Field) => void
-  onDeleteField: (field: Field) => void
+  onEditField: (field: FieldDecorator) => void
+  onDeleteField: (field: FieldDecorator) => void
 }
 
 export function FieldsTable({
@@ -62,11 +56,6 @@ export function FieldsTable({
                 <TableCell>
                   <div className="flex items-center gap-2">
                     <span className="font-medium">{field.entityName}</span>
-                    {field.entityBuiltIn && (
-                      <Badge variant="secondary" className="text-xs uppercase">
-                        Built-in
-                      </Badge>
-                    )}
                   </div>
                 </TableCell>
                 <TableCell className="font-mono">{field.name}</TableCell>

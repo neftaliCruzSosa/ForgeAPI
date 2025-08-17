@@ -6,19 +6,24 @@ import logo from '../../../public/forge.svg'
 import { ProjectFilters } from '@/pages/home/components/ProjectFilters'
 import { ProjectTable } from '@/pages/home/components/ProjectTable'
 import { ProjectModal } from '@/pages/home/components/ProjectModal'
-import { SuccessModal } from '@/pages/home/components/SuccessModal'
+import { SuccessModal, type GeneratedProject } from '@/pages/home/components/SuccessModal'
+import type { IProject } from '@model/project';
 
 
 
 function Home() {
-  const [projects, setProjects] = useState<Proyect[]>([])
+  const [projects, setProjects] = useState<IProject[]>([])
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch('http://localhost:3000');
         const data : Proyect[] = await response.json();
-        setProjects(data);
+        const projectsWithEntities: IProject[] = data.map(project => ({
+          ...project,
+          entities: []
+        }));
+        setProjects(projectsWithEntities);
         // Process the data
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -38,7 +43,7 @@ function Home() {
   // Modal Form Data
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isEditMode, setIsEditMode] = useState(false)
-  const [editingProject, setEditingProject] = useState<any>(null)
+  const [editingProject, setEditingProject] = useState<IProject | null>(null)
   const [formData, setFormData] = useState({
     name: "",
     dbType: "mongo",
@@ -49,7 +54,7 @@ function Home() {
 
   // Success modal state
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
-  const [generatedProject, setGeneratedProject] = useState<any>(null)
+  const [generatedProject, setGeneratedProject] = useState<GeneratedProject | null>(null)
 
   // Get unique values for filters
   const uniqueFrameworks = [...new Set(projects.map(p => p.framework))]
@@ -119,7 +124,7 @@ function Home() {
   }
 
   const handleCreateProject = () => {
-    if (isEditMode) {
+    if (isEditMode && editingProject) {
       // Here you would typically send the data to your API for updating
       console.log("Updating project:", { id: editingProject.id, ...formData })
     } else {
@@ -140,11 +145,15 @@ function Home() {
     setEditingProject(null)
   }
 
-  const handleGenerateCode = (project: Proyect) => {
+  const handleGenerateCode = (project: IProject) => {
     console.log("Generating code for project:", project)
     setTimeout(() => {
       setGeneratedProject({
-        ...project,
+        name: project.name,
+        framework: project.framework,
+        dbType: project.dbType,
+        authType: project.authType,
+        auth: project.auth || false,
         outputDir: `/projects/${project.name}`
       })
       setIsSuccessModalOpen(true)

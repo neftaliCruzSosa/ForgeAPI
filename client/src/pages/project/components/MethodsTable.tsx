@@ -4,14 +4,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Edit, Plus, Trash2 } from "lucide-react"
 import { getAuthLevelColor, getMethodColor } from "@/utils/colors"
+import type { Protect } from "@prisma/client"
 
-interface Method {
-  id: number
-  method: string
-  authLevel: string
-  entityId: number
+export type ProtectDecorator =  Protect & {
   entityName: string
-  entityBuiltIn: boolean
 }
 
 
@@ -33,10 +29,10 @@ const getMethodDescription = (method: string) => {
 }
 
 interface MethodsTableProps {
-  methods: Method[]
+  methods: ProtectDecorator[]
   onAddMethod: () => void
-  onEditMethod: (method: Method) => void
-  onDeleteMethod: (method: Method) => void
+  onEditMethod: (method: ProtectDecorator) => void
+  onDeleteMethod: (method: ProtectDecorator) => void
 }
 
 export function MethodsTable({
@@ -76,11 +72,6 @@ export function MethodsTable({
                 <TableCell>
                   <div className="flex items-center gap-2">
                     <span className="font-medium">{method.entityName}</span>
-                    {method.entityBuiltIn && (
-                      <Badge variant="secondary" className="text-xs uppercase">
-                        Built-in
-                      </Badge>
-                    )}
                   </div>
                 </TableCell>
                 <TableCell>
