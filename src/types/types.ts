@@ -1,4 +1,11 @@
-import type { SupportedCrudAction, AllowedProtectRole } from "./config.js";
+import type {
+  SupportedCrudAction,
+  AllowedProtectRole,
+  SupportedDatabase,
+  SupportedAuth,
+  SupportedFramework,
+  SupportedValidator,
+} from "./config.js";
 
 export interface EnvVar {
   key: string;
@@ -6,29 +13,53 @@ export interface EnvVar {
   comment?: string;
 }
 
-export interface AdapterConfig {
-  services: {
-    fileService: FileService;
-    templateService: TemplateService;
-    logger: Logger;
+export type PackageDeps = Record<string, string>;
+
+export interface PresetRoute {
+  method: string;
+  path: string;
+  description?: string;
+}
+
+export interface PresetStructure {
+  [name: string]: string | undefined;
+}
+
+export interface PresetControllerSnippets {
+  [name: string]: string | undefined;
+}
+
+export interface AdapterPreset {
+  label?: string;
+  deps?: PackageDeps;
+  env?: EnvVar[] | ((projectName: string) => EnvVar[]);
+  routes?: PresetRoute[];
+  controller?: PresetControllerSnippets;
+  structure?: PresetStructure;
+  middlewares?: string[];
+  validation?: {
+    ref?: Record<string, { joi?: string; zod?: string }>;
   };
+}
+
+export type AdapterPresets = Record<string, AdapterPreset>;
+
+export interface AdapterConfig {
+  services: Services;
   outputDir: string;
   entities?: EntityDefinition[];
   dbType?: string;
   authType?: string;
+  framework?: string;
+  validator?: string;
   projectName: string;
-  auth?: boolean;
+  author?: string;
 }
 
-export interface AdapterContext extends AnyRecord {
+export interface AdapterContext {
   config: AdapterConfig;
   templateDir?: string;
-  presets?: Record<
-    string,
-    AnyRecord & {
-      env?: EnvVar[] | ((projectName: string) => EnvVar[]);
-    }
-  >;
+  presets?: AdapterPresets;
 }
 
 export interface AdapterInstance {
@@ -37,10 +68,8 @@ export interface AdapterInstance {
 
 export interface AdapterModule {
   default: new (ctx: AdapterContext) => AdapterInstance;
-  preset: AnyRecord;
+  preset: AdapterPreset;
 }
-
-export type AnyRecord = Record<string, unknown>;
 
 export interface EntityField {
   name: string;
@@ -49,7 +78,10 @@ export interface EntityField {
   ref?: string;
 }
 
-export type EntityProtectRules = Record<SupportedCrudAction, AllowedProtectRole>;
+export type EntityProtectRules = Record<
+  SupportedCrudAction,
+  AllowedProtectRole
+>;
 
 export interface BuiltField {
   name: string;
@@ -72,11 +104,11 @@ export interface EntityDefinition {
 export interface ProjectConfig {
   projectName: string;
   outputDir: string;
-  dbType: string;
-  authType?: string;
-  framework: string;
+  dbType: SupportedDatabase;
+  authType: SupportedAuth;
+  framework: SupportedFramework;
+  validator: SupportedValidator;
   author?: string;
-  auth?: boolean;
 }
 
 export interface LoggerServiceOptions {
@@ -108,7 +140,7 @@ export interface Logger {
 }
 
 export interface TemplateService {
-  setContext(ctx: Record<string, unknown>): void;
+  setContext(ctx: AdapterContext): void;
   render(templateName: string, data: Record<string, unknown>): Promise<string>;
 }
 

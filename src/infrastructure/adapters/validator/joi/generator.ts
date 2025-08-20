@@ -22,7 +22,8 @@ export default class ValidatorGenerator
 
   async generate(entity: EntityDefinition): Promise<void> {
     try {
-      const definition: EntityDefinition = await this.builder.buildDefinition(entity);
+      const definition: EntityDefinition =
+        await this.builder.buildDefinition(entity);
 
       const validatorsPath = await this.ensureDir(
         this.ctx.config.outputDir,
@@ -31,11 +32,15 @@ export default class ValidatorGenerator
 
       const { name: modelName, fields } = definition;
 
-      const code = await this.renderTemplate("crud/validator.ejs", {
+      const validatorName = this.ctx.config?.validator || "";
+      const refRules = this.ctx.presets?.db?.validation?.ref?.[validatorName];
+
+      const code = await this.renderTemplate("validator/joi.ejs", {
         entity: definition,
         modelName,
         fields,
-        dbType: this.ctx.dbLabel,
+        dbType: this.ctx.config.dbType,
+        refRules,
       });
 
       const filePath = await this.writeRenderedFile(

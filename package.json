@@ -8,14 +8,16 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "lint": "eslint \"src/**/*.{ts,tsx,js}\" --fix",
     "format": "prettier -w .",
-    
+
     "db:gen": "prisma generate",
     "db:dev": "prisma migrate dev --name init",
     "db:deploy": "prisma migrate deploy",
     "db:reset": "prisma migrate reset --force",
-    
+
     "demo": "tsx test/test-demo-social-api.js",
-    "api": "node api/server.js",
+    "demo:update": "tsx test/test-demo-update.js",
+
+    "dev:server": "tsx src/server.ts",
 
     "setup": "node scripts/setup.js",
     "postinstall": "npm run setup",
@@ -40,7 +42,9 @@
     "express": "^5.1.0"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.19",
     "@types/ejs": "^3.1.5",
+    "@types/express": "^5.0.3",
     "@types/node": "^24.2.1",
     "@typescript-eslint/eslint-plugin": "^8.39.0",
     "@typescript-eslint/parser": "^8.39.0",

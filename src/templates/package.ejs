@@ -23,8 +23,11 @@
 <% }) %>  },
   "generator": {
     "name": "ForgeAPI",
-    "version": "0.1.3",
-    "auth": "<%= authType %>",
-    "db": "<%= dbType %>"
+    "version": "0.1.3",<% if (authType) { %>
+    "auth": "<%= authType %>",<% 
+  } %>
+    "db": "<%= dbType %>",
+    "framework": "<%= framework %>",
+    "validator": "<%= validator %>"
   }
 }

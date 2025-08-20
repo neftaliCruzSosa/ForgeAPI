@@ -7,6 +7,9 @@ export type SupportedAuth =
 export type SupportedFramework =
   (typeof import("../config/default/constants.js").SUPPORTED_FRAMEWORKS)[number];
 
+export type SupportedValidator =
+  (typeof import("../config/default/constants.js").SUPPORTED_VALIDATORS)[number];
+
 export type SupportedCrudAction =
   (typeof import("../config/default/constants.js").SUPPORTED_CRUD_ACTIONS)[number];
 
@@ -16,8 +19,8 @@ export type AllowedProtectRole =
 export interface DefaultConfig {
   dbType: SupportedDatabase;
   authType: SupportedAuth;
-  auth: boolean;
   framework: SupportedFramework;
+  validator: SupportedValidator;
   force: boolean;
   author: string;
   outputDir: string | ((projectName: string) => string);

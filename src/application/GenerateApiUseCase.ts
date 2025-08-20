@@ -18,30 +18,37 @@ export default async function generateAPI(config: GenerateApiConfig): Promise<vo
       presets: {},
     };
 
-    templateService.setContext?.(ctx as Record<string, unknown>);
+    templateService.setContext?.(ctx);
 
     const outputDirPath = config.outputDir;
 
     await fileService.ensureDir(outputDirPath);
 
+    const noOp = { generate: async (_: any) => {} };
+
     const { generator: frameworkGenerator }   = await loadAdapter("framework",   config.framework,  ctx);
     const { generator: dbGenerator }          = await loadAdapter("db",          config.dbType,     ctx);
-    const { generator: authGenerator }        = await loadAdapter("auth",        config.authType,   ctx);
     const { generator: crudGenerator }        = await loadAdapter("crud",        "default",         ctx);
     const { generator: docsGenerator }        = await loadAdapter("docs",        "default",         ctx);
     const { generator: autoloadGenerator }    = await loadAdapter("autoload",    "default",         ctx);
-    const { generator: validatorGenerator }   = await loadAdapter("validator",   "default",         ctx);
     const { generator: envGenerator }         = await loadAdapter("env",         "default",         ctx);
     const { generator: modelIndexGenerator }  = await loadAdapter("modelIndex",  "default",         ctx);
     const { generator: middlewareGenerator }  = await loadAdapter("middleware",  "default",         ctx);
     const { generator: dbConnectorGenerator } = await loadAdapter("dbConnector", "default",         ctx);
     const { generator: packageGenerator }     = await loadAdapter("package",     "default",         ctx);
 
+    const { generator: validatorGenerator = noOp } = config.validator
+    ? await loadAdapter("validator", config.validator, ctx)
+    : { generator: noOp };
+
+    const { generator: authGenerator = noOp } = config.authType
+    ? await loadAdapter("auth", config.authType, ctx)
+    : { generator: noOp };
+
     await frameworkGenerator.generate();
-    if (config.auth) await authGenerator.generate();
+    await authGenerator.generate();
     await docsGenerator.generate();
     await envGenerator.generate();
-    await autoloadGenerator.generate();
     await middlewareGenerator.generate();
     await dbConnectorGenerator.generate();
     await packageGenerator.generate();
@@ -54,6 +61,7 @@ export default async function generateAPI(config: GenerateApiConfig): Promise<vo
       generatedModels.push(entity);
     }
 
+    await autoloadGenerator.generate();
     await modelIndexGenerator.generate();
 
     try {

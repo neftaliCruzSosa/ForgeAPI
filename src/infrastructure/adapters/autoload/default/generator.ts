@@ -23,8 +23,13 @@ export default class AutoloadGenerator
       this.getFolder("routes")
     );
 
+    const files = await this.fileService.readDir(autoloadPath);
+      const routesFiles = files
+        .filter((file) => file.endsWith(".js") && file !== "autoload.js")
+        .map((file) => file.replace(".routes.js", ""));
+
     const content = await this.renderTemplate("crud/autoload.ejs", {
-      entities: this.ctx.config.entities || []
+      entities: routesFiles || []
     });
 
     const filePath = await this.writeRenderedFile(

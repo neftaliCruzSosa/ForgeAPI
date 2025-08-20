@@ -2,6 +2,7 @@ import type { ValidateConfigOptions } from "types";
 import {
   SUPPORTED_DATABASES,
   SUPPORTED_AUTHS,
+  SUPPORTED_VALIDATORS,
   SUPPORTED_FRAMEWORKS,
 } from "../../config/default/constants.js";
 
@@ -11,6 +12,7 @@ export async function validateConfig({
   dbType,
   authType,
   framework,
+  validator,
   outputDir,
   services,
   force,
@@ -27,9 +29,14 @@ export async function validateConfig({
       `Unsupported database type: "${dbType}". Supported: ${SUPPORTED_DATABASES.join(", ")}`
     );
   }
-  if (!SUPPORTED_AUTHS.includes(authType)) {
+  if (authType && !SUPPORTED_AUTHS.includes(authType)) {
     throw new Error(
       `Unsupported auth type: "${authType}". Supported: ${SUPPORTED_AUTHS.join(", ")}`
+    );
+  }
+  if (validator && !SUPPORTED_VALIDATORS.includes(validator)) {
+    throw new Error(
+      `Unsupported validator type: "${validator}". Supported: ${SUPPORTED_VALIDATORS.join(", ")}`
     );
   }
   if (!SUPPORTED_FRAMEWORKS.includes(framework)) {

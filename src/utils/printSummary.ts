@@ -1,16 +1,14 @@
 import {
-  AUTH_CRUD_ROUTES,
   MODELS_CRUD_ROUTES,
 } from "../config/default/constants.js";
 
 import type {
   AdapterContext,
   EntityDefinition,
-  SupportedAuth,
   SupportedCrudAction,
   AllowedProtectRole,
   EntityProtectRules,
-} from "../types";
+} from "types";
 
 export default function printSummary(
   ctx: AdapterContext,
@@ -26,7 +24,10 @@ export default function printSummary(
   console.log(`Output Path:   ${ctx?.config?.outputDir}`);
   console.log(`Database:      ${ctx?.config?.dbType}`);
   console.log(
-    `Auth:          ${(ctx?.config?.auth && ctx?.config?.authType) || "none"}`
+    `Auth:          ${(ctx?.config?.authType) || "none"}`
+  );
+  console.log(
+    `Validator:     ${(ctx?.config?.validator) || "none"}`
   );
   console.log(
     `Models:        ${models.length} (${models.map((m) => m.name).join(", ")})`
@@ -35,7 +36,7 @@ export default function printSummary(
   models.forEach((model) => {
     console.log(`  - ${model.name}`);
 
-    const protect: EntityProtectRules = ctx.config.auth
+    const protect: EntityProtectRules = ctx.config.authType
       ? (model.protect ?? ({} as EntityProtectRules))
       : ({} as EntityProtectRules);
 
@@ -59,11 +60,9 @@ export default function printSummary(
     });
   });
 
-  if (ctx.config.auth && ctx.config.authType) {
+  if (ctx.config.authType) {
     console.log(`Auth Routes:`);
-    const authRoutes = AUTH_CRUD_ROUTES[
-      ctx.config.authType as SupportedAuth
-    ] as readonly {
+    const authRoutes = ctx.presets?.auth?.routes as readonly {
       method: string;
       path: string;
       description: string;

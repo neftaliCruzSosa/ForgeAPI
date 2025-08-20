@@ -4,7 +4,7 @@ import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 import errorHandler from "./middlewares/errorHandler.js";
-<% if (auth) 
+<% if (authType) 
 { %>import loadAuth from "./auth/index.js";<% } %>
 import "./db.js";
 
@@ -15,7 +15,7 @@ app.use(cors())
 app.use(morgan('dev'))
 app.use(errorHandler)
 app.use(express.json());
-<% if (auth) 
+<% if (authType) 
 { %>loadAuth(app);<% } %>
 
 import apiRoutes from './routes/autoload.js';

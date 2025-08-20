@@ -42,6 +42,7 @@ export default class CrudGenerator
     const modelName = entity.name;
     const fields = entity.fields || [];
     const protect = entity.protect || {};
+    const validator = this.ctx.config.validator || false;
 
     const controllersPath = await this.ensureDir(
       this.ctx.config.outputDir,
@@ -54,7 +55,7 @@ export default class CrudGenerator
 
     const renderedController = await this.renderTemplate(
       this.controllerTemplatePath,
-      { modelName, fields, protect }
+      { modelName, fields, protect, validator }
     );
 
     const renderedRoute = await this.renderTemplate(

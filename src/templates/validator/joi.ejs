@@ -1,0 +1,37 @@
+import Joi from 'joi';<%
+  const TYPE = {
+    string: 'Joi.string()',
+    number: 'Joi.number()',
+    boolean: 'Joi.boolean()',
+    bool: 'Joi.boolean()',
+    int: 'Joi.number()',
+    float: 'Joi.number()',
+    double: 'Joi.number()',
+    date: 'Joi.string().isoDate()',
+    datetime: 'Joi.string().isoDate()',
+    timestamp: 'Joi.string().isoDate()',
+    email: 'Joi.string().email()',
+    default: 'Joi.any()',
+  };
+
+  const REF = (refRules) ?? 'Joi.any()';
+
+  function baseExpr(field) {
+    if (field.type === 'ref' || field.ref) return REF;
+    return TYPE[field.type?.toLowerCase()] || TYPE.default;
+  }
+
+  function chain(field, expr) {
+    let e = expr;
+    if (field.required) e += '.required()';
+    if (typeof field.minlength === 'number') e += `.min(${field.minlength})`;
+    if (typeof field.maxlength === 'number') e += `.max(${field.maxlength})`;
+    return e;
+  }
+%>
+
+const <%= modelName.toLowerCase() %>Schema = Joi.object({
+<% fields.forEach(field => { %>  <%= field.name %>: <%- chain(field, baseExpr(field)) %>,
+<% }); %>});
+
+export default <%= modelName.toLowerCase() %>Schema;

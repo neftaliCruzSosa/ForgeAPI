@@ -41,15 +41,38 @@ export async function loadConfig(options: LoadConfigOptions = {}): Promise<Loade
     projectName,
   });
 
-  return {
-    ...defaultConfig,
-    ...externalConfig,
-    ...options,
-    projectName,
-    outputDir,
-    services:
-      options.services ||
-      externalConfig.services ||
-      buildDefaultServices(projectName),
-  };
+  const services =
+  options.services ??
+  externalConfig.services ??
+  buildDefaultServices(projectName);
+
+const entities =
+  options.entities ?? [];
+
+const dbType =
+  options.dbType ?? externalConfig.dbType ?? defaultConfig.dbType;
+
+const authType =
+  options.authType ?? externalConfig.authType ?? defaultConfig.authType;
+
+const framework =
+  options.framework ?? externalConfig.framework ?? defaultConfig.framework;
+
+const validator =
+  options.validator ?? externalConfig.validator ?? defaultConfig.validator;
+
+const force =
+  options.force ?? externalConfig.force ?? defaultConfig.force ?? false;
+
+return {
+  projectName,
+  outputDir,
+  services,
+  entities,
+  dbType,
+  authType,
+  framework,
+  validator,
+  force,
+}
 }

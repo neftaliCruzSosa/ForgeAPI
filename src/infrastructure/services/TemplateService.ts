@@ -1,11 +1,11 @@
 import ejs from "ejs";
-import type { Logger, FileService, TemplateService as ITemplateService } from "types";
+import type { Logger, FileService, TemplateService as ITemplateService, AdapterContext } from "types";
 
 export default class TemplateService implements ITemplateService {
   readonly logger: Logger;
   readonly fileService: FileService;
   readonly templateDir: string;
-  ctx: Record<string, unknown>;
+  ctx: AdapterContext;
 
   constructor(logger: Logger, fileService: FileService) {
     this.logger = logger;
@@ -14,10 +14,10 @@ export default class TemplateService implements ITemplateService {
       this.fileService.getCurrentDir(import.meta.url),
       "../../templates"
     );
-    this.ctx = {};
+    this.ctx = { config: { services: { logger, fileService, templateService: this }, outputDir: "", projectName: "" } };
   }
 
-  setContext(ctx: Record<string, unknown> = {}): void {
+  setContext(ctx: AdapterContext): void {
     this.ctx = ctx;
   }
 

@@ -1,6 +1,7 @@
 export const SUPPORTED_DATABASES = ["mongo", "postgres"] as const;
 export const SUPPORTED_AUTHS = ["jwt", "ironSession"] as const;
 export const SUPPORTED_FRAMEWORKS = ["express"] as const;
+export const SUPPORTED_VALIDATORS = ["joi", "zod"] as const;
 
 export const SUPPORTED_CRUD_ACTIONS = [
   "create",
@@ -23,31 +24,3 @@ export const MODELS_CRUD_ROUTES = [
   { action: "restore", method: "PATCH", path: "/:id" },
   { action: "hardDelete", method: "DELETE", path: "/:id/hardDelete" },
 ] as const;
-
-export const AUTH_CRUD_ROUTES = {
-  jwt: [
-    { method: "POST", path: "/auth/register", description: "register" },
-    { method: "POST", path: "/auth/login", description: "login" },
-    {
-      method: "PUT",
-      path: "/auth/promote/:username",
-      description: "promote user to admin [admin]",
-    },
-  ],
-
-  ironSession: [
-    { method: "POST", path: "/auth/register", description: "register" },
-    { method: "POST", path: "/auth/login", description: "login" },
-    { method: "POST", path: "/auth/logout", description: "logout" },
-    {
-      method: "GET",
-      path: "/auth/profile",
-      description: "get session user [auth]",
-    },
-    {
-      method: "PUT",
-      path: "/auth/promote/:username",
-      description: "promote user to admin [admin]",
-    },
-  ],
-} as const;

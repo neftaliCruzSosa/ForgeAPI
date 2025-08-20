@@ -1,11 +1,11 @@
-import {  <%= modelName %>  } from '../models/index.js';
-import validate from '../validators/<%= modelName %>.validator.js';
+import {  <%= modelName %>  } from '../models/index.js';<% if (validator) { %>
+import validate from '../validators/<%= modelName %>.validator.js';<% } %>
 
 // Create
-export async function create(req, res) {
+export async function create(req, res) {<% if (validator) { %>
   const { error } = validate.validate(req.body);
-  if (error) return res.status(400).json({ error: error.details[0].message });
-
+  if (error) return res.status(400).json({ error: error.details[0].message });<% 
+} %>
   try {
     const item = new <%= modelName %>({
       ...req.body,

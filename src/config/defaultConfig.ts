@@ -6,13 +6,14 @@ import {
   SUPPORTED_DATABASES,
   SUPPORTED_AUTHS,
   SUPPORTED_FRAMEWORKS,
+  SUPPORTED_VALIDATORS,
 } from "./default/constants.js";
 
 const defaultConfig: DefaultConfig = {
   dbType: SUPPORTED_DATABASES[0],
   authType: SUPPORTED_AUTHS[0],
-  auth: false,
   framework: SUPPORTED_FRAMEWORKS[0],
+  validator: SUPPORTED_VALIDATORS[0],
   force: false,
   author: "unknown",
   outputDir: (projectName: string) => `./projects/${projectName}`,

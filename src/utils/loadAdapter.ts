@@ -1,7 +1,7 @@
 import path from "node:path";
 import { existsSync } from "node:fs";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import type { AdapterModule, AdapterInstance, AdapterContext } from "../types";
+import type { AdapterModule, AdapterInstance, AdapterContext, AdapterPreset } from "types";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -12,9 +12,7 @@ const distRoot = path.join(projRoot, "dist");
 
 function resolveAdapterFile(type: string, name: string): string {
   const candidates = [
-    // build
     path.join(distRoot, "infrastructure", "adapters", type, name, "index.js"),
-    // dev
     path.join(srcRoot, "infrastructure", "adapters", type, name, "index.ts"),
   ];
   for (const p of candidates) if (existsSync(p)) return p;
@@ -27,7 +25,7 @@ export default async function loadAdapter(
   type: string,
   name: string,
   ctx: AdapterContext
-): Promise<{ generator: AdapterInstance; preset: Record<string, unknown> }> {
+): Promise<{ generator: AdapterInstance; preset: AdapterPreset }> {
   const filePath = resolveAdapterFile(type, name);
   const fileUrl = pathToFileURL(filePath).href;
 

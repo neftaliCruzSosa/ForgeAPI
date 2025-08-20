@@ -8,8 +8,8 @@ Project generated automatically with **ForgeAPI** 🛠️
 
 - Node.js
 - <%= presets.framework.label %>
-- <%= presets.db.label %>
-- <%= presets.auth.label %>
+- <%= presets.db.label %><%if (config.authType) {%>
+- <%= presets.auth.label %><% } %>
 - Dotenv
 
 ---
@@ -38,13 +38,13 @@ Edit the values based on your environment:
 ```env
 <% presets.framework.env.forEach(line => { -%>
 <%- line.key %>=<%- line.value %>
-<% }) %><%config.auth && presets.auth.env.forEach(line => { -%>
+<% }) %><%config.authType && presets.auth.env.forEach(line => { -%>
 <%- line.key %>=<%- line.value %>
 <% }) %><% presets.db.env(config.projectName).forEach(line => { -%>
 <%- line.key %>=<%- line.value %>
 <% }) %>
 ```
-<% if (config.auth) {%>
+<% if (config.authType) {%>
 ----
 
 ## 🔐 Auth Routes

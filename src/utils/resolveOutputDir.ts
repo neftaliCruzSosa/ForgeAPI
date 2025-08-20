@@ -1,4 +1,4 @@
-import type { DefaultConfig } from "../types/config";
+import type { DefaultConfig } from "types";
 
 export function resolveOutputDir(
   cfg: Pick<DefaultConfig, "outputDir"> & { projectName: string }

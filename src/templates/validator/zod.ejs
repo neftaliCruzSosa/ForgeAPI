@@ -1,0 +1,59 @@
+import { z } from "zod";<%
+  const TYPE = {
+    string: 'z.string()',
+    number: 'z.number()',
+    boolean: 'z.boolean()',
+    bool: 'z.boolean()',
+    int: 'z.number()',
+    float: 'z.number()',
+    double: 'z.number()',
+    date: 'z.string().datetime({ offset: true })',
+    datetime: 'z.string().datetime({ offset: true })',
+    timestamp: 'z.string().datetime({ offset: true })',
+    email: 'z.string().email()',
+    default: 'z.string()',
+  };
+
+  const REF = (refRules) ?? 'z.string()';
+
+  function baseExpr(field) {
+    if (field.type === 'ref' || field.ref) return REF;
+    return TYPE[field.type?.toLowerCase()] || TYPE.default;
+  }
+
+  function chain(field, expr) {
+    let e = expr;
+    if (!field.required) e += '.optional()';
+    if (typeof field.minlength === 'number') e += `.min(${field.minlength})`;
+    if (typeof field.maxlength === 'number') e += `.max(${field.maxlength})`;
+    return e;
+  }
+%>
+
+const <%= modelName.toLowerCase() %>Schema = z.object({
+<% fields.forEach(field => { %>  <%= field.name %>: <%- chain(field, baseExpr(field)) %>,
+<% }); %>});
+
+const validate = {
+  validate(input) {
+    const result = <%= modelName.toLowerCase() %>Schema.safeParse(input);
+    if (result.success) return { value: result.data };
+    
+    const issues = result.error.issues || [];
+    const details = issues.map((i) => ({
+      message: (i.path?.length ? `${i.path.join(".")}: ` : "") + i.message,
+    }));
+
+    const summary = details.map(d => d.message).join("; ");
+
+    return {
+      error: {
+        details: details.length
+          ? [{ message: summary }, ...details]
+          : [{ message: "Validation error" }],
+      },
+    };
+  },
+};
+
+export default validate;
